@@ -1,0 +1,102 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\simon.png	255	0	255
+20	textures\misc.png	176	224	248
+30	textures\tilesheet.png 	0	0	0
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#SIMON
+#idle
+10011	81	10	97	40	0
+#walk
+10012	110	9	122	40	0
+10013	136	10	151	40	0
+# die 
+10099	215	120	231	135	0
+
+#QUESTION BRICK
+40001	0	176	16	192	30
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+# ==== SIMON =========
+#idle BIG left
+401	10011	100
+ 
+#walk left big
+501	10011	100	10012	100	10013	100
+#die
+599	10099	100
+# ==== QUESTION BRICK =========
+602	40001	100 
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# MARIO
+0	401	501
+# BRICK 
+22	602
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
+# MARIO
+0	100	115	0
+
+# BRICK 
+# BRICK 
+1	0	160	22
+1	16	160	22
+1	32	160	22
+1	48	160	22
+1	64	160	22
+1	80	160	22
+1	96	160	22
+1	112	160	22
+1	128	160	22
+1	144	160	22
+1	160	160	22
+1	176	160	22
+1	192	160	22
+1	208	160	22
+1	224	160	22
+1	240	160	22
+1	256	160	22
+1	272	160	22
+1	288	160	22
+1	304	160	22
+1	320	160	22
+1	336	160	22
+1	352	160	22
+1	368	160	22
+1	384	160	22
+1	400	160	22
+1	416	160	22
+1	432	160	22
+1	448	160	22
+1	464	160	22
+1	480	160	22
+1	496	160	22
+1	512	160	22
+1	528	176	22
+1	544	176	22
+1	560	176	22
+1	576	176	22
+1	592	176	22
+1	608	176	22
+1	624	176	22
+1	640	176	22
+1	656	176	22
+1	672	176	22
+1	688	176	22
+1	704	176	22
+1	720	176	22
+1	736	176	22
+1	752	176	22
+
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+50	500	98	0	516	150	1
