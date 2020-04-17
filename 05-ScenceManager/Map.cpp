@@ -47,7 +47,7 @@ void Map::DrawMap()
 			rectTile.right = rectTile.left + tileWidth;
 			rectTile.bottom = rectTile.top + tileHeight;
 
-			CGame::GetInstance()->Draw(pos_x, pos_y,1, CTextures::GetInstance()->Get(30), rectTile.left, rectTile.top, rectTile.right, rectTile.bottom);
+			CGame::GetInstance()->Draw(pos_x, pos_y,-1, CTextures::GetInstance()->Get(30), rectTile.left, rectTile.top, rectTile.right, rectTile.bottom);
 		}
 	}
 }

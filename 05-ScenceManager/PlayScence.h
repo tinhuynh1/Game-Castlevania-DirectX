@@ -7,7 +7,7 @@
 #include "Simon.h"
 #include "Goomba.h"
 #include "Koopas.h"
-
+#include "Torch.h"
 
 class CPlayScene: public CScene
 {

@@ -3,9 +3,13 @@
 0	textures\simon.png	255	0	255
 20	textures\misc.png	176	224	248
 30	textures\tilesheet.png 	0	0	0
+40	textures\object.png 	255	0	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
+#TORCH	
+30000	48	24	64	56	40
+30001	75	24	91	56	40
 #SIMON
 #idle
 10011	81	10	97	40	0
@@ -19,6 +23,8 @@
 40001	0	176	16	192	30
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
+# ==== TORCH =========
+101	30000	100	30001	100
 # ==== SIMON =========
 #idle BIG left
 401	10011	100
@@ -34,6 +40,8 @@
 # id	ani1	ani2	ani3
 #
 [ANIMATION_SETS]
+#TORCH
+4	101	
 # MARIO
 0	401	501
 # BRICK 
@@ -41,7 +49,9 @@
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4  = Torch
+#TORCH
+4	112	132	4
 # MARIO
 0	100	115	0
 
