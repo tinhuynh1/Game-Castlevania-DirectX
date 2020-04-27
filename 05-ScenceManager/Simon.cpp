@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Goomba.h"
 #include "Portal.h"
+#include "Torch.h"
 
 Simon::Simon(float x, float y) : CGameObject()
 {
@@ -148,6 +149,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//
 		// Collision logic with other objects
 		//
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<Torch*>(e->obj))
+			{
+				DebugOut(L"Collision Simon and torch %d %d\n", e->nx, e->ny);
+				//Process normally
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) y += dy;
+			}
+		}
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];

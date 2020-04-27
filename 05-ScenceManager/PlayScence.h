@@ -5,23 +5,23 @@
 #include "GameObject.h"
 #include "Brick.h"
 #include "Simon.h"
-#include "Goomba.h"
-#include "Koopas.h"
 #include "Torch.h"
+#include "Map.h"
 
 class CPlayScene: public CScene
 {
 protected: 
 	Simon *player;					// A play scene has to have player, right? 
-
+	int tileMapLineY = 0;
+	int tileColumns, tileRows;
 	vector<LPGAMEOBJECT> objects;
-
+	vector<LPMAP> tileMap;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
-	//void _ParseSection_MAP(string line);
+	void _ParseSection_MAP(string line);
 
 	
 public: 

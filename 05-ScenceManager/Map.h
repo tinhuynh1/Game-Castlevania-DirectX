@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "PlayScence.h"
+#include <d3dx9.h>
 #include "Utils.h"
 #include "Sprites.h"
 #include "Textures.h"
@@ -9,28 +9,23 @@
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
+#define TILE_HEIGHT			16
+#define TILE_WIDTH			16
+#define	ID_TILE_MAP	123
 using namespace std;
 class Map
 {
 private:
-	int ID;
-
-	int tileWidth;
-	int tileHeight;
-
-	int translate_y, translate_x;
-	int tileRows, tileColumns;
-	int mapRows; 
-	int mapColumns;  
-
-	int tileMap[500][500];  
-public:
-	CGame* game = CGame::GetInstance();
-	CTextures* textures = CTextures::GetInstance();
-
-	Map(int _id, int _translate_y, int _translate_x);
-	// RECT GetSourceRect(int index);
-	void LoadMap(const char* filePath);
-	void DrawMap();
+	int left, top, right, bottom, x, y;
+public:	 
+	Map(int x, int y, int left, int top, int right, int bottom) {
+		this->left = left;
+		this->top = top;
+		this->right = right;
+		this->bottom = bottom;
+		this->x = x;
+		this->y = y;
+	};
+	void Render();
 };
-typedef Map* LPTILEMAP;
+typedef Map* LPMAP;

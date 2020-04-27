@@ -32,7 +32,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_KOOPAS	3
 #define OBJECT_TYPE_TORCH   4
-
+#define SCENE_SECTION_MAPS 7
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
@@ -49,6 +49,10 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 	int R = atoi(tokens[2].c_str());
 	int G = atoi(tokens[3].c_str());
 	int B = atoi(tokens[4].c_str());
+	if (texID == ID_TILE_MAP) {
+		this->tileColumns = atoi(tokens[5].c_str());
+		this->tileRows = atoi(tokens[6].c_str());
+	}
 
 	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
 }
@@ -119,11 +123,26 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
-//void CPlayScene::_ParseSection_MAP(string line)
-//{
-//	vector<string> tokens = split(line);
-//	//Cchuwa code
-//}
+void CPlayScene::_ParseSection_MAP(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 4) return; // skip invalid lines - an object set must have at least id, x, y
+	for (int i = 0; i < tokens.size(); i++)
+	{
+		RECT rectTile;
+		int index = atoi(tokens[i].c_str());
+		rectTile.left = (index % tileColumns) * TILE_WIDTH;
+		rectTile.top = (index / tileColumns) * TILE_HEIGHT;
+		rectTile.right = rectTile.left + TILE_WIDTH;
+		rectTile.bottom = rectTile.top + TILE_HEIGHT;
+		int x, y;
+		x = i * TILE_WIDTH;
+		y = this->tileMapLineY;
+		Map* map = new Map(x, y, rectTile.left, rectTile.top, rectTile.right, rectTile.bottom);
+		tileMap.push_back(map);
+	}
+	this->tileMapLineY += TILE_HEIGHT;
+}
 /*
 	Parse a line in section [OBJECTS] 
 */
@@ -158,9 +177,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_TORCH: obj = new Torch(); break;
 	case OBJECT_TYPE_PORTAL:
 		{	
@@ -210,6 +227,9 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_ANIMATION_SETS; continue; }
 		if (line == "[OBJECTS]") { 
 			section = SCENE_SECTION_OBJECTS; continue; }
+		if (line == "[MAP]") {
+			section = SCENE_SECTION_MAPS; continue;
+		}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -222,6 +242,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_MAPS:	_ParseSection_MAP(line); break;
 		}
 	}
 
@@ -264,9 +285,11 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	for (int i = 0; i < tileMap.size(); i++)
+		tileMap[i]->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	CGame* game = CGame::GetInstance();
+	//CGame* game = CGame::GetInstance();
 }
 
 /*

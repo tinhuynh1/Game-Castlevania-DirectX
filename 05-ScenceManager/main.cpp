@@ -37,14 +37,7 @@
 #define MAX_FRAME_RATE 120
 
 CGame *game;
-Map* map;
 
-void LoadMaps()
-{ 
-	map = new Map(MAP_SCENCE_1, 10, 0);
-	map->LoadMap("tilemap_1.txt");
-
-}
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -82,8 +75,6 @@ void Render()
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-		// draw map
-		map->DrawMap();
 		CGame::GetInstance()->GetCurrentScene()->Render();
 
 		spriteHandler->End();
@@ -189,7 +180,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard();
 
 	game->Load(L"mario-sample.txt");
-	LoadMaps();
 	
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
