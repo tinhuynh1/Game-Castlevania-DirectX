@@ -339,6 +339,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		simon->SetOrientation(-1);
 		simon->SetState(SIMON_STATE_WALKING);
 	}
+	else if (game->IsKeyDown(DIK_DOWN))
+	{
+		//simon->SetOrientation(-1);
+		simon->SetState(SIMON_STATE_SIT);
+	}
 	else
 		simon->SetState(SIMON_STATE_IDLE);
 }

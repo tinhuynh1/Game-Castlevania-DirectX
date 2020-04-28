@@ -23,6 +23,7 @@ void Simon::Render()
 	int ani = -1;
 	if (state == SIMON_STATE_DIE)
 		ani = SIMON_ANI_DIE;
+	else if (state == SIMON_STATE_SIT) ani = SIMON_ANI_SIT;
 	else
 		{
 			if (vx == 0)
@@ -56,6 +57,12 @@ void Simon::SetState(int state)
 				vx = -SIMON_WALKING_SPEED;
 			}
 			break;
+	case SIMON_STATE_SIT:
+	{
+		vx = 0;
+		vy = 0;
+		break;
+	}
 	case SIMON_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		vy = -SIMON_JUMP_SPEED_Y;

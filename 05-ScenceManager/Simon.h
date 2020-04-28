@@ -10,10 +10,11 @@
 #define SIMON_STATE_WALKING			100
 #define SIMON_STATE_JUMP			300
 #define SIMON_STATE_DIE				400
+#define SIMON_STATE_SIT		     500
 #define SIMON_ANI_IDLE			0
 #define SIMON_ANI_WALKING	1
-#define SIMON_ANI_JUMP			2
-#define SIMON_ANI_SIT				3
+#define SIMON_ANI_JUMP			3
+#define SIMON_ANI_SIT				2
  
 
 #define SIMON_ANI_DIE				8
