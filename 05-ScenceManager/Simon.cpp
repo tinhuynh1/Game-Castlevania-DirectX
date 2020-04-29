@@ -24,6 +24,7 @@ void Simon::Render()
 	if (state == SIMON_STATE_DIE)
 		ani = SIMON_ANI_DIE;
 	else if (state == SIMON_STATE_SIT) ani = SIMON_ANI_SIT;
+	else if (state == SIMON_STATE_JUMP) ani = SIMON_ANI_JUMP;
 	else
 		{
 			if (vx == 0)
@@ -98,7 +99,6 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Simon::Reset()
 {
 	SetState(SIMON_STATE_IDLE);
-	SetLevel(SIMON_LEVEL_SMALL);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
