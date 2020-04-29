@@ -11,10 +11,13 @@
 #define SIMON_STATE_JUMP			300
 #define SIMON_STATE_DIE				400
 #define SIMON_STATE_SIT		     500
+#define SIMON_STATE_ATTACK		600
+
 #define SIMON_ANI_IDLE			0
-#define SIMON_ANI_WALKING	1
+#define SIMON_ANI_WALKING	    1
 #define SIMON_ANI_JUMP			3
-#define SIMON_ANI_SIT				2
+#define SIMON_ANI_SIT		    2
+#define SIMON_ANI_ATTACK	    4
  
 
 #define SIMON_ANI_DIE				8
@@ -23,6 +26,7 @@
 #define SIMON_BBOX_HEIGHT 27
 
 #define SIMON_UNTOUCHABLE_TIME 5000
+#define SIMON_ATTACK_TIME	300
 
 class Simon : public CGameObject
 {
