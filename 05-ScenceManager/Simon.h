@@ -28,6 +28,7 @@ class Simon : public CGameObject
 {
 	int untouchable;
 	DWORD untouchable_start;
+	bool isFalling;
 
 	float start_x;
 	float start_y;
@@ -39,6 +40,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void Reset();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	bool isOnGround() { return vy == 0; }
 
 };
 

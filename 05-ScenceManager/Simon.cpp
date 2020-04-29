@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Portal.h"
 #include "Torch.h"
+#include "Brick.h"
 
 Simon::Simon(float x, float y) : CGameObject()
 {
@@ -47,6 +48,7 @@ void Simon::SetState(int state)
 	switch (state)
 	{
 	case SIMON_STATE_WALKING:
+		isFalling = true;
 			if (nx > 0)
 			{
 				vx = SIMON_WALKING_SPEED;
@@ -58,17 +60,25 @@ void Simon::SetState(int state)
 			break;
 	case SIMON_STATE_SIT:
 	{
+		isFalling = true;
 		vx = 0;
 		vy = 0;
 		break;
 	}
 	case SIMON_STATE_JUMP:
+	{
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
+		isFalling = true;
 		vy = -SIMON_JUMP_SPEED_Y;
+		animation_set->at(SIMON_ANI_JUMP)->SetAniStartTime(GetTickCount());
 		break;
+	}
 	case SIMON_STATE_IDLE:
+	{
+		isFalling = true;
 		vx = 0;
 		break;
+	}
 	case SIMON_STATE_DIE:
 		vy = -SIMON_DIE_DEFLECT_SPEED;
 		break;
@@ -78,13 +88,6 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	top = y;
-
-	/*if (level == SIMON_LEVEL_BIG)
-	{
-		right = x + SIMON_BIG_BBOX_WIDTH;
-		bottom = y + SIMON_BIG_BBOX_HEIGHT;
-	}*/
-	//else
 	{
 		right = x +  SIMON_BBOX_WIDTH;
 		bottom = y + SIMON_BBOX_HEIGHT+2;
@@ -172,6 +175,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
 			}
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				if (e->ny != 0)
+				{
+					vy = 0;
+					isFalling = true;
+				}
+			}
 		}
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -183,6 +194,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
+			 
 		}
 	}
 
