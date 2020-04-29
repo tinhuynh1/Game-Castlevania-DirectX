@@ -18,10 +18,7 @@
  
 
 #define SIMON_ANI_DIE				8
-
-#define	SIMON_LEVEL_SMALL	2
  
-
 #define SIMON_BBOX_WIDTH  15
 #define SIMON_BBOX_HEIGHT 27
 
@@ -29,7 +26,6 @@
 
 class Simon : public CGameObject
 {
-	int level;
 	int untouchable;
 	DWORD untouchable_start;
 
@@ -40,7 +36,6 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 	void SetState(int state);
-	void SetLevel(int l) { level = 1; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void Reset();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

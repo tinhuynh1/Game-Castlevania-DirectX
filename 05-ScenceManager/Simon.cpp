@@ -3,13 +3,11 @@
 #include <assert.h>
 #include "Utils.h"
 #include "Game.h"
-#include "Goomba.h"
 #include "Portal.h"
 #include "Torch.h"
 
 Simon::Simon(float x, float y) : CGameObject()
 {
-	level = SIMON_LEVEL_SMALL;
 	untouchable = 0;
 	SetState(SIMON_STATE_IDLE);
 
@@ -99,14 +97,22 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Simon::Reset()
 {
 	SetState(SIMON_STATE_IDLE);
-	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy 
-	CGameObject::Update(dt);
-
+	if (x > 0)
+	{
+		
+		CGameObject::Update(dt);
+	}
+	else
+	{
+		x = 0.0f;
+		CGameObject::Update(dt);
+	}
+	
 	// Simple fall down
 	vy += SIMON_GRAVITY * dt;
 
@@ -171,37 +177,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
-			{
-				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-
-				// jump on top >> kill Goomba and deflect a bit 
-				if (e->ny < 0)
-				{
-					if (goomba->GetState() != GOOMBA_STATE_DIE)
-					{
-						goomba->SetState(GOOMBA_STATE_DIE);
-						vy = -SIMON_JUMP_DEFLECT_SPEED;
-					}
-				}
-				else if (e->nx != 0)
-				{
-					if (untouchable == 0)
-					{
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
-						{
-							if (level > SIMON_LEVEL_SMALL)
-							{
-								level = SIMON_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else
-								SetState(SIMON_STATE_DIE);
-						}
-					}
-				}
-			} // if Goomba
-			else if (dynamic_cast<CPortal*>(e->obj))
+			
+			 if (dynamic_cast<CPortal*>(e->obj))
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
