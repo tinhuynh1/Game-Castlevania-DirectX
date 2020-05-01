@@ -5,6 +5,7 @@
 10	textures\enemies.png	3	26	110
 30	textures\bbox.png 	0	0	0
 40	textures\object.png 	255	0	255
+50	textures\whip.png	255	0	255
 123	textures\tilesheet.png	0	0	0	11	13
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -36,7 +37,10 @@
 30002	25	14	41	29	10
 #die
 30003	45	21	61	29	10
-
+#WHIP
+80000	0	0	120	32	50
+80001	120	0	240	32	50
+80002	240	0	360	32	50
 #brick with question mark animation
 40001	300	117	316	133	20
 40002	318	117	334	133	20
@@ -73,14 +77,13 @@
 # die
 702	30003	100
 
-
+# ==== WHIP =========
+800	80000	100	80001	100	80002	100
 
 #
 # id	ani1	ani2	ani3
 #
 [ANIMATION_SETS]
-#TORCH
-4	101
 # SIMON
 1	401	501	502	503	504	505
 # BRICK 
@@ -91,10 +94,11 @@
 3	701	702
 #TORCH 
 4	101
-
+#WHIP
+5	800
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Simon , 1 = Brick, 2 = Goomba, 4 = Torch
+# type: 0 = Simon , 1 = Brick, 2 = Goomba, 4 = Torch, 5 whip
 #TORCH
 4	88	112	4
 4	216	112	4
@@ -161,7 +165,8 @@
 1	720	148	2
 1	736	148	2
 1	752	148	2
-
+# WHIP
+5	0	0	5
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
 50	752	98	0	768	150	2

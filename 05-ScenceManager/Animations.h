@@ -33,6 +33,8 @@ public:
 	void Add(int spriteId, DWORD time = 0);
 	void Reset() { currentFrame = -1; }
 	void Render(float x, float y,int nx = -1, int alpha = 255);
+	void RenderByFrame(int frameID, int nx, float x, float y, int alpha = 255);
+	int  GetCurrentFrame() { return currentFrame; }
 	void SetAniStartTime(DWORD t) { aniStartTime = t; }
 	bool IsOver(DWORD dt) { return GetTickCount() - aniStartTime >= dt; }
 };

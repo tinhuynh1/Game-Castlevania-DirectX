@@ -7,6 +7,7 @@
 #include "Torch.h"
 #include "Brick.h"
 
+
 Simon::Simon(float x, float y) : CGameObject()
 {
 	untouchable = 0;
@@ -16,6 +17,7 @@ Simon::Simon(float x, float y) : CGameObject()
 	start_y = y;
 	this->x = x;
 	this->y = y;
+	whip = new Whip();
 }
 void Simon::Render()
 {
@@ -41,7 +43,9 @@ void Simon::Render()
 
 	animation_set->at(ani)->Render(x, y,nx, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
+	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
+		whip->Render(animation_set->at(ani)->GetCurrentFrame());
 }
 void Simon::SetState(int state)
 {
@@ -50,7 +54,6 @@ void Simon::SetState(int state)
 	switch (state)
 	{
 	case SIMON_STATE_WALKING:
-		isFalling = true;
 			if (nx > 0)
 			{
 				vx = SIMON_WALKING_SPEED;
@@ -62,7 +65,7 @@ void Simon::SetState(int state)
 			break;
 	case SIMON_STATE_SIT:
 	{
-		isFalling = true;
+		isStanding = false;
 		vx = 0;
 		vy = 0;
 		break;
@@ -70,9 +73,8 @@ void Simon::SetState(int state)
 	case SIMON_STATE_JUMP:
 	{
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
-		isFalling = true;
+		isStanding = true;
 		vy = -SIMON_JUMP_SPEED_Y;
-		animation_set->at(SIMON_ANI_JUMP)->SetAniStartTime(GetTickCount());
 		break;
 	}
 	case SIMON_STATE_ATTACK:
@@ -89,7 +91,7 @@ void Simon::SetState(int state)
 	}
 	case SIMON_STATE_IDLE:
 	{
-		isFalling = true;
+		isStanding = true;
 		vx = 0;
 		break;
 	}
@@ -104,7 +106,7 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	top = y;
 	{
 		right = x +  SIMON_BBOX_WIDTH;
-		bottom = y + SIMON_BBOX_HEIGHT+2;
+		bottom = y + SIMON_BBOX_HEIGHT;
 	}
 }
 
@@ -119,17 +121,8 @@ void Simon::Reset()
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy 
-	if (x > 0)
-	{
-		
-		CGameObject::Update(dt);
-	}
-	else
-	{
-		x = 0.0f;
-		CGameObject::Update(dt);
-	}
-	
+	CGameObject::Update(dt);
+	whip->Update(dt, coObjects);
 	// Simple fall down
 	vy += SIMON_GRAVITY * dt;
 
@@ -194,7 +187,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny != 0)
 				{
 					vy = 0;
-					isFalling = true;
+					isStanding = true;
 				}
 			}
 		}
@@ -214,4 +207,11 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	//check collsion when simon attack
+	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
+	{
+		whip->SetOrientation(nx);
+		whip->SetWhipPosition(D3DXVECTOR2(x, y), isStanding);
+	}
+	
 }

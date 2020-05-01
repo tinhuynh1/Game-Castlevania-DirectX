@@ -72,7 +72,6 @@ public:
 
 	void RenderBoundingBox();
 	void SetPosition(D3DXVECTOR2 pos) { SetPosition(pos.x, pos.y); }
-	void SetOrientation(int nx) { this->nx = nx; }
 
 	D3DXVECTOR2 GetPosition() { return D3DXVECTOR2(x, y); }
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
@@ -95,7 +94,9 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
-
+	// Orientation
+	void SetOrientation(int nx) { this->nx = nx; }
+	int GetOrientation() { return nx; }
 
 	~CGameObject();
 };

@@ -328,16 +328,16 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_S:
 	{
-		if (simon->GetState() == SIMON_STATE_SIT) {
+		if (simon->GetState() == SIMON_STATE_IDLE || simon->GetState() == SIMON_STATE_JUMP)
+			simon->SetState(SIMON_STATE_ATTACK);
+		else if (simon->GetState() == SIMON_STATE_SIT) {
 			simon->SetState(SIMON_STATE_SIT_AND_ATTACK);
-			break;
 		}
-		simon->SetState(SIMON_STATE_ATTACK);
 		break;
 	}
 	case DIK_SPACE:
 	{
-		if (simon->GetState() == SIMON_STATE_JUMP) return;
+		if (simon->GetState() == SIMON_STATE_JUMP || simon->GetState()==SIMON_STATE_ATTACK || simon->GetState() == SIMON_ANI_SIT_AND_ATTACK) return;
 		simon->SetState(SIMON_STATE_JUMP);
 		break;
 	}

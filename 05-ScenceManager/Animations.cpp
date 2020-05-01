@@ -41,7 +41,10 @@ void CAnimation::Render(float x, float y,int nx, int alpha)
 
 	frames[currentFrame]->GetSprite()->Draw(x, y,nx, alpha);
 }
-
+void CAnimation::RenderByFrame(int frameID, int nx, float x, float y, int alpha) 
+{
+	frames[frameID]->GetSprite()->Draw(x, y, nx, alpha);
+}
 CAnimations * CAnimations::__instance = NULL;
 
 CAnimations * CAnimations::GetInstance()
