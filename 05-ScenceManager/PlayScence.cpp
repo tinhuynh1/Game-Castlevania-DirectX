@@ -277,10 +277,14 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy); //50.0f, 0.0f
 
 	CGame *game = CGame::GetInstance();
-	if (cx > game->GetScreenWidth() / 2)
+	if ((cx > game->GetScreenWidth() / 2))
 	{
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
+		if (cx > 450) {
+			cx = 450.0f;
+			cy = 0.0f;
+		}
 	}
 
 	else
@@ -324,6 +328,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_S:
 	{
+		if (simon->GetState() == SIMON_STATE_SIT) {
+			simon->SetState(SIMON_STATE_SIT_AND_ATTACK);
+			break;
+		}
 		simon->SetState(SIMON_STATE_ATTACK);
 		break;
 	}
@@ -344,8 +352,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->GetPlayer();
 	if (simon->GetState() == SIMON_STATE_JUMP && simon->isOnGround() == false) return;
-	if (simon->GetState() == SIMON_STATE_ATTACK &&
-		simon->animation_set->at(SIMON_ANI_ATTACK)->IsOver(SIMON_ATTACK_TIME) == false)
+	if (simon->GetState() == SIMON_STATE_ATTACK && simon->animation_set->at(SIMON_ANI_ATTACK)->IsOver(SIMON_ATTACK_TIME) == false)
+		return;
+	if (simon->GetState() == SIMON_STATE_SIT_AND_ATTACK && simon->animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->IsOver(SIMON_ATTACK_TIME) == false)
 		return;
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;

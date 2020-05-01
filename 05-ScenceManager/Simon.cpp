@@ -25,7 +25,7 @@ void Simon::Render()
 	else if (state == SIMON_STATE_SIT) ani = SIMON_ANI_SIT;
 	else if (state == SIMON_STATE_JUMP) ani = SIMON_ANI_JUMP;
 	else if (state == SIMON_STATE_ATTACK) ani = SIMON_ANI_ATTACK;
-
+	else if (state == SIMON_STATE_SIT_AND_ATTACK) ani = SIMON_ANI_SIT_AND_ATTACK;
 	else
 		{
 			if (vx == 0)
@@ -79,6 +79,12 @@ void Simon::SetState(int state)
 	{
 		animation_set->at(SIMON_ANI_ATTACK)->Reset();
 		animation_set->at(SIMON_ANI_ATTACK)->SetAniStartTime(GetTickCount());
+		break;
+	}
+	case SIMON_STATE_SIT_AND_ATTACK:
+	{
+		animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->Reset();
+		animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->SetAniStartTime(GetTickCount());
 		break;
 	}
 	case SIMON_STATE_IDLE:
