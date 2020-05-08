@@ -7,6 +7,8 @@
 #include "Simon.h"
 #include "Torch.h"
 #include "Map.h"
+#include "HeartItem.h"
+#include "Items.h"
 
 class CPlayScene: public CScene
 {

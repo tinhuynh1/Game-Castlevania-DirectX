@@ -13,6 +13,7 @@ CGameObject::CGameObject()
 	x = y = 0;
 	vx = vy = 0;
 	nx = 1;	
+	visible = true;
 }
 
 void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -22,6 +23,11 @@ void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	dy = vy*dt;
 }
 
+bool CGameObject::AABB(float left_a, float top_a, float right_a, float bottom_a, float left_b, float top_b, float right_b, float bottom_b)
+{
+
+	return left_a < right_b && right_a > left_b && top_a < bottom_b && bottom_a > top_b;
+}
 
 /*
 	Extension of original SweptAABB to deal with two moving objects
@@ -130,7 +136,7 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(x, y,1, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
+	CGame::GetInstance()->Draw(x, y,1, bbox, rect.left, rect.top, rect.right, rect.bottom, 100);
 }
 
 

@@ -32,6 +32,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_KOOPAS	3
 #define OBJECT_TYPE_TORCH   4
+#define OBJECT_TYPE_WHIP   5
+#define OBJECT_TYPE_ITEM_HEART		6
 #define SCENE_SECTION_MAPS 7
 #define OBJECT_TYPE_PORTAL	50
 
@@ -178,7 +180,20 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_TORCH: obj = new Torch(); break;
+	case OBJECT_TYPE_WHIP: obj = new Whip(); break;
+	case OBJECT_TYPE_TORCH: 
+	{
+		int i = atoi(tokens[4].c_str());
+		obj = new Torch();
+		obj->SetItemId(i);
+		break;
+	}
+	case OBJECT_TYPE_ITEM_HEART: 
+	{
+		obj = new HeartItem();
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_HEART, obj);
+		break;
+	}
 	case OBJECT_TYPE_PORTAL:
 		{	
 			float r = atof(tokens[4].c_str());
@@ -261,11 +276,15 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
+		if (objects[i]->visible == false)
+			continue;
 		coObjects.push_back(objects[i]);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		if (objects[i]->visible == false)
+			continue;
 		objects[i]->Update(dt, &coObjects);
 	}
 
@@ -300,8 +319,14 @@ void CPlayScene::Render()
 {
 	for (int i = 0; i < tileMap.size(); i++)
 		tileMap[i]->Render();
-	for (int i = 0; i < objects.size(); i++)
+	/*for (int i = 0; i < objects.size(); i++)
+		objects[i]->Render();*/
+	for (int i = objects.size() - 1; i >= 0; i--)
+	{
+		if (objects[i]->visible == false)
+			continue;
 		objects[i]->Render();
+	}
 	//CGame* game = CGame::GetInstance();
 }
 
@@ -328,6 +353,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_S:
 	{
+		if ((simon->GetState() == SIMON_STATE_ATTACK) || (simon->GetState() == SIMON_STATE_SIT_AND_ATTACK))
+			return;
 		if (simon->GetState() == SIMON_STATE_IDLE || simon->GetState() == SIMON_STATE_JUMP)
 			simon->SetState(SIMON_STATE_ATTACK);
 		else if (simon->GetState() == SIMON_STATE_SIT) {
@@ -337,7 +364,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	}
 	case DIK_SPACE:
 	{
-		if (simon->GetState() == SIMON_STATE_JUMP || simon->GetState()==SIMON_STATE_ATTACK || simon->GetState() == SIMON_ANI_SIT_AND_ATTACK) return;
+		if (simon->GetState() == SIMON_STATE_JUMP || simon->GetState()==SIMON_STATE_ATTACK || simon->GetState() == SIMON_STATE_SIT_AND_ATTACK) return;
 		simon->SetState(SIMON_STATE_JUMP);
 		break;
 	}

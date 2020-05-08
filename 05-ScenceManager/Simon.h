@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Whip.h"
+#include "HeartItem.h"
 #define SIMON_WALKING_SPEED		0.08f 
 #define SIMON_JUMP_SPEED_Y		0.5f
 #define SIMON_JUMP_DEFLECT_SPEED 0.2f

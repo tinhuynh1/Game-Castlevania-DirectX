@@ -104,10 +104,8 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	top = y;
-	{
-		right = x +  SIMON_BBOX_WIDTH;
-		bottom = y + SIMON_BBOX_HEIGHT;
-	}
+	right = x +  SIMON_BBOX_WIDTH;
+	bottom = y + SIMON_BBOX_HEIGHT;
 }
 
 /*
@@ -145,8 +143,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
-		x+= dx;
-		y+= dy;
+		x += dx;
+		y += dy;
 	}
 	else
 	{
@@ -165,8 +163,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
 
 
 		//
@@ -174,7 +170,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
+	 		LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<Torch*>(e->obj))
 			{
 				DebugOut(L"Collision Simon and torch %d %d\n", e->nx, e->ny);
@@ -182,12 +178,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
 			}
-			if (dynamic_cast<CBrick*>(e->obj))
+			else if (dynamic_cast<CBrick*>(e->obj))
 			{
-				if (e->ny != 0)
+				if (e->ny != 0) vy = 0;
+
+			}
+			else if (dynamic_cast<HeartItem*>(e->obj))
+			{
+				DebugOut(L"[ITEMS] Heart Collected \n");
+				if (e->nx != 0 || e->ny != 0)
 				{
-					vy = 0;
-					isStanding = true;
+					e->obj->SetVisible(false);
 				}
 			}
 		}
@@ -195,13 +196,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			
-			 if (dynamic_cast<CPortal*>(e->obj))
+
+			if (dynamic_cast<CPortal*>(e->obj))
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
-			 
+
 		}
 	}
 
@@ -210,8 +211,37 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//check collsion when simon attack
 	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
 	{
+		int ani = -1;
+		if (state == SIMON_STATE_ATTACK)
+			ani = SIMON_ANI_ATTACK;
+		else
+		{
+			ani = SIMON_ANI_SIT_AND_ATTACK;
+		}
 		whip->SetOrientation(nx);
 		whip->SetWhipPosition(D3DXVECTOR2(x, y), isStanding);
+		if (animation_set->at(ani)->GetCurrentFrame() == 2)
+		 
+		{
+			int count = 0;
+			for (UINT i = 0; i < coObjects->size(); i++) {
+				LPGAMEOBJECT temp = coObjects->at(i);
+
+				if (dynamic_cast<Torch*>(temp))
+				{
+					Torch* torch = dynamic_cast<Torch*>(temp);
+					float left, top, right, bottom;
+					temp->GetBoundingBox(left, top, right, bottom);
+					if (whip->isColliding(left, top, right, bottom) == true)
+					{
+						DebugOut(L"[INFO]Whip Collision with Torch \n");
+						temp->SetState(TORCH_DESTROYED);
+						temp->animation_set->at(1)->SetAniStartTime(GetTickCount());
+					}
+				}
+			}
+		}
 	}
-	
 }
+	
+

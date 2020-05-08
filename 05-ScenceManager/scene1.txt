@@ -5,13 +5,19 @@
 10	textures\enemies.png	3	26	110
 30	textures\bbox.png 	0	0	0
 40	textures\object.png 	255	0	255
-50	textures\whip.png	255	0	255
+50	textures\whip.png	2550	0	255
+60	textures\Objects.png	116	116	116
+70	textures\effect.png	116	116	116
 123	textures\tilesheet.png	0	0	0	11	13
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 #TORCH	
 50000	48	24	64	56	40
 50001	75	24	91	56	40
+#effect
+50002	455	123	467	163	70
+50003	470	123	482	163	70
+50004	485	123	497	163	70
 # SIMON
 # idle 
 10011	81	10	97	40	0
@@ -32,25 +38,19 @@
 10021	131	338	175	360	0
 #BRICK
 20001	0	176	16	192	30
-#GOOMBA
-30001	5	14	21	29	10
-30002	25	14	41	29	10
-#die
-30003	45	21	61	29	10
 #WHIP
 80000	0	0	120	32	50
 80001	120	0	240	32	50
 80002	240	0	360	32	50
-#brick with question mark animation
-40001	300	117	316	133	20
-40002	318	117	334	133	20
-40003	336	117	352	133	20
-40004	355	117	370	133	20
+#HEART
+90000	29	6	41	16	60
+ 
 						
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== TORCH =========
 101	50000	100	50001	100
+102	50002	100	50003	100	50004	100
 # ==== SIMON =========
 #idle 
 401	10011	100
@@ -65,21 +65,12 @@
 #sit and hit
 505	10019	100	10020	100	10021	100
 # ==== BRICK =========
-601	20001	100
-
-# ==== QUESTION MARK BRICK =========
-602	40001	1000	40001	100	40002	100	40003	100	40004	100
-
-
-# ==== GOOMBA  =========
-# walk
-701	30001	100	30002	100
-# die
-702	30003	100
+601	20001	100 
 
 # ==== WHIP =========
 800	80000	100	80001	100	80002	100
-
+# ==== HEART =========
+900	90000	100
 #
 # id	ani1	ani2	ani3
 #
@@ -88,33 +79,27 @@
 1	401	501	502	503	504	505
 # BRICK 
 2	601
-# QUESTION MARK BRICK 
-22	602
-# GOOMBA
-3	701	702
 #TORCH 
-4	101
+4	101	102
 #WHIP
 5	800
+#HEART
+6	900
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Simon , 1 = Brick, 2 = Goomba, 4 = Torch, 5 whip
-#TORCH
-4	88	112	4
-4	216	112	4
-4	344	112	4
-4	480	112	4
-4	600	112	4
+# type: 0 = Simon , 1 = Brick, 2 = Goomba, 4 = Torch, 5 whip, 6 = item heart
 # SIMON
 0	50.0	0	1
+#TORCH
+4	88	112	4	6
+4	216	112	4	6
+4	344	112	4	6
+4	480	112	4	6
+4	600	112	4	6
 
-# GOOMBA
-2	200	135	3
-2	260	135	3
-2	304	135	3
-2	480	135	3
-2	500	135	3
-
+# ITEMS
+#BigHeart
+6	88	80	6
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
 1	0	148	2

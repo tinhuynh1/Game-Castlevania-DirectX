@@ -11,7 +11,7 @@
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
-
+#define ITEM_GRAVITY	0.004f
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
 
@@ -61,6 +61,8 @@ public:
 	DWORD dt; 
 
 	LPANIMATION_SET animation_set;
+	bool visible;
+	int itemId;
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y;}
@@ -75,6 +77,8 @@ public:
 
 	D3DXVECTOR2 GetPosition() { return D3DXVECTOR2(x, y); }
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+	bool AABB(float left_a, float top_a, float right_a, float bottom_a,
+		float left_b, float top_b, float right_b, float bottom_b);
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
@@ -97,7 +101,14 @@ public:
 	// Orientation
 	void SetOrientation(int nx) { this->nx = nx; }
 	int GetOrientation() { return nx; }
+	// Visibility
+	void SetVisible(bool visible) { this->visible = visible; }
+	bool isVisible() { return this->visible; }
 
+	int GetItemId() { return itemId; }
+	void SetItemId(int id) { this->itemId = id; }
+
+	
 	~CGameObject();
 };
 
