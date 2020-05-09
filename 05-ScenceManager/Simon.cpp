@@ -191,6 +191,24 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					e->obj->SetVisible(false);
 				}
 			}
+			else if (dynamic_cast<ChainItem*>(e->obj))
+			{
+
+				if (e->nx != 0 || e->ny != 0)
+				{
+					e->obj->SetVisible(false);
+					this->whip->LevelUp();
+					DebugOut(L"[INFO] WHIP UPGRADED \n");
+				}
+			}
+			else if (dynamic_cast<DaggerItem*>(e->obj))
+			{
+				DebugOut(L"[ITEMS] Dagger Collected \n");
+				if (e->nx != 0 || e->ny != 0)
+				{
+					e->obj->SetVisible(false);
+				}
+			}
 		}
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{

@@ -34,6 +34,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_TORCH   4
 #define OBJECT_TYPE_WHIP   5
 #define OBJECT_TYPE_ITEM_HEART		6
+#define OBJECT_TYPE_ITEM_CHAIN		7
+#define OBJECT_TYPE_ITEM_DAGGER		8
 #define SCENE_SECTION_MAPS 7
 #define OBJECT_TYPE_PORTAL	50
 
@@ -194,6 +196,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_HEART, obj);
 		break;
 	}
+	case OBJECT_TYPE_ITEM_CHAIN:
+	{
+		obj = new ChainItem();
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_CHAIN, obj);
+		break;
+	}
+	case OBJECT_TYPE_ITEM_DAGGER:
+	{
+		obj = new DaggerItem();
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_DAGGER, obj);
+		break;
+	}
 	case OBJECT_TYPE_PORTAL:
 		{	
 			float r = atof(tokens[4].c_str());
@@ -294,13 +308,17 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow simon
 	float cx, cy;
 	player->GetPosition(cx, cy); //50.0f, 0.0f
-
+	if(cx <= 0)
+	{
+		player->x = 0;
+	}
 	CGame *game = CGame::GetInstance();
 	if ((cx > game->GetScreenWidth() / 2))
 	{
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
-		if (cx > 450) {
+		if (cx > 450) 
+		{
 			cx = 450.0f;
 			cy = 0.0f;
 		}
@@ -309,18 +327,14 @@ void CPlayScene::Update(DWORD dt)
 	else
 	{
 		cx = 0.0f;
-		cy = 0.0f;
 	}
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, -10.0f /*cy*/);
 }
 
 void CPlayScene::Render()
 {
 	for (int i = 0; i < tileMap.size(); i++)
 		tileMap[i]->Render();
-	/*for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();*/
 	for (int i = objects.size() - 1; i >= 0; i--)
 	{
 		if (objects[i]->visible == false)

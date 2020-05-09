@@ -7,14 +7,47 @@ void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	top = y + 10;
 	bottom = top + 6;
-	if (nx > 0) left = x + 70;
-	else left = x + 25;
-	right = left + 24;
+	switch (state)
+	{
+	case NORMAL_WHIP:
+	{
+		if (nx > 0) left = x + 70;
+		else
+		{
+			left = x + 25;
+		}
+		right = left + 24;
+		break;
+	}
+	case SHORT_CHAIN:
+	{
+		if (nx > 0) left = x + 70;
+		else
+		{
+			left = x + 25;
+		}
+		right = left + 24;
+		break;
+	}
+	case LONG_CHAIN:
+	{
+		if (nx > 0) left = x + 70;
+		else
+		{
+			left = x + 15;
+		}
+		right = left + 38;
+		break;
+	}
+	default:
+		break;
+	}
+ 
 }
 void Whip::Render(int currentFrame)
 {
-	CAnimationSets::GetInstance()->Get(5)->at(WHIP_ANI)->RenderByFrame(currentFrame, nx, x, y);
-	RenderBoundingBox();
+	CAnimationSets::GetInstance()->Get(5)->at(state)->RenderByFrame(currentFrame, nx, x, y);
+	//RenderBoundingBox();
 }
 bool Whip::isColliding(float obj_left, float obj_top, float obj_right, float obj_bottom)
 {
@@ -45,4 +78,10 @@ void Whip::SetWhipPosition(D3DXVECTOR2 simonPos, bool isStanding)
 		}
 
 	SetPosition(simonPos.x, simonPos.y);
+}
+void Whip::LevelUp()
+{
+	if (state == NORMAL_WHIP) SetState(SHORT_CHAIN);
+	else if (state == SHORT_CHAIN) SetState(LONG_CHAIN);
+
 }

@@ -2,10 +2,12 @@
 #include "GameObject.h"
 #include "Whip.h"
 #include "HeartItem.h"
+#include "ChainItem.h"
+#include "DaggerItem.h"
 #define SIMON_WALKING_SPEED		0.08f 
-#define SIMON_JUMP_SPEED_Y		0.5f
+#define SIMON_JUMP_SPEED_Y		0.18f
 #define SIMON_JUMP_DEFLECT_SPEED 0.2f
-#define SIMON_GRAVITY			0.002f
+#define SIMON_GRAVITY			0.0007f
 #define SIMON_DIE_DEFLECT_SPEED	 0.5f
 
 #define SIMON_STATE_IDLE			0
