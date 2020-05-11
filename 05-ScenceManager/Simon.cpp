@@ -114,6 +114,7 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Simon::Reset()
 {
 	SetState(SIMON_STATE_IDLE);
+	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
