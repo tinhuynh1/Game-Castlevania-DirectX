@@ -6,6 +6,7 @@
 #include "Portal.h"
 #include "Torch.h"
 #include "Brick.h"
+#include "BotStair.h"
 
 
 Simon::Simon(float x, float y) : CGameObject()
@@ -28,6 +29,7 @@ void Simon::Render()
 	else if (state == SIMON_STATE_JUMP) ani = SIMON_ANI_JUMP;
 	else if (state == SIMON_STATE_ATTACK) ani = SIMON_ANI_ATTACK;
 	else if (state == SIMON_STATE_SIT_AND_ATTACK) ani = SIMON_ANI_SIT_AND_ATTACK;
+	else if (state == SIMON_STATE_GO_UP_STAIR) ani = SIMON_ANI_GO_UP_STAIR;
 	else
 		{
 			if (vx == 0)
@@ -42,10 +44,11 @@ void Simon::Render()
 	if (untouchable) alpha = 128;
 
 	animation_set->at(ani)->Render(x, y,nx, alpha);
-
+	
 	//RenderBoundingBox();
 	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
 		whip->Render(animation_set->at(ani)->GetCurrentFrame());
+	//RenderBoundingBox();
 }
 void Simon::SetState(int state)
 {
@@ -53,6 +56,14 @@ void Simon::SetState(int state)
 
 	switch (state)
 	{
+	case SIMON_STATE_GO_UP_STAIR:
+		if (nx > 0)
+		{
+			vx = 0.04f;
+			vy = -0.04f;
+		}
+		//handle nx <0
+		break;
 	case SIMON_STATE_WALKING:
 			if (nx > 0)
 			{
@@ -102,6 +113,14 @@ void Simon::SetState(int state)
 }
 void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	if (state == SIMON_STATE_SIT)
+	{
+		left = x;
+		top = y + 6;
+		right = x + SIMON_BBOX_WIDTH;
+		bottom = y + SIMON_BBOX_HEIGHT+2;
+	}
+	else
 	left = x;
 	top = y;
 	right = x +  SIMON_BBOX_WIDTH;
@@ -116,6 +135,17 @@ void Simon::Reset()
 	SetState(SIMON_STATE_IDLE);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
+}
+RECT Simon::GetBound()
+{
+	RECT rect;
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	rect.left = l;
+	rect.top = t;
+	rect.right = r;
+	rect.bottom = b;
+	return rect;
 }
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -175,6 +205,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<Torch*>(e->obj))
 			{
 				DebugOut(L"Collision Simon and torch %d %d\n", e->nx, e->ny);
+				//Process normally
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) y += dy;
+			}
+			if (dynamic_cast<BotStair*>(e->obj))
+			{
+				DebugOut(L"Collision Simon and Botstair %d %d\n", e->nx, e->ny);
 				//Process normally
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
@@ -251,7 +288,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					Torch* torch = dynamic_cast<Torch*>(temp);
 					float left, top, right, bottom;
 					temp->GetBoundingBox(left, top, right, bottom);
-					if (whip->isColliding(left, top, right, bottom) == true)
+					
+					if (whip->isColliding(temp->GetBound()) == true)
 					{
 						DebugOut(L"[INFO]Whip Collision with Torch \n");
 						temp->SetState(TORCH_DESTROYED);

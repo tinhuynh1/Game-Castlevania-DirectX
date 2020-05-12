@@ -49,12 +49,11 @@ void Whip::Render(int currentFrame)
 	CAnimationSets::GetInstance()->Get(5)->at(state)->RenderByFrame(currentFrame, nx, x, y);
 	//RenderBoundingBox();
 }
-bool Whip::isColliding(float obj_left, float obj_top, float obj_right, float obj_bottom)
+bool Whip::isColliding(RECT rect_object)
 {
 	float whip_left, whip_top, whip_right, whip_bottom;
 	GetBoundingBox(whip_left, whip_top, whip_right, whip_bottom);
-
-	return CGameObject::AABB(whip_left, whip_top, whip_right, whip_bottom, obj_left, obj_top, obj_right, obj_bottom);
+	return CGameObject::AABB(GetBound(), rect_object);
 }
 void Whip::SetState(int state)
 {
@@ -84,4 +83,8 @@ void Whip::LevelUp()
 	if (state == NORMAL_WHIP) SetState(SHORT_CHAIN);
 	else if (state == SHORT_CHAIN) SetState(LONG_CHAIN);
 
+}
+RECT Whip::GetBound()
+{
+	return CGameObject::GetBound();
 }

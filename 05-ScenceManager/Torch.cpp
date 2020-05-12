@@ -26,3 +26,7 @@ void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		return;
 	}
 }
+RECT Torch::GetBound()
+{
+	return CGameObject::GetBound();
+}

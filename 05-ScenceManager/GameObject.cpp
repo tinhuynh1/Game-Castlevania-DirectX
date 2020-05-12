@@ -23,10 +23,10 @@ void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	dy = vy*dt;
 }
 
-bool CGameObject::AABB(float left_a, float top_a, float right_a, float bottom_a, float left_b, float top_b, float right_b, float bottom_b)
+bool CGameObject::AABB(RECT rect1, RECT rect2)
 {
 
-	return left_a < right_b && right_a > left_b && top_a < bottom_b && bottom_a > top_b;
+	return rect1.left < rect2.right && rect1.right > rect2.left && rect1.top < rect2.bottom && rect1.bottom > rect2.top;
 }
 
 /*
@@ -144,4 +144,15 @@ void CGameObject::RenderBoundingBox()
 CGameObject::~CGameObject()
 {
 
+}
+RECT CGameObject::GetBound()
+{
+	RECT rect;
+	float l, t, r, b;
+	GetBoundingBox(l, t, r, b);
+	rect.left = l;
+	rect.top = t;
+	rect.right = r;
+	rect.bottom = b;
+	return rect;
 }

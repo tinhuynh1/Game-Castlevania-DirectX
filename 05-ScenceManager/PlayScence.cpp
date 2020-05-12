@@ -36,6 +36,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_ITEM_HEART		6
 #define OBJECT_TYPE_ITEM_CHAIN		7
 #define OBJECT_TYPE_ITEM_DAGGER		8
+#define OBJECT_TYPE_BOTSTAIR   9
 #define SCENE_SECTION_MAPS 7
 #define OBJECT_TYPE_PORTAL	50
 
@@ -183,6 +184,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_WHIP: obj = new Whip(); break;
+	case OBJECT_TYPE_BOTSTAIR: obj = new BotStair(); break;
 	case OBJECT_TYPE_TORCH: 
 	{
 		int i = atoi(tokens[4].c_str());
@@ -350,7 +352,15 @@ void CPlayScene::Render()
 void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
-		delete objects[i];
+		if (dynamic_cast<Simon*>(objects[i]) || dynamic_cast<Whip*>(objects[i])) {
+			DebugOut(L"Object %d", i);
+		}
+			
+		else
+		{
+			delete objects[i];
+		}
+		
 
 	objects.clear();
 	player = NULL;
@@ -413,6 +423,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	{
 		//simon->SetOrientation(-1);
 		simon->SetState(SIMON_STATE_SIT);
+	}
+	else if (game->IsKeyDown(DIK_UP))
+	{
+		//simon->SetOrientation(-1);
+		simon->SetState(SIMON_STATE_GO_UP_STAIR);
 	}
 	else
 		simon->SetState(SIMON_STATE_IDLE);

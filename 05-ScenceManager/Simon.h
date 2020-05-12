@@ -7,7 +7,7 @@
 #define SIMON_WALKING_SPEED		0.08f 
 #define SIMON_JUMP_SPEED_Y		0.18f
 #define SIMON_JUMP_DEFLECT_SPEED 0.2f
-#define SIMON_GRAVITY			0.0007f
+#define SIMON_GRAVITY			 0.0007f
 #define SIMON_DIE_DEFLECT_SPEED	 0.5f
 
 #define SIMON_STATE_IDLE			0
@@ -17,6 +17,7 @@
 #define SIMON_STATE_SIT		     500
 #define SIMON_STATE_ATTACK		600
 #define	SIMON_STATE_SIT_AND_ATTACK 700
+#define SIMON_STATE_GO_UP_STAIR			800
 
 #define SIMON_ANI_IDLE			0
 #define SIMON_ANI_WALKING	    1
@@ -24,6 +25,7 @@
 #define SIMON_ANI_SIT		    2
 #define SIMON_ANI_ATTACK	    4
 #define SIMON_ANI_SIT_AND_ATTACK	5
+#define SIMON_ANI_GO_UP_STAIR	6
  
 
 #define SIMON_ANI_DIE				8
@@ -52,6 +54,7 @@ public:
 	void Reset();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	bool isOnGround() { return vy == 0; }
+	RECT GetBound();
 
 };
 

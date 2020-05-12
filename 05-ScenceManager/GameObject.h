@@ -3,7 +3,6 @@
 #include <Windows.h>
 #include <d3dx9.h>
 #include <vector>
-
 #include "Sprites.h"
 #include "Animations.h"
 
@@ -77,8 +76,7 @@ public:
 
 	D3DXVECTOR2 GetPosition() { return D3DXVECTOR2(x, y); }
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
-	bool AABB(float left_a, float top_a, float right_a, float bottom_a,
-		float left_b, float top_b, float right_b, float bottom_b);
+	bool AABB(RECT rect1, RECT rect2);
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
@@ -108,7 +106,7 @@ public:
 	int GetItemId() { return itemId; }
 	void SetItemId(int id) { this->itemId = id; }
 
-	
+	virtual RECT GetBound();
 	~CGameObject();
 };
 

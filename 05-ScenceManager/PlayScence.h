@@ -9,7 +9,7 @@
 #include "Map.h"
 #include "HeartItem.h"
 #include "Items.h"
-
+#include "BotStair.h"
 class CPlayScene: public CScene
 {
 protected: 
