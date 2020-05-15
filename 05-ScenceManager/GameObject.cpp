@@ -91,7 +91,7 @@ void CGameObject::FilterCollision(
 	vector<LPCOLLISIONEVENT> &coEvents,
 	vector<LPCOLLISIONEVENT> &coEventsResult,
 	float &min_tx, float &min_ty, 
-	float &nx, float &ny, float &rdx, float &rdy)
+	float &nx, float &ny)
 {
 	min_tx = 1.0f;
 	min_ty = 1.0f;
@@ -108,11 +108,11 @@ void CGameObject::FilterCollision(
 		LPCOLLISIONEVENT c = coEvents[i];
 
 		if (c->t < min_tx && c->nx != 0) {
-			min_tx = c->t; nx = c->nx; min_ix = i; rdx = c->dx;
+			min_tx = c->t; nx = c->nx; min_ix = i; 
 		}
 
 		if (c->t < min_ty  && c->ny != 0) {
-			min_ty = c->t; ny = c->ny; min_iy = i; rdy = c->dy;
+			min_ty = c->t; ny = c->ny; min_iy = i; 
 		}
 	}
 

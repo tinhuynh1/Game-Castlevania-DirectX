@@ -359,6 +359,7 @@ void CGame::_ParseSection_SCENES(string line)
 */
 void CGame::Load(LPCWSTR gameFile)
 {
+	CGame* g;
 	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
 
 	ifstream f;
@@ -390,19 +391,18 @@ void CGame::Load(LPCWSTR gameFile)
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n",gameFile);
 
-	SwitchScene(current_scene);
+	SwitchScene(current_scene, CGame::GetInstance()->simon);
 }
 
-void CGame::SwitchScene(int scene_id)
+void CGame::SwitchScene(int scene_id, Simon *simon)
 {
 	DebugOut(L"[INFO] Switching to scene %d\n", scene_id);
-
+	simon = ((CPlayScene*)scenes.at(current_scene))->GetPlayer();
 	scenes[current_scene]->Unload();
 
 	CTextures::GetInstance()->Clear();
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
-
 	current_scene = scene_id;
 	LPSCENE s = scenes[scene_id];
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());

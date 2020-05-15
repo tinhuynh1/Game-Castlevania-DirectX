@@ -38,6 +38,7 @@
 
 class Simon : public CGameObject
 {
+	static Simon* __instance;
 	Whip* whip;
 	int untouchable;
 	DWORD untouchable_start;
@@ -55,6 +56,7 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	bool isOnGround() { return vy == 0; }
 	RECT GetBound();
-
+	static Simon* GetInstance();
+	
 };
 

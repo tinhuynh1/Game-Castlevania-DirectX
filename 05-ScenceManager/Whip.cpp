@@ -1,4 +1,10 @@
 #include "Whip.h"
+Whip* Whip::__instance = NULL;
+Whip* Whip::GetInstance()
+{
+	if (__instance == NULL) __instance = new Whip();
+	return __instance;
+}
 Whip::Whip() :CGameObject()
 {
 	SetState(0);

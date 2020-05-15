@@ -9,6 +9,13 @@
 #include "BotStair.h"
 
 
+Simon* Simon::__instance = NULL;
+Simon* Simon::GetInstance()
+{
+	if (__instance == NULL) __instance = new Simon();
+	return __instance;
+}
+
 Simon::Simon(float x, float y) : CGameObject()
 {
 	untouchable = 0;
@@ -53,14 +60,13 @@ void Simon::Render()
 void Simon::SetState(int state)
 {
 	CGameObject::SetState(state);
-
 	switch (state)
 	{
 	case SIMON_STATE_GO_UP_STAIR:
 		if (nx > 0)
 		{
-			vx = 0.04f;
-			vy = -0.04f;
+				vx = 0.04f;
+				vy = -0.04f;	
 		}
 		//handle nx <0
 		break;
@@ -184,7 +190,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdy = 0;
 
 		// TODO: This is a very ugly designed function!!!!
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
 		//if (rdx != 0 && rdx!=dx)
@@ -209,7 +215,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
 			}
-			if (dynamic_cast<BotStair*>(e->obj))
+			else if (dynamic_cast<BotStair*>(e->obj))
 			{
 				DebugOut(L"Collision Simon and Botstair %d %d\n", e->nx, e->ny);
 				//Process normally
@@ -256,7 +262,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CPortal*>(e->obj))
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
-				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				CGame::GetInstance()->SwitchScene(p->GetSceneId(), this->GetInstance());
 			}
 
 		}
@@ -301,4 +307,3 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 }
 	
-

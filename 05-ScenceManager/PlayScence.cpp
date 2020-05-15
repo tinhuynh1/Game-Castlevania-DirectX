@@ -179,10 +179,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new Simon(x,y); 
 		player = (Simon*)obj;  
-
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_BRICK: 
+	{
+		int width = atoi(tokens[4].c_str());
+		int height = atoi(tokens[5].c_str());
+		obj = new CBrick();
+		obj->SetWidth(width);
+		obj->SetHeight(height);
+		break;
+	}
 	case OBJECT_TYPE_WHIP: obj = new Whip(); break;
 	case OBJECT_TYPE_BOTSTAIR: obj = new BotStair(); break;
 	case OBJECT_TYPE_TORCH: 
@@ -319,10 +326,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
-		if (cx > 450) 
+		if (cx > 450)
 		{
-			cx = 450.0f;
-			cy = 0.0f;
+			return;
 		}
 	}
 
@@ -352,22 +358,23 @@ void CPlayScene::Render()
 void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
-		if (dynamic_cast<Simon*>(objects[i]) || dynamic_cast<Whip*>(objects[i])) {
-			DebugOut(L"Object %d", i);
+	{
+
+		if (dynamic_cast<Simon*>(objects[i]) || dynamic_cast<Whip*>(objects[i]))
+		{
+			DebugOut(L"Object [%d]", objects.size());
 		}
-			
 		else
 		{
 			delete objects[i];
 		}
-		
+	}
 
 	objects.clear();
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
-
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -426,8 +433,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	}
 	else if (game->IsKeyDown(DIK_UP))
 	{
-		//simon->SetOrientation(-1);
-		simon->SetState(SIMON_STATE_GO_UP_STAIR);
+		if (simon->isCollisionWithStair == true)
+		{
+			//simon->SetOrientation(-1);
+			simon->SetState(SIMON_STATE_GO_UP_STAIR);
+		}
 	}
 	else
 		simon->SetState(SIMON_STATE_IDLE);

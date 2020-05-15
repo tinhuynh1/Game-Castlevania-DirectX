@@ -43,7 +43,9 @@ struct CCollisionEvent
 class CGameObject
 {
 public:
-
+	int width, height;
+	bool isOnStair = false;
+	bool isStopOnStair = false;
 	float x; 
 	float y;
 
@@ -61,6 +63,8 @@ public:
 
 	LPANIMATION_SET animation_set;
 	bool visible;
+	bool isCollisionWithStair = false;
+	bool isMoving = false;
 	int itemId;
 
 public: 
@@ -86,9 +90,7 @@ public:
 		float &min_tx, 
 		float &min_ty, 
 		float &nx, 
-		float &ny, 
-		float &rdx, 
-		float &rdy);
+		float &ny);
 
 	CGameObject();
 	 
@@ -105,7 +107,10 @@ public:
 
 	int GetItemId() { return itemId; }
 	void SetItemId(int id) { this->itemId = id; }
-
+	void SetWidth(int w) { this->width = w; }
+	int GetWidth() { return this->width; }
+	void SetHeight(int h) { this->height = h; }
+	int GetHeight() { return this->height; }
 	virtual RECT GetBound();
 	~CGameObject();
 };

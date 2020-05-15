@@ -26,7 +26,7 @@ void ChainItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx, rdy;
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		x += min_tx * dx;
 		y += min_ty * dy;

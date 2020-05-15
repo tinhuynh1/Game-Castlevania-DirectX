@@ -9,6 +9,7 @@
 #define WHIP_BBOX_WIDTH 25
 class Whip : public CGameObject
 {
+	static Whip* __instance;
 public:
 	Whip();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
@@ -20,5 +21,6 @@ public:
 	void SetWhipPosition(D3DXVECTOR2 simonPos, bool isStanding);
 	void LevelUp();
 	RECT GetBound();
+	static Whip* GetInstance();
 };
 
