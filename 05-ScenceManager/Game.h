@@ -57,10 +57,19 @@ public:
 
 	int IsKeyDown(int KeyCode);
 	void ProcessKeyboard();
+	static bool CGame::AABB(RECT rect1, RECT rect2)
+	{
 
+		if (rect1.left > rect2.right || rect1.right < rect2.left || rect1.top > rect2.bottom || rect1.bottom < rect2.top)
+		{
+			return false;
+		}
+
+		return true;
+	}
 	void Load(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
-	void SwitchScene(int scene_id, Simon* simon);
+	void SwitchScene(int scene_id);
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }

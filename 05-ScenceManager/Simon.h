@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Whip.h"
 #include "HeartItem.h"
@@ -17,7 +17,7 @@
 #define SIMON_STATE_SIT		     500
 #define SIMON_STATE_ATTACK		600
 #define	SIMON_STATE_SIT_AND_ATTACK 700
-#define SIMON_STATE_GO_UP_STAIR			800
+#define SIMON_STATE_ONSTAIR			800
 
 #define SIMON_ANI_IDLE			0
 #define SIMON_ANI_WALKING	    1
@@ -25,7 +25,10 @@
 #define SIMON_ANI_SIT		    2
 #define SIMON_ANI_ATTACK	    4
 #define SIMON_ANI_SIT_AND_ATTACK	5
-#define SIMON_ANI_GO_UP_STAIR	6
+#define SIMON_ANI_UPSTAIR_STOP	6
+#define SIMON_ANI_UPSTAIR	7
+#define SIMON_ANI_DOWNSTAIR_STOP	8
+#define SIMON_ANI_DOWNSTAIR	9
  
 
 #define SIMON_ANI_DIE				8
@@ -38,15 +41,28 @@
 
 class Simon : public CGameObject
 {
+public:
 	static Simon* __instance;
 	Whip* whip;
 	int untouchable;
 	DWORD untouchable_start;
 	bool isStanding;
-
+	int StairDirection;
+	bool isWalkingToStair; //biến dùng để xác định lúc đang đi bộ đến vị trí lên cầu thang thì đi chậm
+	bool isJumping = false;
+	bool isLand = false;
+	bool isSitAttack = false;
+	bool isAttack = false;
+	bool isOnStair = false;
+	bool isStopOnStair = false;
+	bool isUpstair = false;
+	bool isHitTopStair = false;
+	bool isHitBottomStair = false;
 	float start_x;
 	float start_y;
+	float firstY;
 public:
+	
 	Simon(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
@@ -54,9 +70,9 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void Reset();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	bool isOnGround() { return vy == 0; }
 	RECT GetBound();
-	static Simon* GetInstance();
+	void CheckCollisionOnStair(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
+	void CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
 	
 };
 

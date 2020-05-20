@@ -43,9 +43,15 @@ struct CCollisionEvent
 class CGameObject
 {
 public:
+	static CGameObject* __instance;
+	enum StairTypes
+	{
+		Null,
+		ToLeft,
+		ToRight
+	};
+	StairTypes StairTag;
 	int width, height;
-	bool isOnStair = false;
-	bool isStopOnStair = false;
 	float x; 
 	float y;
 
@@ -58,7 +64,7 @@ public:
 	int nx;	 
 
 	int state;
-
+	bool isOnGround = false;
 	DWORD dt; 
 
 	LPANIMATION_SET animation_set;
@@ -68,6 +74,7 @@ public:
 	int itemId;
 
 public: 
+	static CGameObject* GetInstance();
 	void SetPosition(float x, float y) { this->x = x, this->y = y;}
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
@@ -104,7 +111,10 @@ public:
 	// Visibility
 	void SetVisible(bool visible) { this->visible = visible; }
 	bool isVisible() { return this->visible; }
-
+	//ground
+	virtual bool IsOnGround();
+	virtual void SetOnGround(bool flag);
+	
 	int GetItemId() { return itemId; }
 	void SetItemId(int id) { this->itemId = id; }
 	void SetWidth(int w) { this->width = w; }

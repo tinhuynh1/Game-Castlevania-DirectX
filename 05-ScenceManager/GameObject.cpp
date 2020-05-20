@@ -156,3 +156,12 @@ RECT CGameObject::GetBound()
 	rect.bottom = b;
 	return rect;
 }
+bool CGameObject::IsOnGround()
+{
+	return this->isOnGround;
+}
+
+void CGameObject::SetOnGround(bool flag)
+{
+	isOnGround = flag;
+}

@@ -391,10 +391,10 @@ void CGame::Load(LPCWSTR gameFile)
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n",gameFile);
 
-	SwitchScene(current_scene, CGame::GetInstance()->simon);
+	SwitchScene(current_scene);
 }
 
-void CGame::SwitchScene(int scene_id, Simon *simon)
+void CGame::SwitchScene(int scene_id)
 {
 	DebugOut(L"[INFO] Switching to scene %d\n", scene_id);
 	simon = ((CPlayScene*)scenes.at(current_scene))->GetPlayer();

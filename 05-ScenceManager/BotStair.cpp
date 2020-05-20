@@ -11,5 +11,6 @@ void BotStair::GetBoundingBox(float& left, float& top, float& right, float& bott
 }
 void BotStair::Render()
 {
-	RenderBoundingBox();
+	/*animation_set->at(0)->Render(x, y, nx, 110);
+	RenderBoundingBox();*/
 }

@@ -1,11 +1,11 @@
 #pragma once
 #include "GameObject.h"
-#define BOTSTAIR_BBOX_WIDTH  16
-#define BOTSTAIR_BBOX_HEIGHT 16
-class BotStair : public CGameObject
+#define TOPSTAIR_BBOX_WIDTH  8
+#define TOPSTAIR_BBOX_HEIGHT 16
+class TopStair : public CGameObject
 {
 public:
-	BotStair();
+	TopStair();
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
