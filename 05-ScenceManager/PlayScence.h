@@ -14,7 +14,7 @@
 class CPlayScene: public CScene
 {
 public: 
-	static CPlayScene* __instance;
+	 
 	Simon *player;					// A play scene has to have player, right? 
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
@@ -27,39 +27,23 @@ public:
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_MAP(string line);
 public: 
-	static CPlayScene* GetInstance();
-	CPlayScene();
+	 
 	CPlayScene(int id, LPCWSTR filePath);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-	int GetId() { return this->id; }
-
-	LPCWSTR  GetFilePath() { return this->sceneFilePath; };
-   CPlayScene* GetInstanceOfPlayScene() {
-		return this;
-	}
 	Simon * GetPlayer() { return player; } 
-
-	friend class CPlayScenceKeyHandler;
+	vector<LPGAMEOBJECT> GetObjects() { return objects; };
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler
 {
-public:
-	CPlayScene* p;
+
 public: 
-	int Access(CPlayScene& playscene)
-	{
-		return playscene.objects.size();
-		
-	}
 	virtual void KeyState(BYTE *states);
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode);
 	CPlayScenceKeyHandler(CScene* s) :CScenceKeyHandler(s) {};
- 
-
 };
 

@@ -388,6 +388,37 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+
+	if (!isOnStair)
+	{
+		//fall down
+		vy += SIMON_GRAVITY * dt;
+		CheckCollisionWithGround(dt, coObjects);
+
+		isWalkingToStair = false;  //chỉnh speed lại thành đi bth 
+	}
+	else
+	{
+		x += dx;
+		y += dy;
+	}
+
+	//if (isHitTopStair || isHitBottomStair)
+	//{
+	//	CheckCollisionOnStair(dt, coObjects);
+	//}
+
+	if (isOnStair)
+	{
+		if (isHitTopStair == true && isUpstair == true)
+		{
+			CheckCollisionOnStair(dt, coObjects);
+		}
+		else if (isHitBottomStair == true && isUpstair == false)
+		{
+			CheckCollisionOnStair(dt, coObjects);
+		}
+	}
 }
 	
 void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
