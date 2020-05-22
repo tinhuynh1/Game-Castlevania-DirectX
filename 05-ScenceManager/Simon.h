@@ -5,6 +5,7 @@
 #include "ChainItem.h"
 #include "DaggerItem.h"
 #define SIMON_WALKING_SPEED		0.08f 
+#define SIMON_WALKING_TO_STAIR_SPEED	0.058f 
 #define SIMON_JUMP_SPEED_Y		0.18f
 #define SIMON_JUMP_DEFLECT_SPEED 0.2f
 #define SIMON_GRAVITY			 0.0007f
@@ -42,6 +43,7 @@
 class Simon : public CGameObject
 {
 public:
+	//static vector<LPGAMEOBJECT> listStair;
 	static Simon* __instance;
 	Whip* whip;
 	int untouchable;
@@ -58,6 +60,10 @@ public:
 	bool isUpstair = false;
 	bool isHitTopStair = false;
 	bool isHitBottomStair = false;
+
+	bool isHitTop = false; //biến này dùng để ko cho Simon ngồi xuống khi ấn phím xuống cầu thang
+	bool isHitLeft = false;
+
 	float start_x;
 	float start_y;
 	float firstY;

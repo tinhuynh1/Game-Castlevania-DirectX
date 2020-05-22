@@ -127,7 +127,7 @@
 # SIMON
 0	50	100	1
 #Botstair
-9	116	160	9
+9	92	160	9
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
 1	0	176	2	256	16

@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
-#define BOTSTAIR_BBOX_WIDTH  16
-#define BOTSTAIR_BBOX_HEIGHT 16
+#define BOTSTAIR_BBOX_WIDTH  8
+#define BOTSTAIR_BBOX_HEIGHT 8
 class BotStair : public CGameObject
 {
 public:

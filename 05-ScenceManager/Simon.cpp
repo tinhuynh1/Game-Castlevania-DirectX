@@ -72,7 +72,7 @@ void Simon::Render()
 
 	animation_set->at(ani)->Render(x, y,nx, alpha);
 	
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
 		whip->Render(animation_set->at(ani)->GetCurrentFrame());
 	//RenderBoundingBox();
@@ -83,9 +83,9 @@ void Simon::SetState(int state)
 	switch (state)
 	{
 	case SIMON_STATE_ONSTAIR:
-		isUpstair = true;
 		if (isUpstair)
 		{
+			nx = StairDirection;
 			if (nx > 0)
 			{
 				//simon đi lên hướng phải
@@ -99,8 +99,9 @@ void Simon::SetState(int state)
 				vy = -0.04f;
 			}
 		}
-		else
+		else if (isUpstair == false)
 		{
+			nx = -StairDirection;
 			if (nx > 0)
 			{
 				//simon xuống hướng phải
@@ -125,6 +126,15 @@ void Simon::SetState(int state)
 		//////////////////
 		break;
 	case SIMON_STATE_WALKING:
+		if (isWalkingToStair)
+		{
+			if (nx > 0)
+				vx = SIMON_WALKING_TO_STAIR_SPEED;
+			else
+				vx = -SIMON_WALKING_TO_STAIR_SPEED;
+		}
+		else
+		{
 			if (nx > 0)
 			{
 				vx = SIMON_WALKING_SPEED;
@@ -133,6 +143,7 @@ void Simon::SetState(int state)
 			{
 				vx = -SIMON_WALKING_SPEED;
 			}
+		}
 			break;
 	case SIMON_STATE_SIT:
 	{
@@ -477,10 +488,10 @@ void Simon::CheckCollisionOnStair(DWORD dt, vector<LPGAMEOBJECT>* colliable_obje
 			vy = 0;
 			vx = 0;
 			isOnStair = false;
-			//isHitTopStair = false;
-			//isHitBottomStair = false;
+			isHitTopStair = false;
+			isHitBottomStair = false;
 			isStopOnStair = false;
-			//isWalkingToStair = false;
+			isWalkingToStair = false;
 
 
 			//if (isSiting == false)

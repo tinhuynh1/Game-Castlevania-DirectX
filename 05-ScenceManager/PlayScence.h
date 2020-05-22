@@ -14,54 +14,52 @@
 class CPlayScene: public CScene
 {
 public: 
-	CScene* scene;
-	//static CPlayScene* __instance;
+	static CPlayScene* __instance;
 	Simon *player;					// A play scene has to have player, right? 
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPMAP> tileMap;
-	//int id;
-	//LPCWSTR filePath;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_MAP(string line);
-	CScene* GetScene() { return scene; }
-	//vector<LPGAMEOBJECT> GetListObject() { return objects; };
-
-	
 public: 
-	//static CPlayScene* GetInstance();
+	static CPlayScene* GetInstance();
+	CPlayScene();
 	CPlayScene(int id, LPCWSTR filePath);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-	int GetId() { return scene->GetSceneId(); }
-	LPCWSTR  GetFilePath() { return scene->GetFilePathScene(); }
-	
-	
-	/*void SetId(int id) { this->id = id; }
-	void SetFilePath(LPCWSTR filePath) { this->filePath = filePath; }*/
+	int GetId() { return this->id; }
 
+	LPCWSTR  GetFilePath() { return this->sceneFilePath; };
+   CPlayScene* GetInstanceOfPlayScene() {
+		return this;
+	}
 	Simon * GetPlayer() { return player; } 
 
-	//friend class CPlayScenceKeyHandler;
+	friend class CPlayScenceKeyHandler;
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler
 {
 public:
-	//CScene* scene;
-	CPlayScene* cplayscene;
-	//vector<LPGAMEOBJECT> objects = cplayscene->GetListObject();
+	CPlayScene* p;
 public: 
-virtual void KeyState(BYTE *states);
+	int Access(CPlayScene& playscene)
+	{
+		return playscene.objects.size();
+		
+	}
+	virtual void KeyState(BYTE *states);
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode);
 	CPlayScenceKeyHandler(CScene* s) :CScenceKeyHandler(s) {};
+ 
+
 };
 

@@ -8,8 +8,12 @@
 #include "Portal.h"
 
 using namespace std;
-CPlayScene::CPlayScene(int id, LPCWSTR filePath):
-	CScene(id, filePath)
+CPlayScene::CPlayScene() : CScene(this->id, this->sceneFilePath)
+{
+	
+	key_handler = new CPlayScenceKeyHandler(this);
+}
+CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
 }
@@ -46,17 +50,13 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
-//CPlayScene* CPlayScene::__instance = NULL;
-//
-//CPlayScene* CPlayScene::GetInstance()
-//{
-//	CScene* Cscene = CScene::GetInstance();
-//	int id = Cscene->GetSceneId();
-//	LPCWSTR path = Cscene->GetFilePathScene();
-//	if (__instance == NULL) __instance = new CPlayScene(id,path);
-//	return __instance;
-//}
+CPlayScene* CPlayScene::__instance = NULL;
 
+CPlayScene* CPlayScene::GetInstance() 
+{
+	if (__instance == NULL) __instance = new CPlayScene();
+	return __instance;
+}
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
 	vector<string> tokens = split(line);
@@ -313,6 +313,7 @@ void CPlayScene::Load()
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	DebugOut(L"[INFO] Size is: %d", this->objects.size());
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -334,11 +335,73 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		objects[i]->Update(dt, &coObjects);
 	}
-	if(CGame::GetInstance()->IsKeyDown(DIK_UP))
-	{
-		if ((player->state == SIMON_STATE_JUMP) || (player->isAttack)) return;
-		
-		for (int i = 0; i < objects.size(); i++)
+	//if (CGame::GetInstance()->IsKeyDown(DIK_DOWN))
+	//{
+	//	if ((player->isAttack)) return;
+	//	for (int i = 0; i < objects.size(); i++)
+	//	{
+	//		LPGAMEOBJECT temp = objects.at(i);
+	//		if (dynamic_cast<BotStair*>(temp))
+	//		{ 
+	//			if (CGame::GetInstance()->AABB(objects.at(i)->GetBound(), player->GetBound()))
+	//			{
+	//				player->isHitBottomStair = true;
+	//			}
+	//		}
+	//		else if (dynamic_cast<TopStair*>(temp))
+	//		{
+	//			if (CGame::GetInstance()->AABB(objects.at(i)->GetBound(), player->GetBound()))
+	//			{
+	//				if (player->nx > 0)
+	//				{
+	//					player->StairDirection = -1;
+	//					if (objects.at(i)->StairTag == CGameObject::StairTypes::ToLeft)
+	//					{
+	//						player->StairDirection = 1;
+	//					}
+	//				}
+	//				else if (player->nx < 0)
+	//				{
+	//					player->StairDirection = 1;
+	//					if (objects.at(i)->StairTag == CGameObject::StairTypes::ToRight)
+	//					{
+	//						player->StairDirection = -1;
+	//					}
+	//				}
+	//				if (abs(player->x - objects.at(i)->x) <= 10)
+	//				{
+	//					if(objects.at(i)->StairTag == CGameObject::StairTypes::ToLeft)
+	//					{
+	//						player->isHitTop = true;
+	//						player->isWalkingToStair = true;
+	//						player->nx = 1;
+	//						player->SetState(SIMON_STATE_WALKING);
+	//					}
+	//				}
+	//				else
+	//				{
+	//					player->isOnStair = true;
+	//				}
+	//				if (objects.at(i)->StairTag == CGameObject::StairTypes::ToRight)
+	//				{
+	//					player->isHitTop = true;
+	//					player->SetPosition(objects.at(i)->x, player->GetPosition().y);
+	//					player->isOnStair = true;
+	//				}
+	//			}
+	//		}
+	//		if (player->isOnStair)
+	//		{
+	//			player->isStopOnStair = false;
+	//			if (player->isUpstair == false) // dòng này để tránh simon đang xuống cầu thang nhưng lại checkColWithStair do biến isHitTopStair vẫn true
+	//				player->isHitTopStair == false;
+	//			player->isUpstair = true;
+	//			player->SetState(SIMON_STATE_ONSTAIR);
+	//		}
+	//	}
+	//	
+	//}
+	/*for (int i = 0; i < objects.size(); i++)
 		{
 			LPGAMEOBJECT temp = objects.at(i);
 			if (dynamic_cast<BotStair*>(temp))
@@ -356,6 +419,8 @@ void CPlayScene::Update(DWORD dt)
 							player->isWalkingToStair = true;
 							player->nx = 1;
 							player->SetState(SIMON_STATE_WALKING);
+							
+							DebugOut(L"Vx: true \n");
 						}
 						else if (objects.at(i)->StairTag == CGameObject::StairTypes::ToLeft)
 						{
@@ -380,15 +445,8 @@ void CPlayScene::Update(DWORD dt)
 				}
 			}
 
-		}
-		if (player->isOnStair)
-		{
-			player->isStopOnStair = false;
-			if (player->isUpstair == false); //dòng này để tránh simon đang xuống cầu thang nhưng lại checkColwithstair do biến is HitTopStair vẫn true
-			player->isUpstair = true;
-			player->SetState(SIMON_STATE_ONSTAIR);
-		}
-	}
+		}*/
+	
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
@@ -440,7 +498,7 @@ void CPlayScene::Unload()
 
 		if (dynamic_cast<Simon*>(objects[i]) || dynamic_cast<Whip*>(objects[i]))
 		{
-			DebugOut(L"Object [%d]", objects.size());
+			DebugOut(L"Object [%d] \n", objects.size());
 		}
 		else
 		{
@@ -527,9 +585,19 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		//simon->SetOrientation(-1);
 		simon->SetState(SIMON_STATE_SIT);
 	}
+	else if (game->IsKeyDown(DIK_UP))
+	{
+		CPlayScene* p = CPlayScene::GetInstance();
+		/*if ((simon->state == SIMON_STATE_JUMP) || (simon->isAttack)) return;
+		DebugOut(L"Size is: %d \n", p->objects.size());*/
+		int size = this->Access(*p);
+		DebugOut(L"Size is %d: \n", size);
+		
+	}
 	else
 		simon->SetState(SIMON_STATE_IDLE);
 }
+
 void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	Simon* simon = ((CPlayScene*)scence)->GetPlayer();
@@ -579,6 +647,7 @@ void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		}
 		break;
 	case DIK_UP:
+		DebugOut(L"Key Up \n");
 		simon->isStopOnStair = true;
 		simon->vx = 0;
 		simon->vy = 0;
