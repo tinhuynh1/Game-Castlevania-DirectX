@@ -127,7 +127,6 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BotStair.cpp" />
     <ClCompile Include="Brick.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChainItem.cpp" />
     <ClCompile Include="DaggerItem.cpp" />
     <ClCompile Include="HeartItem.cpp" />
@@ -153,7 +152,6 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="BotStair.h" />
     <ClInclude Include="Brick.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="ChainItem.h" />
     <ClInclude Include="DaggerItem.h" />
     <ClInclude Include="HeartItem.h" />

@@ -4,8 +4,8 @@
 #include "HeartItem.h"
 #include "ChainItem.h"
 #include "DaggerItem.h"
-#define SIMON_WALKING_SPEED		0.08f 
-#define SIMON_WALKING_TO_STAIR_SPEED	0.058f 
+#define SIMON_WALKING_SPEED		0.025f 
+#define SIMON_WALKING_TO_STAIR_SPEED	0.015f 
 #define SIMON_JUMP_SPEED_Y		0.18f
 #define SIMON_JUMP_DEFLECT_SPEED 0.2f
 #define SIMON_GRAVITY			 0.0007f

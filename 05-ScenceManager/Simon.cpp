@@ -89,14 +89,14 @@ void Simon::SetState(int state)
 			if (nx > 0)
 			{
 				//simon đi lên hướng phải
-				vx = 0.04f;
-				vy = -0.04f;
+				vx = 0.008f;
+				vy = -0.008f;
 			}
 			else
 			{
 				//simon đi lên hướng trái
-				vx = -0.04f;
-				vy = -0.04f;
+				vx = -0.008f;
+				vy = -0.004f;
 			}
 		}
 		else if (isUpstair == false)
@@ -105,14 +105,14 @@ void Simon::SetState(int state)
 			if (nx > 0)
 			{
 				//simon xuống hướng phải
-				vx = 0.04f;
-				vy = 0.04f;
+				vx = 0.008f;
+				vy = 0.008f;
 			}
 			else
 			{
 				//simon đi xuống hướng trái
-				vx = -0.04f;
-				vy = 0.04f;
+				vx = -0.008f;
+				vy = 0.008f;
 			}
 		}
 		if (isStopOnStair)
@@ -149,7 +149,6 @@ void Simon::SetState(int state)
 	{
 		isStanding = false;
 		vx = 0;
-		vy = 0;
 		break;
 	}
 	case SIMON_STATE_JUMP:
@@ -174,6 +173,8 @@ void Simon::SetState(int state)
 	case SIMON_STATE_IDLE:
 	{
 		isStanding = true;
+		isSitAttack = false;
+		isAttack = false;
 		vx = 0;
 		vy = 0;
 		break;
@@ -225,16 +226,23 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 	whip->Update(dt, coObjects);
 	// Simple fall down
-	vy += SIMON_GRAVITY * dt;
+	//vy += SIMON_GRAVITY * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
+	if (GetState() == SIMON_STATE_ATTACK)
+	{
+		
+	}
 	//simon không ở trên cầu thang
 	if (!isOnStair)
 	{
 		vy += SIMON_GRAVITY * dt;
+		//CheckCollisionWithGround(dt, coObjects);
+
+		isWalkingToStair = false;  //chỉnh speed lại thành đi bth 
 	}
 	else
 	{
@@ -243,9 +251,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (isOnStair)
 	{
-		if (isUpstair == true)
+		if (isHitTopStair == true && isUpstair == true)
 		{
-
+			CheckCollisionOnStair(dt, coObjects);
+		}
+		else if (isHitBottomStair == true && isUpstair == false)
+		{
+			CheckCollisionOnStair(dt, coObjects);
 		}
 	}
 
@@ -389,36 +401,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (!isOnStair)
-	{
-		//fall down
-		vy += SIMON_GRAVITY * dt;
-		CheckCollisionWithGround(dt, coObjects);
-
-		isWalkingToStair = false;  //chỉnh speed lại thành đi bth 
-	}
-	else
-	{
-		x += dx;
-		y += dy;
-	}
-
-	//if (isHitTopStair || isHitBottomStair)
-	//{
-	//	CheckCollisionOnStair(dt, coObjects);
-	//}
-
-	if (isOnStair)
-	{
-		if (isHitTopStair == true && isUpstair == true)
-		{
-			CheckCollisionOnStair(dt, coObjects);
-		}
-		else if (isHitBottomStair == true && isUpstair == false)
-		{
-			CheckCollisionOnStair(dt, coObjects);
-		}
-	}
 }
 	
 void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
@@ -432,16 +414,6 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 
 	CalcPotentialCollisions(colliable_objects, coEvents);
 
-
-	//// reset untouchable timer if untouchable time has passed
-	//if (GetTickCount() - untouchable_start > Simon_UNTOUCHABLE_TIME)
-	//{
-	//	untouchable_start = 0;
-	//	untouchable = 0;
-	//}
-
-
-	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
 		x += dx; //dx=vx*dt
@@ -479,12 +451,9 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 
 			isJumping = false;
 		}
-
-
 	}
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-
 }
 void Simon::CheckCollisionOnStair(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
@@ -523,9 +492,6 @@ void Simon::CheckCollisionOnStair(DWORD dt, vector<LPGAMEOBJECT>* colliable_obje
 			isHitBottomStair = false;
 			isStopOnStair = false;
 			isWalkingToStair = false;
-
-
-			//if (isSiting == false)
 			SetState(SIMON_STATE_IDLE);
 		}
 	}

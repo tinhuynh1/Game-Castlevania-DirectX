@@ -325,117 +325,6 @@ void CPlayScene::Update(DWORD dt)
 			continue;
 		objects[i]->Update(dt, &coObjects);
 	}
-	//if (CGame::GetInstance()->IsKeyDown(DIK_DOWN))
-	//{
-	//	if ((player->isAttack)) return;
-	//	for (int i = 0; i < objects.size(); i++)
-	//	{
-	//		LPGAMEOBJECT temp = objects.at(i);
-	//		if (dynamic_cast<BotStair*>(temp))
-	//		{ 
-	//			if (CGame::GetInstance()->AABB(objects.at(i)->GetBound(), player->GetBound()))
-	//			{
-	//				player->isHitBottomStair = true;
-	//			}
-	//		}
-	//		else if (dynamic_cast<TopStair*>(temp))
-	//		{
-	//			if (CGame::GetInstance()->AABB(objects.at(i)->GetBound(), player->GetBound()))
-	//			{
-	//				if (player->nx > 0)
-	//				{
-	//					player->StairDirection = -1;
-	//					if (objects.at(i)->StairTag == CGameObject::StairTypes::ToLeft)
-	//					{
-	//						player->StairDirection = 1;
-	//					}
-	//				}
-	//				else if (player->nx < 0)
-	//				{
-	//					player->StairDirection = 1;
-	//					if (objects.at(i)->StairTag == CGameObject::StairTypes::ToRight)
-	//					{
-	//						player->StairDirection = -1;
-	//					}
-	//				}
-	//				if (abs(player->x - objects.at(i)->x) <= 10)
-	//				{
-	//					if(objects.at(i)->StairTag == CGameObject::StairTypes::ToLeft)
-	//					{
-	//						player->isHitTop = true;
-	//						player->isWalkingToStair = true;
-	//						player->nx = 1;
-	//						player->SetState(SIMON_STATE_WALKING);
-	//					}
-	//				}
-	//				else
-	//				{
-	//					player->isOnStair = true;
-	//				}
-	//				if (objects.at(i)->StairTag == CGameObject::StairTypes::ToRight)
-	//				{
-	//					player->isHitTop = true;
-	//					player->SetPosition(objects.at(i)->x, player->GetPosition().y);
-	//					player->isOnStair = true;
-	//				}
-	//			}
-	//		}
-	//		if (player->isOnStair)
-	//		{
-	//			player->isStopOnStair = false;
-	//			if (player->isUpstair == false) // dòng này để tránh simon đang xuống cầu thang nhưng lại checkColWithStair do biến isHitTopStair vẫn true
-	//				player->isHitTopStair == false;
-	//			player->isUpstair = true;
-	//			player->SetState(SIMON_STATE_ONSTAIR);
-	//		}
-	//	}
-	//	
-	//}
-	/*for (int i = 0; i < objects.size(); i++)
-		{
-			LPGAMEOBJECT temp = objects.at(i);
-			if (dynamic_cast<BotStair*>(temp))
-			{
-				if (CGame::GetInstance()->AABB(objects.at(i)->GetBound(), player->GetBound()))
-				{
-					if (objects.at(i)->StairTag == CGameObject::StairTypes::ToRight)
-						player->StairDirection = 1;
-					else if (objects.at(i)->StairTag == CGameObject::StairTypes::ToLeft)
-						player->StairDirection = -1;
-					if (abs(player->x - objects.at(i)->x) < 14)
-					{
-						if (objects.at(i)->StairTag == CGameObject::StairTypes::ToRight)
-						{
-							player->isWalkingToStair = true;
-							player->nx = 1;
-							player->SetState(SIMON_STATE_WALKING);
-							
-							DebugOut(L"Vx: true \n");
-						}
-						else if (objects.at(i)->StairTag == CGameObject::StairTypes::ToLeft)
-						{
-							player->isWalkingToStair = true;
-							player->nx = -1;
-							player->SetState(SIMON_STATE_WALKING);
-						}
-					}
-					else
-					{
-						player ->isWalkingToStair = false;
-						player->isOnStair = true;
-						break;
-					}
-				}
-			}
-			else if (dynamic_cast<TopStair*>(temp))
-			{
-				if (CGame::GetInstance()->AABB(objects.at(i)->GetBound(), player->GetBound()))
-				{
-					player->isHitTopStair = true;
-				}
-			}
-
-		}*/
 	
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
@@ -514,8 +403,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		if ((simon->GetState() == SIMON_STATE_ATTACK) || (simon->GetState() == SIMON_STATE_SIT_AND_ATTACK))
 			return;
 		if (simon->GetState() == SIMON_STATE_IDLE || simon->GetState() == SIMON_STATE_JUMP)
-			simon->SetState(SIMON_STATE_ATTACK);
+		{			
+			simon->SetState(SIMON_STATE_ATTACK);		
+		}
+		
 		else if (simon->GetState() == SIMON_STATE_SIT) {
+			simon->isAttack = true;
 			simon->SetState(SIMON_STATE_SIT_AND_ATTACK);
 		}
 		break;
@@ -778,6 +671,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 					}
 					if (abs(simon->x - list.at(i)->x) < 14)
 					{
+						DebugOut(L"Distance is: %f \n", abs(simon->x - list.at(i)->x));
 						if (list.at(i)->StairTag == CGameObject::StairTypes::ToRight)
 						{
 							simon->isWalkingToStair = true;
@@ -807,7 +701,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				}
 			}
 		}
-		if (!simon->isOnStair)
+		if (simon->isOnStair)
 		{
 			simon->isStopOnStair = false;
 			if (simon->isUpstair == false) //dòng này để tránh Simon đang xuống cầu thang nhưng lại checkColWithStair do biến isHitTopStair vẫn true
@@ -816,8 +710,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			simon->SetState(SIMON_STATE_ONSTAIR);
 		}
 	}
-	else
-		simon->SetState(SIMON_STATE_IDLE);
+	/*else
+		simon->SetState(SIMON_STATE_IDLE);*/
 }
 
 void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
