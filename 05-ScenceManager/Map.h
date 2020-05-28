@@ -11,7 +11,7 @@
 #define SCREEN_HEIGHT 240
 #define TILE_HEIGHT			16
 #define TILE_WIDTH			16
-#define	ID_TILE_MAP	123
+#define	ID_TILE_MAP	100
 using namespace std;
 class Map
 {

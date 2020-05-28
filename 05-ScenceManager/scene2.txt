@@ -1,142 +1,43 @@
-# id	file_path	transparent_color_r	g	b
-[TEXTURES]
-0	textures\simon.png	255	0	255
-20	textures\misc.png	176	224	248
-10	textures\enemies.png	3	26	110
-30	textures\bbox.png 	0	0	0
-40	textures\object.png 	255	0	255
-50	textures\whip.png	255	0	255
-60	textures\Objects.png	116	116	116
-70	textures\effect.png	116	116	116
-123	textures\tilesheet2.png	0	0	0	4	6
-# id	left	top	right	bottom	texture_id
-[SPRITES]
-#BOTSTAIR
-40000	0	176	16	192	30
-#TORCH	
-50000	48	24	64	56	40
-50001	75	24	91	56	40
-#effect
-50002	455	123	467	163	70
-50003	470	123	482	163	70
-50004	485	123	497	163	70
-# SIMON
-# idle 
-10011	81	10	97	40	0
-#walk
-10012	110	10	122	40	0
-10013	136	10	151	40	0
-#sit
-10014	164	10	180	40	0
-#jump
-10015	164	7	180	40	0
-#hit
-10016	61	53	85	83	0
-10017	109	53	125	81	0
-10018	153	54	175	83	0
-#sit and hit
-10019	21	332	53	363	0
-10020	65	336	97	359	0
-10021	131	338	175	360	0
-#stop stair up 
-10024	169	79	184	110	70
-#go up stair
-10022	234	78	246	109	70
-10023	169	79	184	110	70
-
-#BRICK
-20001	0	176	16	192	30
-#WHIP
-80000	0	0	120	32	50
-80001	120	0	240	32	50
-80002	240	0	360	32	50
-#short chain
-80003	0	33	120	65	50
-80004	120	33	240	65	50
-80005	240	33	360	65	50
-#long chain
-80006	0	66	120	98	50
-80007	120	66	240	98	50
-80008	240	66	360	98	50
-#HEART
-90000	29	6	41	16	60
-#ITEM_CHAIN
-90001	1	1	17	17	60
-#ITEM_DAGGER
-90002	1	22	17	31	60
-# ani_id	sprite1_id	time1	sprite2_id	time2	...
-[ANIMATIONS]
-# ==== TORCH =========
-101	50000	100	50001	100
-102	50002	100	50003	100	50004	100
-# ==== SIMON =========
-#idle 
-401	10011	100
-#walk 
-501	10011	100	10012	100	10013	100
-#sit
-502	10014	100
-#jump
-503	10015	100
-#hit
-504	10016	100	10017	100	10018	100
-#sit and hit
-505	10019	100	10020	100	10021	100
-#stop stair top
-506	10024	100
-#go up stair
-507	10022	100	10023	100
-# ==== BRICK =========
-601	20001	100
-# ==== WHIP =========
-800	80000	100	80001	100	80002	100
-#short chain
-801	80003	100	80004	100	80005	100
-#long chain
-802	80006	100	80007	100	80008	100
-# ==== HEART =========
-900	90000	100
-# Chain
-901	90001	100
-# Dagger
-902	90002	100
-#Botstair
-301	40000	100
-# id	ani1	ani2	ani3
-#
-[ANIMATION_SETS]
-# SIMON
-1	401	501	502	503	504	505	506	507
-# BRICK 
-2	601
-#TORCH 
-4	101	102
-#WHIP
-5	800	801	802
-#HEART
-6	900
-#ITEM_Chain
-7	901
-#ITEMS_Dagger
-8	902
-#BotStair
-9	301
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Simon , 1 = Brick, 2 = Goomba, 4 = Torch, 5 whip, 6 = item heart, 7 = item chain, 8=item dagger, 9 = botstair
+# type: 0 = Simon , 1 = Brick, 2 = Candle, 3= Whip, 4= Items_BigHeart, 5 = Items_Chain, 6 = Items_Dagger, 7 = Dagger
+# 8 = Black Knight
+
 # SIMON
-0	50	100	1
-#Botstair
-9	92	160	9
+0	10	120	0
+
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
-1	0	176	2	256	16
-1	224	128	2	16	48	
+1	0	176	1	224	16
+1	0	128	1	16	48
+1	224	128	1	16	48
+1	0	80	1	160	16
+1	176	112	1	48	16
+
+#Small candle	extra1: item, extra 2: state
+2	76	116	2	1	1
+2	206	116	2	1	1
+2	140	20	2	1	1
+
+#Black Knight
+8	74	48	5
+
+# WHIP
+#3	0	0	3
+
+# STAIR bottom
+# type	l	t	r	b	direction
+9	94	162	126	170	1
+
+# STAIR top
+# type	l	t	r	b
+10	178	78	179	104	-1
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	624	98	0	640	150	2
-
+50	160	0	0	180	10	1
+[MAP_INFO]
+4	6
 [MAP]
 0	1	2	3	1	1	1	1	4	5	6	7	2	3	0	0
 0	1	2	3	1	1	1	1	5	1	8	9	2	3	0	0

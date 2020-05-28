@@ -4,9 +4,9 @@
 #include "HeartItem.h"
 #include "ChainItem.h"
 #include "DaggerItem.h"
-#define SIMON_WALKING_SPEED		0.025f 
-#define SIMON_WALKING_TO_STAIR_SPEED	0.015f 
-#define SIMON_JUMP_SPEED_Y		0.18f
+#define SIMON_WALKING_SPEED		0.08f 
+#define SIMON_WALKING_TO_STAIR_SPEED	0.058f 
+#define SIMON_JUMP_SPEED_Y		0.22f
 #define SIMON_JUMP_DEFLECT_SPEED 0.2f
 #define SIMON_GRAVITY			 0.0007f
 #define SIMON_DIE_DEFLECT_SPEED	 0.5f
@@ -26,16 +26,17 @@
 #define SIMON_ANI_SIT		    2
 #define SIMON_ANI_ATTACK	    4
 #define SIMON_ANI_SIT_AND_ATTACK	5
-#define SIMON_ANI_UPSTAIR_STOP	6
-#define SIMON_ANI_UPSTAIR	7
-#define SIMON_ANI_DOWNSTAIR_STOP	8
-#define SIMON_ANI_DOWNSTAIR	9
- 
+#define SIMON_ANI_UPSTAIR	6
+#define SIMON_ANI_UPSTAIR_STOP	7
+#define SIMON_ANI_DOWNSTAIR	8
+#define SIMON_ANI_DOWNSTAIR_STOP	9
+//#define SIMON_ANI_DOWNSTAIR	8
+//#define SIMON_ANI_DOWNSTAIR_STOP	9
 
-#define SIMON_ANI_DIE				8
+//#define SIMON_ANI_DIE				8
  
-#define SIMON_BBOX_WIDTH  15
-#define SIMON_BBOX_HEIGHT 27
+#define SIMON_BBOX_WIDTH  16
+#define SIMON_BBOX_HEIGHT 30
 
 #define SIMON_UNTOUCHABLE_TIME 5000
 #define SIMON_ATTACK_TIME	300
@@ -48,18 +49,34 @@ public:
 	Whip* whip;
 	int untouchable;
 	DWORD untouchable_start;
-	bool isStanding;
-	int StairDirection;
-	bool isWalkingToStair; //biến dùng để xác định lúc đang đi bộ đến vị trí lên cầu thang thì đi chậm
 	bool isJumping = false;
-	bool isLand = false;
+	bool isSitThrow = false; //chỉ dùng để quản lý animation ngồi đánh 
 	bool isSitAttack = false;
 	bool isAttack = false;
+	bool isThrow = false;
+	bool isUseStopWatch = false;
+	bool isHitDoor = false;
+	bool isHitEnemy = false;
+	bool isUntouchable = false;
+	bool isBreakRock;
+	bool isBreakRockChicken;
+	bool isInvisible;
+	bool isRevive;
+	bool isEatingItem;
+	bool isLand = false;
+	bool isStanding = true;
+	int check;
+	bool isThrowDouble = false;
+	bool isDamageBoss = true;
+	int count;
+
+	int StairDirection;
+	bool isWalkingToStair; //biến dùng để xác định lúc đang đi bộ đến vị trí lên cầu thang thì đi chậm
 	bool isOnStair = false;
 	bool isStopOnStair = false;
-	bool isUpstair = false;
 	bool isHitTopStair = false;
 	bool isHitBottomStair = false;
+	bool isUpstair = false;
 
 	bool isHitTop = false; //biến này dùng để ko cho Simon ngồi xuống khi ấn phím xuống cầu thang
 	bool isHitLeft = false;
@@ -67,6 +84,10 @@ public:
 	float start_x;
 	float start_y;
 	float firstY;
+	DWORD timerHitEnemy = 0;
+	DWORD timerDie = 0;
+	DWORD timerChangeColor = 0;
+	DWORD timerLand = 0;
 public:
 	
 	Simon(float x = 0.0f, float y = 0.0f);
@@ -75,7 +96,7 @@ public:
 	void SetState(int state);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void Reset();
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	RECT GetBound();
 	void CheckCollisionOnStair(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
 	void CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);

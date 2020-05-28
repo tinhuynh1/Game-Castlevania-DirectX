@@ -1,4 +1,6 @@
 #include "Whip.h"
+#define WHIP_ANI_SET 3
+
 Whip* Whip::__instance = NULL;
 Whip* Whip::GetInstance()
 {
@@ -52,8 +54,8 @@ void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 }
 void Whip::Render(int currentFrame)
 {
-	CAnimationSets::GetInstance()->Get(5)->at(state)->RenderByFrame(currentFrame, nx, x, y);
-	//RenderBoundingBox();
+	CAnimationSets::GetInstance()->Get(WHIP_ANI_SET)->at(state)->RenderByFrame(currentFrame, nx, x, y);
+	RenderBoundingBox();
 }
 bool Whip::isColliding(RECT rect_object)
 {

@@ -64,7 +64,6 @@ public:
 	int nx;	 
 
 	int state;
-	bool isOnGround = false;
 	DWORD dt; 
 
 	LPANIMATION_SET animation_set;
@@ -72,6 +71,7 @@ public:
 	bool isCollisionWithStair = false;
 	bool isMoving = false;
 	int itemId;
+	bool isDeleted = false;
 
 public: 
 	static CGameObject* GetInstance();
@@ -114,13 +114,21 @@ public:
 	//ground
 	virtual bool IsOnGround();
 	virtual void SetOnGround(bool flag);
-	
+	bool isOnGround = false;
+
+	//object state
+	virtual bool IsDelete();
+	virtual void SetDelete(bool flag);
+
 	int GetItemId() { return itemId; }
 	void SetItemId(int id) { this->itemId = id; }
+
 	void SetWidth(int w) { this->width = w; }
 	int GetWidth() { return this->width; }
+
 	void SetHeight(int h) { this->height = h; }
 	int GetHeight() { return this->height; }
+
 	virtual RECT GetBound();
 	~CGameObject();
 };

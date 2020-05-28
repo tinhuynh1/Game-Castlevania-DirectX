@@ -6,11 +6,15 @@
 #include "Brick.h"
 #include "Simon.h"
 #include "Torch.h"
+#include "HeartItem.h"
+#include "ChainItem.h"
+#include "DaggerItem.h"
 #include "Map.h"
 #include "HeartItem.h"
 #include "Items.h"
 #include "BotStair.h"
 #include "TopStair.h"
+#include "Knight.h"
 class CPlayScene: public CScene
 {
 public: 
@@ -19,12 +23,13 @@ public:
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> listStair;
+	vector<LPGAMEOBJECT> listBrick;
+	vector<LPGAMEOBJECT> listTorch;
+	vector<LPGAMEOBJECT> listItem;
 	vector<LPMAP> tileMap;
-	void _ParseSection_TEXTURES(string line);
-	void _ParseSection_SPRITES(string line);
-	void _ParseSection_ANIMATIONS(string line);
-	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_MAP_INFO(string line);
 	void _ParseSection_MAP(string line);
 public: 
 	 
@@ -33,8 +38,13 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	void CheckCollision_ItemAndSimon();
 	Simon * GetPlayer() { return player; } 
 	vector<LPGAMEOBJECT> GetObjects() { return objects; };
+	vector<LPGAMEOBJECT> GetListStair() { return listStair; };
+	vector<LPGAMEOBJECT> GetListBrick() { return listBrick; };
+	vector<LPGAMEOBJECT> GetListTorch() { return listTorch; };
+	vector<LPGAMEOBJECT> GetListItem() { return listItem; };
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

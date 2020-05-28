@@ -43,7 +43,7 @@ void HeartItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void HeartItem::Render()
 {
 	animation_set->at(0)->Render(x, y, nx);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 void HeartItem::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
 	left = x;

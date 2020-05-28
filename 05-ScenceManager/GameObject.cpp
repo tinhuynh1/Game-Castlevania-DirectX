@@ -165,3 +165,11 @@ void CGameObject::SetOnGround(bool flag)
 {
 	isOnGround = flag;
 }
+bool CGameObject::IsDelete()
+{
+	return this->isDeleted;
+}
+void CGameObject::SetDelete(bool flag)
+{
+	isDeleted = flag;
+}

@@ -15,7 +15,7 @@
 using namespace std;
 
 #define KEYBOARD_BUFFER_SIZE 1024
-
+#define RESOURCE_FILE_PATH L"Resources.txt"
 class CGame
 {
 	Simon* simon;
@@ -48,7 +48,10 @@ class CGame
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
-
+	void _ParseSection_TEXTURES(string line);
+	void _ParseSection_SPRITES(string line);
+	void _ParseSection_ANIMATIONS(string line);
+	void _ParseSection_ANIMATION_SETS(string line);
 public:
 	void InitKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
@@ -67,8 +70,10 @@ public:
 
 		return true;
 	}
-	void Load(LPCWSTR gameFile);
+	void LoadResources();
+	void LoadGameFile(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	int GetSceneId() { return current_scene; }
 	void SwitchScene(int scene_id);
 
 	int GetScreenWidth() { return screen_width; }

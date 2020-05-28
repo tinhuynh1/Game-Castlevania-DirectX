@@ -131,7 +131,7 @@
     <ClCompile Include="DaggerItem.cpp" />
     <ClCompile Include="HeartItem.cpp" />
     <ClCompile Include="Items.cpp" />
-    <ClCompile Include="Koopas.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Simon.cpp" />
@@ -140,7 +140,6 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayScence.cpp" />
     <ClCompile Include="Scence.cpp" />
@@ -156,7 +155,7 @@
     <ClInclude Include="DaggerItem.h" />
     <ClInclude Include="HeartItem.h" />
     <ClInclude Include="Items.h" />
-    <ClInclude Include="Koopas.h" />
+    <ClInclude Include="Knight.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Simon.h" />
@@ -165,7 +164,6 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Goomba.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="PlayScence.h" />
     <ClInclude Include="Scence.h" />

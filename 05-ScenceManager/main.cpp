@@ -19,10 +19,8 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Textures.h"
-
 #include "Map.h"
 #include "Brick.h"
-#include "Goomba.h"
 #include "Textures.h"
 #include "PlayScence.h"
 
@@ -31,8 +29,6 @@
 #define MAIN_WINDOW_TITLE L"SAMPLE 05 - SCENCE MANAGER"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
 
 #define MAX_FRAME_RATE 120
 
@@ -178,8 +174,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game = CGame::GetInstance();
 	game->Init(hWnd);
 	game->InitKeyboard();
-
-	game->Load(L"mario-sample.txt");
+	game->LoadResources();
+	game->LoadGameFile(L"mario-sample.txt");
 	
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
