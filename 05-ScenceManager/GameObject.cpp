@@ -140,6 +140,20 @@ void CGameObject::RenderBoundingBox()
 	CGame::GetInstance()->Draw(l, t, nx, bbox, rect.left, rect.top, rect.right, rect.bottom, 100);
 }
 
+bool CGameObject::CheckCollision(CGameObject* object)
+{
+	if (CGame::GetInstance()->AABB(this->GetBound(), object->GetBound()))
+	{
+		return true;
+	}
+
+	LPCOLLISIONEVENT e = SweptAABBEx(object);
+	if (e->t > 0 && e->t <= 1.0f)
+	{
+		return true;
+	}
+	delete e;
+}
 
 CGameObject::~CGameObject()
 {

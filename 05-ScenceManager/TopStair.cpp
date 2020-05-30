@@ -1,6 +1,7 @@
 #include "TopStair.h"
 TopStair::TopStair()
 {
+	this->visible = false;
 }
 void TopStair::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {

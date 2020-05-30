@@ -19,6 +19,7 @@
 #define SIMON_STATE_ATTACK		600
 #define	SIMON_STATE_SIT_AND_ATTACK 700
 #define SIMON_STATE_ONSTAIR			800
+#define SIMON_STATE_THROW	900
 
 #define SIMON_ANI_IDLE			0
 #define SIMON_ANI_WALKING	    1
@@ -30,6 +31,7 @@
 #define SIMON_ANI_UPSTAIR_STOP	7
 #define SIMON_ANI_DOWNSTAIR	8
 #define SIMON_ANI_DOWNSTAIR_STOP	9
+#define SIMON_ANI_CHANGECOLOR 13
 //#define SIMON_ANI_DOWNSTAIR	8
 //#define SIMON_ANI_DOWNSTAIR_STOP	9
 
@@ -50,25 +52,13 @@ public:
 	int untouchable;
 	DWORD untouchable_start;
 	bool isJumping = false;
-	bool isSitThrow = false; //chỉ dùng để quản lý animation ngồi đánh 
 	bool isSitAttack = false;
 	bool isAttack = false;
-	bool isThrow = false;
-	bool isUseStopWatch = false;
-	bool isHitDoor = false;
-	bool isHitEnemy = false;
-	bool isUntouchable = false;
-	bool isBreakRock;
-	bool isBreakRockChicken;
+	bool isCollectDagger = false;
+
 	bool isInvisible;
-	bool isRevive;
 	bool isEatingItem;
-	bool isLand = false;
-	bool isStanding = true;
-	int check;
-	bool isThrowDouble = false;
-	bool isDamageBoss = true;
-	int count;
+	bool isStanding;
 
 	int StairDirection;
 	bool isWalkingToStair; //biến dùng để xác định lúc đang đi bộ đến vị trí lên cầu thang thì đi chậm
@@ -89,7 +79,7 @@ public:
 	DWORD timerChangeColor = 0;
 	DWORD timerLand = 0;
 public:
-	
+	static Simon* GetInstance();
 	Simon(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
@@ -99,7 +89,6 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	RECT GetBound();
 	void CheckCollisionOnStair(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
-	void CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
-	
+	void CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);	
 };
 

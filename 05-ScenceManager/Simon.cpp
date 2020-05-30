@@ -9,9 +9,15 @@
 #include "BotStair.h"
 #include "TopStair.h"
 
-
 Simon* Simon::__instance = NULL;
 
+ 
+Simon* Simon::GetInstance()
+{
+	if (__instance == NULL)
+		__instance = new Simon();
+	return __instance;
+}
 
 Simon::Simon(float x, float y) : CGameObject()
 {
@@ -33,6 +39,7 @@ void Simon::Render()
 	else if (state == SIMON_STATE_JUMP) ani = SIMON_ANI_JUMP;
 	else if (state == SIMON_STATE_ATTACK) ani = SIMON_ANI_ATTACK;
 	else if (state == SIMON_STATE_SIT_AND_ATTACK) ani = SIMON_ANI_SIT_AND_ATTACK;
+	else if (state == SIMON_STATE_THROW) ani = SIMON_ANI_SIT_AND_ATTACK;
 	else if (state == SIMON_STATE_ONSTAIR)
 	{
 		if (isUpstair)
@@ -62,7 +69,16 @@ void Simon::Render()
 		{
 			if (vx == 0)
 			{
-				ani = SIMON_ANI_IDLE;
+				if (isEatingItem)
+				{
+					DebugOut(L"OK \n");
+					ani = SIMON_ANI_CHANGECOLOR;
+				}
+				else
+				{
+					ani = SIMON_ANI_IDLE;
+				}
+				
 			}
 			else ani = SIMON_ANI_WALKING;
 		 
@@ -73,7 +89,7 @@ void Simon::Render()
 
 	animation_set->at(ani)->Render(x, y,nx, alpha);
 	
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
 		whip->Render(animation_set->at(ani)->GetCurrentFrame());
 }
@@ -145,6 +161,12 @@ void Simon::SetState(int state)
 			}
 		}
 			break;
+	case SIMON_STATE_THROW:
+	{
+		animation_set->at(SIMON_ANI_ATTACK)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK)->SetAniStartTime(GetTickCount());
+		break;
+	}
 	case SIMON_STATE_SIT:
 	{
 		isStanding = false;
@@ -155,6 +177,7 @@ void Simon::SetState(int state)
 	{
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		//isStanding = true;
+		isStanding = true;
 		vy = -SIMON_JUMP_SPEED_Y;
 		break;
 	}
@@ -173,6 +196,7 @@ void Simon::SetState(int state)
 	}
 	case SIMON_STATE_IDLE:
 	{
+		isStanding = true;
 		isSitAttack = false;
 		isAttack = false;
 		vx = 0;
@@ -242,37 +266,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	
 	whip->Update(dt, coObjects);
-	if (state == SIMON_STATE_DIE)
-	{
-		vx = 0;
-		if (timerDie < 2500)
-			timerDie += dt;
-		else
-		{
-			timerDie = 0;
-			isRevive = true;
-		}
-	}
 
-	/*if (this->isDeleted)
-		return;*/
-
-
-	if (isLand)
-	{
-		SetState(SIMON_STATE_SIT);
-
-		if (timerLand < 300)
-			timerLand += dt;
-		else
-		{
-			timerLand = 0;
-			isLand = false;
-			isJumping = false;
-			SetState(SIMON_STATE_IDLE);
-		}
-
-	}
 	// reset untouchable timer if untouchable time has passed
 	/*if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
 	{
@@ -379,6 +373,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// clean up collision events
 	//for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	//check collsion when simon attack
+	if (isEatingItem)
+	{
+		if (timerChangeColor < 700)
+			timerChangeColor += dt;
+		else
+		{
+			isEatingItem = false;
+			timerChangeColor = 0;
+		}
+	}
 	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
 	{
 		int ani = -1;
@@ -442,7 +446,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 }
-	
 void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
 
@@ -479,7 +482,6 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 		{
 			if (this->GetPosition().y - firstY >= 50 /*&& isLand == false*/)
 			{
-				isLand = true;
 			}
 			firstY = this->GetPosition().y;
 		}

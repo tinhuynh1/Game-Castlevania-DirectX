@@ -8,7 +8,7 @@ ChainItem::ChainItem()
 void ChainItem::Render()
 {
 	animation_set->at(0)->Render(x, y, nx);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void ChainItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

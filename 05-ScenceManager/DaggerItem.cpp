@@ -8,7 +8,7 @@ DaggerItem::DaggerItem()
 void DaggerItem::Render()
 {
 	animation_set->at(0)->Render(x, y, nx);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void DaggerItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

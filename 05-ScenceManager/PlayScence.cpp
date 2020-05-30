@@ -74,7 +74,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new Simon(x,y); 
+		//obj = new Simon(x,y); 
+		obj = Simon::GetInstance();
 		player = (Simon*)obj;  
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
@@ -241,10 +242,10 @@ void CPlayScene::Update(DWORD dt)
 	{
 		if (objects[i]->visible == false)
 			continue;
-		if (dynamic_cast<BotStair*>(objects[i]) || dynamic_cast<TopStair*>(objects[i]))
+		/*if (dynamic_cast<BotStair*>(objects[i]) || dynamic_cast<TopStair*>(objects[i]))
 		{
 			continue;
-		}
+		}*/
 		/*else if (dynamic_cast<Torch*>(objects[i]))
 		{
 			continue;
@@ -261,6 +262,8 @@ void CPlayScene::Update(DWORD dt)
 	}
 	listStair.clear();
 	listTorch.clear();
+	listItem.clear();
+	listPortal.clear();
 	for (UINT i = 0; i < objects.size(); i++)
 	{
 		LPGAMEOBJECT temp = objects.at(i);
@@ -272,15 +275,22 @@ void CPlayScene::Update(DWORD dt)
 		{
 			listTorch.push_back(objects.at(i));
 		}
-		else if (dynamic_cast<Torch*>(temp))
+		/*else if (dynamic_cast<Torch*>(temp))
 		{
 			listTorch.push_back(objects.at(i));
-		}
+		}*/
 		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) || dynamic_cast<DaggerItem*>(temp))
 		{
 			listItem.push_back(objects.at(i));
 		}
+		else if (dynamic_cast<CPortal*>(temp))
+		{
+			listPortal.push_back(objects.at(i));
+		}
 	}
+	CheckCollision_ItemAndSimon();
+	CheckCollision_TorchAndSimon();
+	CheckCollision_PortalAndSimon();
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
@@ -296,7 +306,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
-		if (cx > 450)
+		if (cx > 480)
 		{
 			return;
 		}
@@ -328,9 +338,15 @@ void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 	{
+		if (dynamic_cast<Simon*>(objects[i]) || dynamic_cast<Whip*>(objects[i]))
+		{
+			;
+		}
+		else
+		{
 			delete objects[i];
+		}
 	}
-
 	objects.clear();
 	player = NULL;
 
@@ -341,9 +357,53 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 {
 	for (UINT i = 0; i < listItem.size(); i++)
 	{
-		if (listItem.at(i)->IsDelete() == false)
+		if (listItem.at(i)->visible == true)
 		{
-
+			if (player->CheckCollision(listItem.at(i)))
+			{
+				if (dynamic_cast<HeartItem*>(listItem.at(i)))
+				{
+					listItem.at(i)->visible = false;
+				}
+			}
+			if (player->CheckCollision(listItem.at(i)))
+			{
+				if (dynamic_cast<ChainItem*>(listItem.at(i)))
+				{
+					player->isEatingItem = true;
+					listItem.at(i)->visible = false;
+					player->whip->LevelUp();
+				}
+			}
+			if (player->CheckCollision(listItem.at(i)))
+			{
+				if (dynamic_cast<DaggerItem*>(listItem.at(i)))
+				{
+					player->isCollectDagger = true;
+					player->isEatingItem = true;
+					listItem.at(i)->visible = false;
+				}
+			}
+		}
+	}
+}
+void CPlayScene::CheckCollision_TorchAndSimon()
+{
+	for (UINT i = 0; i < listTorch.size(); i++)
+	{
+		if (player->CheckCollision(listTorch.at(i)))
+		{
+			//player->x += player->dx;
+		}
+	}
+}
+void CPlayScene::CheckCollision_PortalAndSimon()
+{
+	for (UINT i = 0; i < listPortal.size(); i++)
+	{
+		if (player->CheckCollision(listPortal.at(i)))
+		{
+			CGame::GetInstance()->SwitchScene(2);
 		}
 	}
 }
@@ -353,7 +413,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	Simon *simon = ((CPlayScene*)scence)->GetPlayer();
 	
-
+	if (simon->isEatingItem)
+	{
+		simon->SetState(SIMON_STATE_IDLE);
+		return;
+	}
 	switch (KeyCode)
 	{
 	case DIK_S:
@@ -371,9 +435,21 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		break;
 	}
+	case DIK_X:
+	{
+		if (simon->isCollectDagger)
+		{
+			DebugOut(L" Dagger Available\n");
+			simon->SetState(SIMON_STATE_THROW);
+		}
+		else
+		{
+			DebugOut(L"NOT OK \n");
+		}
+		break;
+	}
 	case DIK_SPACE:
 	{
-		if (simon->isHitEnemy) return;
 		if (simon->isAttack) return;
 		if (simon->isOnStair) return;
 		if (simon->isJumping == false)
@@ -394,6 +470,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CGame *game = CGame::GetInstance();
 	Simon* simon = ((CPlayScene*)scence)->GetPlayer();
 	vector<LPGAMEOBJECT> listStair = ((CPlayScene*)scence)->GetListStair();
+	if (simon->isEatingItem)
+	{
+		simon->SetState(SIMON_STATE_IDLE);
+		return;
+	}
 	if (simon->GetState() == SIMON_STATE_JUMP) return;
 	if (simon->GetState() == SIMON_STATE_ATTACK && simon->animation_set->at(SIMON_ANI_ATTACK)->IsOver(SIMON_ATTACK_TIME) == false)
 		return;
@@ -402,8 +483,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))		//simon->SetState(SIMON_STATE_WALKING_RIGHT);
-	{
-		DebugOut(L"DIK_RIGHT \n");
+	{						
 		if (simon->GetState() == SIMON_STATE_ATTACK || simon->GetState() == SIMON_STATE_SIT_AND_ATTACK) return;
 		if (game->IsKeyDown(DIK_DOWN))
 		{
@@ -462,7 +542,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 		else
 		{
-			DebugOut(L"NOT OK \n");
 			simon->SetOrientation(1);
 			simon->SetState(SIMON_STATE_WALKING);
 		}

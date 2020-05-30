@@ -84,7 +84,7 @@ public:
 
 	void RenderBoundingBox();
 	void SetPosition(D3DXVECTOR2 pos) { SetPosition(pos.x, pos.y); }
-
+	bool CheckCollision(CGameObject* object);
 	D3DXVECTOR2 GetPosition() { return D3DXVECTOR2(x, y); }
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 	bool AABB(RECT rect1, RECT rect2);

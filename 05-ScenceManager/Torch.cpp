@@ -2,13 +2,13 @@
  
 Torch::Torch()
 {
-
+	
 }
 void Torch::Render()
 {
 	
 	animation_set->at(state)->Render(x, y, nx);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void Torch::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
@@ -31,6 +31,7 @@ void Torch::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 }
 void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
+	
 	if (state == TORCH_DESTROYED && animation_set->at(state)->IsOver(TORCH_DESTROYED_EFFECT_TIME))
 	{
 		this->visible = false;

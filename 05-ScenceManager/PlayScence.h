@@ -27,6 +27,7 @@ public:
 	vector<LPGAMEOBJECT> listBrick;
 	vector<LPGAMEOBJECT> listTorch;
 	vector<LPGAMEOBJECT> listItem;
+	vector<LPGAMEOBJECT> listPortal;
 	vector<LPMAP> tileMap;
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_MAP_INFO(string line);
@@ -39,12 +40,15 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	void CheckCollision_ItemAndSimon();
+	void CheckCollision_TorchAndSimon();
+	void CheckCollision_PortalAndSimon();
 	Simon * GetPlayer() { return player; } 
 	vector<LPGAMEOBJECT> GetObjects() { return objects; };
 	vector<LPGAMEOBJECT> GetListStair() { return listStair; };
 	vector<LPGAMEOBJECT> GetListBrick() { return listBrick; };
 	vector<LPGAMEOBJECT> GetListTorch() { return listTorch; };
 	vector<LPGAMEOBJECT> GetListItem() { return listItem; };
+	vector<LPGAMEOBJECT> GetListPortal() { return listPortal; };
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler
