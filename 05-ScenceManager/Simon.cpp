@@ -29,6 +29,7 @@ Simon::Simon(float x, float y) : CGameObject()
 	this->x = x;
 	this->y = y;
 	whip = new Whip();
+	dagger = new Dagger();
 }
 void Simon::Render()
 {
@@ -39,7 +40,7 @@ void Simon::Render()
 	else if (state == SIMON_STATE_JUMP) ani = SIMON_ANI_JUMP;
 	else if (state == SIMON_STATE_ATTACK) ani = SIMON_ANI_ATTACK;
 	else if (state == SIMON_STATE_SIT_AND_ATTACK) ani = SIMON_ANI_SIT_AND_ATTACK;
-	else if (state == SIMON_STATE_THROW) ani = SIMON_ANI_SIT_AND_ATTACK;
+	else if (state == SIMON_STATE_THROW) ani = SIMON_ANI_THROW;
 	else if (state == SIMON_STATE_ONSTAIR)
 	{
 		if (isUpstair)
@@ -163,8 +164,8 @@ void Simon::SetState(int state)
 			break;
 	case SIMON_STATE_THROW:
 	{
-		animation_set->at(SIMON_ANI_ATTACK)->Reset();
-		animation_set->at(SIMON_ANI_ATTACK)->SetAniStartTime(GetTickCount());
+		animation_set->at(SIMON_ANI_THROW)->Reset();
+		animation_set->at(SIMON_ANI_THROW)->SetAniStartTime(GetTickCount());
 		break;
 	}
 	case SIMON_STATE_SIT:
@@ -266,113 +267,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	
 	whip->Update(dt, coObjects);
-
-	// reset untouchable timer if untouchable time has passed
-	/*if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
+	if (state == SIMON_STATE_THROW)
 	{
-		untouchable_start = 0;
-		untouchable = 0;
-	}*/
-
-	// No collision occured, proceed normally
-	/*if (coEvents.size() == 0)
-	{
-		x += dx;
-		y += dy;
-	}*/
-	//else
-	{
-		float min_tx, min_ty, nx = 0, ny=0;
-		float rdx = 0;
-		float rdy = 0;
-
-		//// TODO: This is a very ugly designed function!!!!
-		//FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
-		//// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
-		////if (rdx != 0 && rdx!=dx)
-		////	x += nx*abs(rdx); 
-
-		//// block every object first!
-		//x += min_tx * dx + nx * 0.4f;
-		//y += min_ty * dy + ny * 0.4f;
-
-
-
-		//
-		// Collision logic with other objects
-		//for (UINT i = 0; i < coEventsResult.size(); i++)
-		//{
-	 //		LPCOLLISIONEVENT e = coEventsResult[i];
-		//	if (dynamic_cast<Torch*>(e->obj))
-		//	{
-		//		DebugOut(L"Collision Simon and torch %d %d\n", e->nx, e->ny);
-		//		//Process normally
-		//		if (e->nx != 0) x += dx;
-		//		if (e->ny != 0) y += dy;
-		//	}
-		//	else if (dynamic_cast<BotStair*>(e->obj))
-		//	{
-		//		//DebugOut(L"Collision Simon and Botstair %d %d\n", e->nx, e->ny);
-		//		//Process normally
-		//		if (e->nx != 0) x += dx;
-		//		if (e->ny != 0) y += dy;
-		//	}
-		//	else if (dynamic_cast<TopStair*>(e->obj))
-		//	{
-		//		//DebugOut(L"Collision Simon and Botstair %d %d\n", e->nx, e->ny);
-		//		//Process normally
-		//		if (e->nx != 0) x += dx;
-		//		if (e->ny != 0) y += dy;
-		//	}
-		//	else if (dynamic_cast<CBrick*>(e->obj))
-		//	{
-		//		if (e->ny == 0) vy = 0;
-		//	}
-		//	else if (dynamic_cast<HeartItem*>(e->obj))
-		//	{
-		//		DebugOut(L"[ITEMS] Heart Collected \n");
-		//		if (e->nx != 0 || e->ny != 0)
-		//		{
-		//			e->obj->SetVisible(false);
-		//		}
-		//	}
-		//	else if (dynamic_cast<ChainItem*>(e->obj))
-		//	{
-
-		//		if (e->nx != 0 || e->ny != 0)
-		//		{
-		//			e->obj->SetVisible(false);
-		//			this->whip->LevelUp();
-		//			DebugOut(L"[INFO] WHIP UPGRADED \n");
-		//		}
-		//	}
-		//	else if (dynamic_cast<DaggerItem*>(e->obj))
-		//	{
-		//		DebugOut(L"[ITEMS] Dagger Collected \n");
-		//		if (e->nx != 0 || e->ny != 0)
-		//		{
-		//			e->obj->SetVisible(false);
-		//		}
-		//	}
-		//	else if (dynamic_cast<CPortal*>(e->obj))
-		//	{
-		//			CPortal* p = dynamic_cast<CPortal*>(e->obj);
-		//			CGame::GetInstance()->SwitchScene(p->GetSceneId());
-		//	}
-		//	else
-		//	{
-		//		if (nx != 0) vx = 0;
-		//		if (ny != 0) vy = 0;
-		//	}
-
-		//}
-		
+		if (animation_set->at(0)->GetCurrentFrame() == 2)
+		{
+			isLastFrame = true;
+			DebugOut(L"Throw \n");
+			//dagger->Update(dt, coObjects);
+		}
 	}
+	//dagger->Update(dt, coObjects);
 
-	// clean up collision events
-	//for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	//check collsion when simon attack
 	if (isEatingItem)
 	{
 		if (timerChangeColor < 700)

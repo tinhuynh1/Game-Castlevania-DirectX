@@ -89,11 +89,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_WHIP: obj = new Whip(); break;
+	case OBJECT_TYPE_DAGGER: 
+	{
+		obj = new Dagger();
+		dagger = (Dagger*)obj;
+		obj->visible = false;
+		break;
+	}
 	case OBJECT_TYPE_KNIGHT: obj = new Knight(); break;
 	case OBJECT_TYPE_BOTSTAIR:
 	{
 		obj = new BotStair(); 
-		int direction = atoi(tokens[5].c_str());
+		int direction = atoi(tokens[3].c_str());
 		DebugOut(L"Bot stair direction is: %d  \n", direction);
 		if(direction == 1)
 		obj->StairTag = CGameObject::StairTypes::ToRight;
@@ -237,29 +244,7 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		if (objects[i]->visible == false)
-			continue;
-		/*if (dynamic_cast<BotStair*>(objects[i]) || dynamic_cast<TopStair*>(objects[i]))
-		{
-			continue;
-		}*/
-		/*else if (dynamic_cast<Torch*>(objects[i]))
-		{
-			continue;
-		}*/
-		else
-			coObjects.push_back(objects[i]);
-	}
-
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		if (objects[i]->visible == false)
-			continue;
-		objects[i]->Update(dt, &coObjects);
-	}
+	
 	listStair.clear();
 	listTorch.clear();
 	listItem.clear();
@@ -291,6 +276,34 @@ void CPlayScene::Update(DWORD dt)
 	CheckCollision_ItemAndSimon();
 	CheckCollision_TorchAndSimon();
 	CheckCollision_PortalAndSimon();
+	vector<LPGAMEOBJECT> coObjects;
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->visible == false)
+			continue;
+		/*if (dynamic_cast<BotStair*>(objects[i]) || dynamic_cast<TopStair*>(objects[i]))
+		{
+			continue;
+		}*/
+		else if (dynamic_cast<DaggerItem*>(objects[i]))
+		{
+			continue;
+		}
+		else if (dynamic_cast<Torch*>(objects[i]))
+		{
+			listTorch.push_back(objects[i]);
+			continue;
+		}
+		else
+			coObjects.push_back(objects[i]);
+	}
+
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->visible == false)
+			continue;
+		objects[i]->Update(dt, &coObjects);
+	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
@@ -338,7 +351,7 @@ void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 	{
-		if (dynamic_cast<Simon*>(objects[i]) || dynamic_cast<Whip*>(objects[i]))
+		if (dynamic_cast<Simon*>(objects[i]) || dynamic_cast<Whip*>(objects[i]) || dynamic_cast<Dagger*>(objects[i]))
 		{
 			;
 		}
@@ -380,7 +393,6 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 				if (dynamic_cast<DaggerItem*>(listItem.at(i)))
 				{
 					player->isCollectDagger = true;
-					player->isEatingItem = true;
 					listItem.at(i)->visible = false;
 				}
 			}
@@ -389,12 +401,15 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 }
 void CPlayScene::CheckCollision_TorchAndSimon()
 {
-	for (UINT i = 0; i < listTorch.size(); i++)
+	if (player->animation_set->at(SIMON_ANI_ATTACK)->GetCurrentFrame() == 2 || player->animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->GetCurrentFrame() == 2)
 	{
-		if (player->CheckCollision(listTorch.at(i)))
-		{
-			//player->x += player->dx;
-		}
+		for (UINT i = 0; i < listTorch.size(); i++)
+			if (player->whip->CheckCollision(listTorch.at(i)))
+			{
+
+				listTorch.at(i)->SetState(TORCH_DESTROYED);
+				listTorch.at(i)->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
+			}
 	}
 }
 void CPlayScene::CheckCollision_PortalAndSimon()
@@ -412,6 +427,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	Simon *simon = ((CPlayScene*)scence)->GetPlayer();
+	Dagger* dagger = ((CPlayScene*)scence)->GetDagger();
 	
 	if (simon->isEatingItem)
 	{
@@ -439,8 +455,16 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 		if (simon->isCollectDagger)
 		{
-			DebugOut(L" Dagger Available\n");
-			simon->SetState(SIMON_STATE_THROW);
+			if (simon->GetState() == SIMON_STATE_THROW && dagger->visible == true) return;
+				DebugOut(L" Dagger Available\n");
+				float x, y;
+				simon->GetPosition(x, y);
+				dagger->SetPosition(x, y+5);
+				dagger->SetOrientation(simon->nx);
+				dagger->visible = true;
+				simon->SetState(SIMON_STATE_THROW);
+				
+			
 		}
 		else
 		{
@@ -479,6 +503,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	if (simon->GetState() == SIMON_STATE_ATTACK && simon->animation_set->at(SIMON_ANI_ATTACK)->IsOver(SIMON_ATTACK_TIME) == false)
 		return;
 	if (simon->GetState() == SIMON_STATE_SIT_AND_ATTACK && simon->animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->IsOver(SIMON_ATTACK_TIME) == false)
+		return;
+	if (simon->GetState() == SIMON_STATE_THROW &&
+		simon->animation_set->at(SIMON_ANI_THROW)->IsOver(SIMON_ATTACK_TIME) == false)
 		return;
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;

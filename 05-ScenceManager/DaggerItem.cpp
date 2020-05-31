@@ -14,7 +14,6 @@ void DaggerItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	vy += ITEM_GRAVITY * dt;				// simple fall down
-
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 

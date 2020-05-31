@@ -1,7 +1,7 @@
 #include "BotStair.h"
 BotStair::BotStair()
 {
-	this->visible = false;
+	//this->visible = false;
 }
 void BotStair::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {

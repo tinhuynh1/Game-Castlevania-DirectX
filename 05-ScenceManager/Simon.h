@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "Whip.h"
+#include "Dagger.h"
 #include "HeartItem.h"
 #include "ChainItem.h"
 #include "DaggerItem.h"
@@ -32,6 +33,7 @@
 #define SIMON_ANI_DOWNSTAIR	8
 #define SIMON_ANI_DOWNSTAIR_STOP	9
 #define SIMON_ANI_CHANGECOLOR 13
+#define SIMON_ANI_THROW	14
 //#define SIMON_ANI_DOWNSTAIR	8
 //#define SIMON_ANI_DOWNSTAIR_STOP	9
 
@@ -49,6 +51,7 @@ public:
 	//static vector<LPGAMEOBJECT> listStair;
 	static Simon* __instance;
 	Whip* whip;
+	Dagger* dagger;
 	int untouchable;
 	DWORD untouchable_start;
 	bool isJumping = false;
@@ -56,6 +59,7 @@ public:
 	bool isAttack = false;
 	bool isCollectDagger = false;
 
+	bool isLastFrame = false;
 	bool isInvisible;
 	bool isEatingItem;
 	bool isStanding;

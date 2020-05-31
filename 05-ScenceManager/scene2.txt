@@ -18,7 +18,8 @@
 2	76	116	2	1	1
 2	206	116	2	1	1
 2	140	20	2	1	1
-
+#Dagger
+7	570	136	43
 #Black Knight
 8	74	48	5
 
@@ -27,8 +28,9 @@
 
 # STAIR bottom
 # type	l	t	r	b	direction
-9	94	162	126	170	1
-
+#9	94	162	126	170	1
+9	94	162	1
+9	62	66	1
 # STAIR top
 # type	l	t	r	b
 10	178	78	179	104	-1

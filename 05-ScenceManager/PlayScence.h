@@ -9,6 +9,7 @@
 #include "HeartItem.h"
 #include "ChainItem.h"
 #include "DaggerItem.h"
+#include "Dagger.h"
 #include "Map.h"
 #include "HeartItem.h"
 #include "Items.h"
@@ -20,6 +21,7 @@ class CPlayScene: public CScene
 public: 
 	 
 	Simon *player;					// A play scene has to have player, right? 
+	Dagger* dagger;
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
 	vector<LPGAMEOBJECT> objects;
@@ -43,6 +45,7 @@ public:
 	void CheckCollision_TorchAndSimon();
 	void CheckCollision_PortalAndSimon();
 	Simon * GetPlayer() { return player; } 
+	Dagger* GetDagger() { return dagger; }
 	vector<LPGAMEOBJECT> GetObjects() { return objects; };
 	vector<LPGAMEOBJECT> GetListStair() { return listStair; };
 	vector<LPGAMEOBJECT> GetListBrick() { return listBrick; };

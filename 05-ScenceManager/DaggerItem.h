@@ -3,6 +3,8 @@
 
 #define DAGGER_BBOX_WIDTH	16
 #define	DAGGER_BBOX_HEIGHT	10
+
+
 class DaggerItem : public CGameObject
 {
 public:
