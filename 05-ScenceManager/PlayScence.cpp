@@ -260,6 +260,7 @@ void CPlayScene::_ParseSection_MAP_INFO(string line)
 	if (tokens.size() < 2) return; // skip invalid lines
 	this->tileColumns = atoi(tokens[0].c_str());
 	this->tileRows = atoi(tokens[1].c_str());
+	this->map_width = atoi(tokens[2].c_str());
 }
 void CPlayScene::_ParseSection_MAP(string line)
 {
@@ -362,10 +363,10 @@ void CPlayScene::Update(DWORD dt)
 		{
 			listTorch.push_back(objects.at(i));
 		}
-		/*else if (dynamic_cast<Torch*>(temp))
+		else if (dynamic_cast<Torch*>(temp))
 		{
 			listTorch.push_back(objects.at(i));
-		}*/
+		}
 		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) || dynamic_cast<DaggerItem*>(temp))
 		{
 			listItem.push_back(objects.at(i));
@@ -378,6 +379,7 @@ void CPlayScene::Update(DWORD dt)
 	CheckCollision_ItemAndSimon();
 	CheckCollision_TorchAndSimon();
 	CheckCollision_PortalAndSimon();
+	CheckCollision_DaggerAndTorch();
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -417,20 +419,34 @@ void CPlayScene::Update(DWORD dt)
 		player->x = 0;
 	}
 	CGame *game = CGame::GetInstance();
-	if ((cx > game->GetScreenWidth() / 2))
-	{
+	/*if ((cx > game->GetScreenWidth()/2))
+	{*/
+	
+	 if(cx >= game->GetScreenWidth() / 2)
+	 {
+		
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
-		if (cx > 512)
+		if (cx > (map_width - (game->GetScreenWidth())))
 		{
-			return;
+			cx = map_width - (game->GetScreenWidth());
 		}
-	}
+		
+	 }
+	 else if (cx < game->GetScreenWidth() / 2)
+	 {
+		 cx = 0.0f;
+	 }
+	 if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x)-cx < -DAGGER_WEAPON_BBOX_WIDTH)
+	 {
+		 dagger->visible = false;
+	 }
+	/*}
 
 	else
 	{
 		cx = 0.0f;
-	}
+	}*/
 	CGame::GetInstance()->SetCamPos(cx, -10.0f /*cy*/);
 }
 
@@ -524,6 +540,16 @@ void CPlayScene::CheckCollision_PortalAndSimon()
 		}
 	}
 }
+void CPlayScene::CheckCollision_DaggerAndTorch()
+{
+	for (UINT i = 0; i < listTorch.size(); i++)
+		if (dagger->CheckCollision(listTorch.at(i)))
+		{
+			dagger->visible = false;
+			listTorch.at(i)->SetState(TORCH_DESTROYED);
+			listTorch.at(i)->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
+		}
+}
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -557,14 +583,15 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 		if (simon->isCollectDagger)
 		{
-			if (simon->GetState() == SIMON_STATE_THROW && dagger->visible == true) return;
-				DebugOut(L" Dagger Available\n");
-				float x, y;
-				simon->GetPosition(x, y);
-				dagger->SetPosition(x, y+5);
-				dagger->SetOrientation(simon->nx);
-				dagger->visible = true;
-				simon->SetState(SIMON_STATE_THROW);
+			if (simon->GetState() == SIMON_STATE_THROW) return;
+			if (dagger->visible) return;
+			DebugOut(L" Dagger Available\n");
+			float x, y;
+			simon->GetPosition(x, y);
+			dagger->SetPosition(x, y+5);
+			dagger->SetOrientation(simon->nx);
+			dagger->visible = true;
+			simon->SetState(SIMON_STATE_THROW);
 				
 			
 		}

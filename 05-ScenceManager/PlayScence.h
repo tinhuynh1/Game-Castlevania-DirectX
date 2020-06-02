@@ -20,7 +20,7 @@
 class CPlayScene: public CScene
 {
 public: 
-	 
+	int map_width;
 	int scene_id;
 	Simon *player;					// A play scene has to have player, right? 
 	Dagger* dagger;
@@ -50,6 +50,7 @@ public:
 	void CheckCollision_ItemAndSimon();
 	void CheckCollision_TorchAndSimon();
 	void CheckCollision_PortalAndSimon();
+	void CheckCollision_DaggerAndTorch();
 	Simon * GetPlayer() { return player; } 
 	Dagger* GetDagger() { return dagger; }
 	vector<LPGAMEOBJECT> GetObjects() { return objects; };

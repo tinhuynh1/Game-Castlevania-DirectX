@@ -100,4 +100,5 @@ LPANIMATION_SET CAnimationSets::Get(unsigned int id)
 void CAnimationSets::Add(int id, LPANIMATION_SET ani_set)
 {
 	animation_sets[id] = ani_set;
+	DebugOut(L"[INFO] Animations add set id: %d\n", id);
 }
