@@ -134,6 +134,7 @@
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Simon.cpp" />
     <ClCompile Include="TopStair.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Items.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Simon.h" />
     <ClInclude Include="TopStair.h" />

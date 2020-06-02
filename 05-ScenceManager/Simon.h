@@ -4,12 +4,12 @@
 #include "Dagger.h"
 #include "HeartItem.h"
 #include "ChainItem.h"
-#include "DaggerItem.h"
+ #include "DaggerItem.h"
 #define SIMON_WALKING_SPEED		0.08f 
 #define SIMON_WALKING_TO_STAIR_SPEED	0.058f 
-#define SIMON_JUMP_SPEED_Y		0.22f
+#define SIMON_JUMP_SPEED_Y		0.18f
 #define SIMON_JUMP_DEFLECT_SPEED 0.2f
-#define SIMON_GRAVITY			 0.0007f
+#define SIMON_GRAVITY			 0.0004f
 #define SIMON_DIE_DEFLECT_SPEED	 0.5f
 
 #define SIMON_STATE_IDLE			0
@@ -61,7 +61,7 @@ public:
 
 	bool isLastFrame = false;
 	bool isInvisible;
-	bool isEatingItem;
+	bool isEatingItem = false;
 	bool isStanding;
 
 	int StairDirection;

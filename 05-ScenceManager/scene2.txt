@@ -1,3 +1,41 @@
+[TILESHEET]
+2	resources\tilesheet2.png	5	5	5
+61	resources\BlackKnight.png	116	116	116
+[SPRITES]
+#small
+22003	157	1	165	17	10
+22004	166	1	174	17	10
+#============ BLACK_KNIGHT ===============
+60001	2	19	18	51	61
+60002	19	19	35	51	61
+60003	36	19	52	51	61
+#================= BAT ===================
+#idle
+60010	57	11	69	25	62
+#flying
+60011	72	11	88	27	62
+60012	89	11	105	27	62
+60013	106	11	122	27	62
+[ANIMATIONS]
+#================= CANDLE ================
+#small
+202	22003	150	22004	150
+================= BAT ===================
+#idle
+661	60010	100
+#flying
+662	60011	100	60012	100	60013	100
+
+#============ BLACK_KNIGHT ===============
+660	60001	100	60002	100	60003	100
+
+[ANIMATIONS_SETS]
+# BRICK 
+1	601
+#BLACK KNIGHT
+5	660
+# CANDLE
+2	201	202	203
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Brick, 2 = Candle, 3= Whip, 4= Items_BigHeart, 5 = Items_Chain, 6 = Items_Dagger, 7 = Dagger
@@ -37,7 +75,7 @@
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	160	0	0	180	10	1
+50	160	0	0	180	10	3
 [MAP_INFO]
 4	6
 [MAP]

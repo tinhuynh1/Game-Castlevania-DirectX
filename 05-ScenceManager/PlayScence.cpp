@@ -25,6 +25,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 */
 
 #define SCENE_SECTION_UNKNOWN -1
+#define SCENE_SECTION_TILE_SHEET 1
+#define SCENE_SECTION_SPRITES 2
+#define SCENE_SECTION_ANIMATIONS 3
+#define SCENE_SECTION_ANIMATION_SETS 4
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_MAP_INFO				7
 #define SCENE_SECTION_MAPS 8
@@ -40,6 +44,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define OBJECT_TYPE_KNIGHT		8 
 #define OBJECT_TYPE_BOTSTAIR	9
 #define OBJECT_TYPE_TOPSTAIR	10
+#define OBJECT_TYPE_MOVING_PFLATFORM	17
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -49,6 +54,86 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 /*
 	Parse a line in section [OBJECTS] 
 */
+void CPlayScene::_ParseSection_TILE_SHEET(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 5) return; // skip invalid lines
+
+	int texID = atoi(tokens[0].c_str());
+	wstring path = ToWSTR(tokens[1]);
+	int R = atoi(tokens[2].c_str());
+	int G = atoi(tokens[3].c_str());
+	int B = atoi(tokens[4].c_str());
+	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
+}
+
+void CPlayScene::_ParseSection_SPRITES(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 6) return; // skip invalid lines
+
+	int ID = atoi(tokens[0].c_str());
+	int l = atoi(tokens[1].c_str());
+	int t = atoi(tokens[2].c_str());
+	int r = atoi(tokens[3].c_str());
+	int b = atoi(tokens[4].c_str());
+	int texID = atoi(tokens[5].c_str());
+
+	LPDIRECT3DTEXTURE9 tex = CTextures::GetInstance()->Get(texID);
+	if (tex == NULL)
+	{
+		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
+		return;
+	}
+
+	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
+}
+
+void CPlayScene::_ParseSection_ANIMATIONS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
+
+	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
+
+	LPANIMATION ani = new CAnimation();
+
+	int ani_id = atoi(tokens[0].c_str());
+	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	{
+		int sprite_id = atoi(tokens[i].c_str());
+		int frame_time = atoi(tokens[i + 1].c_str());
+		ani->Add(sprite_id, frame_time);
+	}
+
+	CAnimations::GetInstance()->Add(ani_id, ani);
+}
+
+void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return; // skip invalid lines - an animation set must at least id and one animation id
+
+	int ani_set_id = atoi(tokens[0].c_str());
+
+	LPANIMATION_SET s = new CAnimationSet();
+
+	CAnimations* animations = CAnimations::GetInstance();
+
+	for (int i = 1; i < tokens.size(); i++)
+	{
+		int ani_id = atoi(tokens[i].c_str());
+
+		LPANIMATION ani = animations->Get(ani_id);
+		s->push_back(ani);
+	}
+
+	CAnimationSets::GetInstance()->Add(ani_set_id, s);
+}
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
@@ -97,6 +182,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_KNIGHT: obj = new Knight(); break;
+	case OBJECT_TYPE_MOVING_PFLATFORM: obj = new MovingPlatform(); break;
 	case OBJECT_TYPE_BOTSTAIR:
 	{
 		obj = new BotStair(); 
@@ -111,7 +197,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_TOPSTAIR:
 	{
 		obj = new TopStair();
-		int direction = atoi(tokens[5].c_str());
+		int direction = atoi(tokens[3].c_str());
 		DebugOut(L"Top stair direction is: %d  \n", direction);
 		if (direction == 1)
 		obj->StairTag = CGameObject::StairTypes::ToRight;
@@ -151,7 +237,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{	
 			float r = atof(tokens[4].c_str());
 			float b = atof(tokens[5].c_str());
-			int scene_id = atoi(tokens[6].c_str());
+			scene_id = atoi(tokens[6].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
 		}
 		break;
@@ -211,6 +297,18 @@ void CPlayScene::Load()
 		string line(str);
 
 		if (line[0] == '#') continue;	// skip comment lines	
+		if (line == "[TILESHEET]") {
+			section = SCENE_SECTION_TILE_SHEET; continue;
+		}
+		if (line == "[SPRITES]") {
+			section = SCENE_SECTION_SPRITES; continue;
+		}
+		if (line == "[ANIMATIONS]") {
+			section = SCENE_SECTION_ANIMATIONS; continue;
+		}
+		if (line == "[ANIMATIONS_SETS]") {
+			section = SCENE_SECTION_ANIMATION_SETS; continue;
+		}
 		if (line == "[OBJECTS]") { 
 			section = SCENE_SECTION_OBJECTS; continue; }
 		if (line == "[MAP_INFO]") {
@@ -228,6 +326,10 @@ void CPlayScene::Load()
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 			case SCENE_SECTION_MAP_INFO: _ParseSection_MAP_INFO(line); break;
 			case SCENE_SECTION_MAPS:	_ParseSection_MAP(line); break;
+			case SCENE_SECTION_TILE_SHEET: _ParseSection_TILE_SHEET(line); break;
+			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 		}
 	}
 
@@ -281,10 +383,10 @@ void CPlayScene::Update(DWORD dt)
 	{
 		if (objects[i]->visible == false)
 			continue;
-		/*if (dynamic_cast<BotStair*>(objects[i]) || dynamic_cast<TopStair*>(objects[i]))
+		if (dynamic_cast<BotStair*>(objects[i]) || dynamic_cast<TopStair*>(objects[i]))
 		{
 			continue;
-		}*/
+		}
 		else if (dynamic_cast<DaggerItem*>(objects[i]))
 		{
 			continue;
@@ -319,7 +421,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
-		if (cx > 480)
+		if (cx > 512)
 		{
 			return;
 		}
@@ -418,7 +520,7 @@ void CPlayScene::CheckCollision_PortalAndSimon()
 	{
 		if (player->CheckCollision(listPortal.at(i)))
 		{
-			CGame::GetInstance()->SwitchScene(2);
+			CGame::GetInstance()->SwitchScene(this->scene_id);
 		}
 	}
 }
@@ -728,7 +830,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		for (int i = 0; i < listStair.size(); i++)
 		{
 			LPGAMEOBJECT temp = listStair.at(i);
-
 			if (dynamic_cast<BotStair*>(temp))
 			{
 				if (CGame::GetInstance()->AABB(listStair.at(i)->GetBound(), simon->GetBound()))
@@ -769,7 +870,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			{
 				if (CGame::GetInstance()->AABB(listStair.at(i)->GetBound(), simon->GetBound()))
 				{
+					if(simon->nx > 0 && listStair.at(i)->StairTag == CGameObject::StairTypes::ToLeft)
 					simon->isHitTopStair = true;
+					if (simon->nx < 0 && listStair.at(i)->StairTag == CGameObject::StairTypes::ToRight)
+						simon->isHitTopStair = true;
 				}
 			}
 		}

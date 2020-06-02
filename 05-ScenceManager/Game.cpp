@@ -7,11 +7,6 @@
 #include "PlayScence.h"
 #define MAX_RESOURCES_LINE	1024
 
-#define RESOURCES_SECTION_UNKNOWN			-1
-#define RESOURCE_SECTION_TEXTURES				2
-#define RESOURCE_SECTION_SPRITES					3
-#define RESOURCE_SECTION_ANIMATIONS			4
-#define RESOURCE_SECTION_ANIMATION_SETS	5
 CGame * CGame::__instance = NULL;
 
 /*
@@ -336,6 +331,10 @@ CGame *CGame::GetInstance()
 #define GAME_FILE_SECTION_UNKNOWN -1
 #define GAME_FILE_SECTION_SETTINGS 1
 #define GAME_FILE_SECTION_SCENES 2
+#define GAME_FILE_SECTION_TEXTURES 3
+#define GAME_FILE_SECTION_SPRITES 4
+#define GAME_FILE_SECTION_ANIMATIONS 5
+#define GAME_FILE_SECTION_ANIMATION_SETS 6
 
 void CGame::_ParseSection_SETTINGS(string line)
 {
@@ -443,55 +442,6 @@ void CGame::_ParseSection_ANIMATION_SETS(string line)
 /*
 	Load game campaign file and load/initiate first scene
 */
-void CGame::LoadResources()
-{
-	DebugOut(L"[INFO] Start loading game resources from : %s \n", RESOURCE_FILE_PATH);
-
-	ifstream f;
-	f.open(RESOURCE_FILE_PATH);
-
-	int section = RESOURCES_SECTION_UNKNOWN;
-
-	char str[MAX_RESOURCES_LINE];
-
-	while (f.getline(str, MAX_RESOURCES_LINE))
-	{
-		string line(str);
-
-		if (line[0] == '#') continue;	// skip comment lines	
-
-		if (line == "[TEXTURES]")
-		{
-			section = RESOURCE_SECTION_TEXTURES; continue;
-		}
-		if (line == "[SPRITES]") {
-			section = RESOURCE_SECTION_SPRITES; continue;
-		}
-		if (line == "[ANIMATIONS]") {
-			section = RESOURCE_SECTION_ANIMATIONS; continue;
-		}
-		if (line == "[ANIMATIONS_SETS]") {
-			section = RESOURCE_SECTION_ANIMATION_SETS; continue;
-		}
-		if (line[0] == '[') { section = RESOURCES_SECTION_UNKNOWN; continue; }
-
-		//
-		// data section
-		//
-		switch (section)
-		{
-		case RESOURCE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
-		case RESOURCE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-		case RESOURCE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
-		case RESOURCE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
-		}
-	}
-	f.close();
-
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"resources\\bbox.png", D3DCOLOR_XRGB(0, 0, 0));
-
-	DebugOut(L"[INFO] Done loading game resources %s\n", RESOURCE_FILE_PATH);
-}
 
 void CGame::LoadGameFile(LPCWSTR gameFile)
 {
@@ -513,7 +463,20 @@ void CGame::LoadGameFile(LPCWSTR gameFile)
 
 		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
 		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
-
+		if (line == "[TEXTURES]")
+		{
+			section = GAME_FILE_SECTION_TEXTURES; continue;
+		}
+		if (line == "[SPRITES]") {
+			section = GAME_FILE_SECTION_SPRITES; continue;
+		}
+		if (line == "[ANIMATIONS]") {
+			section = GAME_FILE_SECTION_ANIMATIONS; continue;
+		}
+		if (line == "[ANIMATIONS_SETS]") {
+			section = GAME_FILE_SECTION_ANIMATION_SETS; continue;
+		}
+		//if (line[0] == '[') { section = RESOURCES_SECTION_UNKNOWN; continue; }
 		//
 		// data section
 		//
@@ -521,10 +484,15 @@ void CGame::LoadGameFile(LPCWSTR gameFile)
 		{
 			case GAME_FILE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
 			case GAME_FILE_SECTION_SCENES: _ParseSection_SCENES(line); break;
+			case GAME_FILE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
+			case GAME_FILE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+			case GAME_FILE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+			case GAME_FILE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 		}
 	}
 	f.close();
 
+	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"resources\\bbox.png", D3DCOLOR_XRGB(0, 0, 0));
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n",gameFile);
 
 	SwitchScene(current_scene);

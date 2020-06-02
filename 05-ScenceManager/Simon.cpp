@@ -90,7 +90,7 @@ void Simon::Render()
 
 	animation_set->at(ani)->Render(x, y,nx, alpha);
 	
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
 		whip->Render(animation_set->at(ani)->GetCurrentFrame());
 }

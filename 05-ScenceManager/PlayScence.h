@@ -16,10 +16,12 @@
 #include "BotStair.h"
 #include "TopStair.h"
 #include "Knight.h"
+#include "MovingPlatform.h"
 class CPlayScene: public CScene
 {
 public: 
 	 
+	int scene_id;
 	Simon *player;					// A play scene has to have player, right? 
 	Dagger* dagger;
 	int tileMapLineY = 0;
@@ -31,6 +33,10 @@ public:
 	vector<LPGAMEOBJECT> listItem;
 	vector<LPGAMEOBJECT> listPortal;
 	vector<LPMAP> tileMap;
+	void _ParseSection_TILE_SHEET(string line);
+	void _ParseSection_SPRITES(string line);
+	void _ParseSection_ANIMATIONS(string line);
+	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_MAP_INFO(string line);
 	void _ParseSection_MAP(string line);

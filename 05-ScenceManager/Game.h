@@ -70,7 +70,6 @@ public:
 
 		return true;
 	}
-	void LoadResources();
 	void LoadGameFile(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	int GetSceneId() { return current_scene; }
