@@ -433,11 +433,11 @@ void CPlayScene::Update(DWORD dt)
 		}
 		
 	 }
-	 else if (cx < game->GetScreenWidth() / 2)
+	else if (cx < game->GetScreenWidth() / 2)
 	 {
 		 cx = 0.0f;
 	 }
-	 if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x)-cx < -DAGGER_WEAPON_BBOX_WIDTH)
+	 else if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x)-cx < -DAGGER_WEAPON_BBOX_WIDTH)
 	 {
 		 dagger->visible = false;
 	 }
@@ -645,6 +645,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			if (simon->isOnStair == false)
 			{
+				simon->nx = 1;
 				simon->SetState(SIMON_STATE_SIT);
 				return;
 			}
@@ -709,6 +710,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			if (simon->isOnStair == false)
 			{
+				simon->nx = -1;
 				simon->SetState(SIMON_STATE_SIT);
 				return;
 			}
@@ -845,8 +847,17 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			if (simon->isHitTop == false)
 			{
+				//DebugOut(L"DIK_RIGHT OK \n");
 				if (simon->isAttack == false && simon->isJumping == false)
-					simon->SetState(SIMON_STATE_SIT);
+
+					if (game->IsKeyDown(DIK_RIGHT))
+					{
+						DebugOut(L"DIK_RIGHT OK \n");
+						simon->nx = 1;
+					}
+					else if (game->IsKeyDown(DIK_LEFT))
+						simon->nx = -1;
+						simon->SetState(SIMON_STATE_SIT);
 			}
 		}
 	}
@@ -932,7 +943,7 @@ void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		}
 		else
 		{
-			if((simon->isAttack) ||(simon->state == SIMON_STATE_SIT))
+			if((simon->isAttack) ||(simon->state == SIMON_STATE_SIT) || simon->isJumping == true)
 				return;
 			simon->SetState(SIMON_STATE_IDLE);
 		}
@@ -946,7 +957,7 @@ void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		}
 		else
 		{
-			if ((simon->isAttack) || (simon->state == SIMON_STATE_SIT))
+			if ((simon->isAttack) || (simon->state == SIMON_STATE_SIT) || simon->isJumping == true)
 				return;
 			simon->SetState(SIMON_STATE_IDLE);
 		}
