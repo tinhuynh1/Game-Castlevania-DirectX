@@ -437,7 +437,7 @@ void CPlayScene::Update(DWORD dt)
 	 {
 		 cx = 0.0f;
 	 }
-	 else if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x)-cx < -DAGGER_WEAPON_BBOX_WIDTH)
+	 if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x)-cx < -DAGGER_WEAPON_BBOX_WIDTH)
 	 {
 		 dagger->visible = false;
 	 }
@@ -849,14 +849,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			{
 				//DebugOut(L"DIK_RIGHT OK \n");
 				if (simon->isAttack == false && simon->isJumping == false)
-
-					if (game->IsKeyDown(DIK_RIGHT))
-					{
-						DebugOut(L"DIK_RIGHT OK \n");
-						simon->nx = 1;
-					}
-					else if (game->IsKeyDown(DIK_LEFT))
-						simon->nx = -1;
 						simon->SetState(SIMON_STATE_SIT);
 			}
 		}

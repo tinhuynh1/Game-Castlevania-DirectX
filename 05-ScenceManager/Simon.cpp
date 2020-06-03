@@ -288,7 +288,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			timerChangeColor = 0;
 		}
 	}
-	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
+	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK || state == SIMON_STATE_THROW)
 	{
 		int ani = -1;
 		if (state == SIMON_STATE_ATTACK)
