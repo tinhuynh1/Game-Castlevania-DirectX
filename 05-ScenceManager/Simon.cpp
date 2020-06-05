@@ -267,15 +267,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	
 	whip->Update(dt, coObjects);
-	if (state == SIMON_STATE_THROW)
-	{
-		if (animation_set->at(0)->GetCurrentFrame() == 2)
-		{
-			isLastFrame = true;
-			DebugOut(L"Throw \n");
-			//dagger->Update(dt, coObjects);
-		}
-	}
 	//dagger->Update(dt, coObjects);
 
 	if (isEatingItem)
@@ -293,9 +284,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		int ani = -1;
 		if (state == SIMON_STATE_ATTACK)
 			ani = SIMON_ANI_ATTACK;
-		else
+		else if (state == SIMON_STATE_SIT_AND_ATTACK)
 		{
 			ani = SIMON_ANI_SIT_AND_ATTACK;
+		}
+		else if (state == SIMON_STATE_THROW)
+		{
+			ani = SIMON_ANI_THROW;
 		}
 		whip->SetOrientation(nx);
 		whip->SetWhipPosition(D3DXVECTOR2(x, y), isStanding);

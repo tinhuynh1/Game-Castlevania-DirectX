@@ -44,6 +44,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define OBJECT_TYPE_KNIGHT		8 
 #define OBJECT_TYPE_BOTSTAIR	9
 #define OBJECT_TYPE_TOPSTAIR	10
+#define OBJECT_TYPE_ITEM_BOOMERANG	11
 #define OBJECT_TYPE_MOVING_PFLATFORM	17
 
 #define OBJECT_TYPE_PORTAL	50
@@ -233,6 +234,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_DAGGER, obj);
 		break;
 	}
+	case OBJECT_TYPE_ITEM_BOOMERANG:
+	{
+		obj = new BoomerangItem();
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_BOOMERANG, obj);
+		break;
+	}
 	case OBJECT_TYPE_PORTAL:
 		{	
 			float r = atof(tokens[4].c_str());
@@ -339,7 +346,7 @@ void CPlayScene::Load()
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
-	DebugOut(L"[INFO] Size is: %d", this->objects.size());
+	DebugOut(L"[INFO] Size is: %d \n", this->objects.size());
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -363,11 +370,7 @@ void CPlayScene::Update(DWORD dt)
 		{
 			listTorch.push_back(objects.at(i));
 		}
-		else if (dynamic_cast<Torch*>(temp))
-		{
-			listTorch.push_back(objects.at(i));
-		}
-		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) || dynamic_cast<DaggerItem*>(temp))
+		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) || dynamic_cast<DaggerItem*>(temp) || dynamic_cast<BoomerangItem*>(temp))
 		{
 			listItem.push_back(objects.at(i));
 		}
@@ -437,9 +440,12 @@ void CPlayScene::Update(DWORD dt)
 	 {
 		 cx = 0.0f;
 	 }
-	 if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x)-cx < -DAGGER_WEAPON_BBOX_WIDTH)
+	 if (player->isCollectDagger)
 	 {
-		 dagger->visible = false;
+		 if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x) - cx < -DAGGER_WEAPON_BBOX_WIDTH)
+		 {
+			 dagger->visible = false;
+		 }
 	 }
 	/*}
 
@@ -479,6 +485,9 @@ void CPlayScene::Unload()
 		}
 	}
 	objects.clear();
+	listTorch.clear();
+	listItem.clear();
+	listStair.clear();
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
@@ -514,6 +523,15 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 					listItem.at(i)->visible = false;
 				}
 			}
+			if (player->CheckCollision(listItem.at(i)))
+			{
+				if (dynamic_cast<BoomerangItem*>(listItem.at(i)))
+				{
+					player->isCollectBoomerang = true;
+					listItem.at(i)->visible = false;
+				}
+			}
+
 		}
 	}
 }
@@ -542,13 +560,17 @@ void CPlayScene::CheckCollision_PortalAndSimon()
 }
 void CPlayScene::CheckCollision_DaggerAndTorch()
 {
+	DebugOut(L"Size torch is: %d \n", listTorch.size());
 	for (UINT i = 0; i < listTorch.size(); i++)
+	{
+		
 		if (dagger->CheckCollision(listTorch.at(i)))
 		{
 			dagger->visible = false;
 			listTorch.at(i)->SetState(TORCH_DESTROYED);
 			listTorch.at(i)->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
 		}
+	}
 }
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {

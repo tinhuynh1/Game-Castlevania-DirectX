@@ -13,153 +13,189 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Items">
+      <UniqueIdentifier>{f9c2790b-42cf-47a3-8d1b-8dcc857d4de6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapon">
+      <UniqueIdentifier>{f8875811-4b24-4b83-b206-430e52c26d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{d984d91b-b9c5-40a8-b279-2c79be66a120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{574fcc07-2dd1-42f1-9a0c-0c60e829176a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ObjectsGame">
+      <UniqueIdentifier>{28975d54-80db-4e08-aa74-fb40a6be37af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Simon">
+      <UniqueIdentifier>{35da2e2c-db7c-44cb-9850-470286a28265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{c93b9dc1-2085-4301-88d9-cc5ae6c6d89f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{cac08a19-ac33-41f6-a37e-ab687c7f8388}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Brick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sprites.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scence.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScence.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Animations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Portal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Simon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Torch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Whip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HeartItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Items.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ChainItem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Items</Filter>
     </ClCompile>
     <ClCompile Include="DaggerItem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Items</Filter>
     </ClCompile>
-    <ClCompile Include="BotStair.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="HeartItem.cpp">
+      <Filter>Items</Filter>
     </ClCompile>
-    <ClCompile Include="TopStair.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="BoomerangItem.cpp">
+      <Filter>Items</Filter>
     </ClCompile>
-    <ClCompile Include="Knight.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Items.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Whip.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Boomerang.cpp">
+      <Filter>Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Dagger.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>ObjectsGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>ObjectsGame</Filter>
     </ClCompile>
     <ClCompile Include="MovingPlatform.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>ObjectsGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Torch.cpp">
+      <Filter>ObjectsGame</Filter>
+    </ClCompile>
+    <ClCompile Include="BotStair.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="TopStair.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Simon.cpp">
+      <Filter>Simon</Filter>
+    </ClCompile>
+    <ClCompile Include="Animations.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScence.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scence.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Brick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprites.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scence.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScence.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Animations.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyEventHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Portal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Simon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Torch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Whip.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeartItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Items.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BoomerangItem.h">
+      <Filter>Items</Filter>
     </ClInclude>
     <ClInclude Include="ChainItem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="HeartItem.h">
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Items</Filter>
     </ClInclude>
     <ClInclude Include="DaggerItem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Items</Filter>
     </ClInclude>
-    <ClInclude Include="BotStair.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TopStair.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Knight.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Boomerang.h">
+      <Filter>Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Dagger.h">
-      <Filter>Header Files</Filter>
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="MovingPlatform.h">
-      <Filter>Header Files</Filter>
+      <Filter>ObjectsGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>ObjectsGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>ObjectsGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Torch.h">
+      <Filter>ObjectsGame</Filter>
+    </ClInclude>
+    <ClInclude Include="BotStair.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="TopStair.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Simon.h">
+      <Filter>Simon</Filter>
+    </ClInclude>
+    <ClInclude Include="Animations.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEventHandler.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScence.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scence.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

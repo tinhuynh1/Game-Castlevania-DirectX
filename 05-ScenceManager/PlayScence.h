@@ -17,6 +17,7 @@
 #include "TopStair.h"
 #include "Knight.h"
 #include "MovingPlatform.h"
+#include "BoomerangItem.h"
 class CPlayScene: public CScene
 {
 public: 

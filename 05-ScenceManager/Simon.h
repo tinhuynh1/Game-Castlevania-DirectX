@@ -58,6 +58,7 @@ public:
 	bool isSitAttack = false;
 	bool isAttack = false;
 	bool isCollectDagger = false;
+	bool isCollectBoomerang = false;
 
 	bool isLastFrame = false;
 	bool isInvisible;
