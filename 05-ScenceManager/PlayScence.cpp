@@ -657,14 +657,28 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 		if ((simon->GetState() == SIMON_STATE_ATTACK) || (simon->GetState() == SIMON_STATE_SIT_AND_ATTACK))
 			return;
-		if (simon->GetState() == SIMON_STATE_IDLE || simon->GetState() == SIMON_STATE_JUMP)
-		{			
-			simon->SetState(SIMON_STATE_ATTACK);		
+		if (simon->isOnStair)
+		{
+			if (simon->isUpstair)
+			{
+				simon->SetState(SIMON_STATE_ATTACK_UPSTAIR);
+			}
+			else
+			{
+				simon->SetState(SIMON_STATE_ATTACK_DOWNSTAIR);
+			}
 		}
-		
-		else if (simon->GetState() == SIMON_STATE_SIT) {
-			simon->isAttack = true;
-			simon->SetState(SIMON_STATE_SIT_AND_ATTACK);
+		else
+		{
+			if (simon->GetState() == SIMON_STATE_IDLE || simon->GetState() == SIMON_STATE_JUMP)
+			{
+				simon->SetState(SIMON_STATE_ATTACK);
+			}
+
+			else if (simon->GetState() == SIMON_STATE_SIT) {
+				simon->isAttack = true;
+				simon->SetState(SIMON_STATE_SIT_AND_ATTACK);
+			}
 		}
 		break;
 	}

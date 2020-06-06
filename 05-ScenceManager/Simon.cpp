@@ -40,6 +40,8 @@ void Simon::Render()
 	else if (state == SIMON_STATE_JUMP) ani = SIMON_ANI_JUMP;
 	else if (state == SIMON_STATE_ATTACK) ani = SIMON_ANI_ATTACK;
 	else if (state == SIMON_STATE_SIT_AND_ATTACK) ani = SIMON_ANI_SIT_AND_ATTACK;
+	else if (state == SIMON_STATE_ATTACK_UPSTAIR) ani = SIMON_ANI_ATTACK_UPSTAIR;
+	else if (state == SIMON_STATE_ATTACK_DOWNSTAIR) ani = SIMON_ANI_ATTACK_DOWNSTAIR;
 	else if (state == SIMON_STATE_THROW) ani = SIMON_ANI_THROW;
 	else if (state == SIMON_STATE_ONSTAIR)
 	{
@@ -67,23 +69,23 @@ void Simon::Render()
 		}
 	}
 	else
+	{
+		if (vx == 0)
 		{
-			if (vx == 0)
+			if (isEatingItem)
 			{
-				if (isEatingItem)
-				{
-					DebugOut(L"OK \n");
-					ani = SIMON_ANI_CHANGECOLOR;
-				}
-				else
-				{
-					ani = SIMON_ANI_IDLE;
-				}
-				
+				DebugOut(L"OK \n");
+				ani = SIMON_ANI_CHANGECOLOR;
 			}
-			else ani = SIMON_ANI_WALKING;
-		 
+			else
+			{
+				ani = SIMON_ANI_IDLE;
+			}
+
 		}
+		else ani = SIMON_ANI_WALKING;
+
+	}
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
@@ -91,7 +93,7 @@ void Simon::Render()
 	animation_set->at(ani)->Render(x, y,nx, alpha);
 	
 	RenderBoundingBox();
-	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK)
+	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK || state == SIMON_STATE_ATTACK_UPSTAIR || state == SIMON_STATE_ATTACK_DOWNSTAIR)
 		whip->Render(animation_set->at(ani)->GetCurrentFrame());
 }
 void Simon::SetState(int state)
@@ -166,6 +168,20 @@ void Simon::SetState(int state)
 	{
 		animation_set->at(SIMON_ANI_THROW)->Reset();
 		animation_set->at(SIMON_ANI_THROW)->SetAniStartTime(GetTickCount());
+		break;
+	}
+	case SIMON_STATE_ATTACK_UPSTAIR:
+	{
+		isStanding = true;
+		animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->SetAniStartTime(GetTickCount());
+		break;
+	}
+	case SIMON_STATE_ATTACK_DOWNSTAIR:
+	{
+		isStanding = true;
+		animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->SetAniStartTime(GetTickCount());
 		break;
 	}
 	case SIMON_STATE_SIT:
@@ -279,7 +295,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			timerChangeColor = 0;
 		}
 	}
-	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK || state == SIMON_STATE_THROW)
+	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK || state == SIMON_STATE_THROW || state == SIMON_STATE_ATTACK_UPSTAIR || state == SIMON_STATE_ATTACK_DOWNSTAIR)
 	{
 		int ani = -1;
 		if (state == SIMON_STATE_ATTACK)
@@ -291,6 +307,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (state == SIMON_STATE_THROW)
 		{
 			ani = SIMON_ANI_THROW;
+		}
+		else if (state == SIMON_STATE_ATTACK_UPSTAIR)
+		{
+			ani = SIMON_ANI_ATTACK_UPSTAIR;
+		}
+		else if (state == SIMON_STATE_ATTACK_DOWNSTAIR)
+		{
+			ani = SIMON_ANI_ATTACK_DOWNSTAIR;
 		}
 		whip->SetOrientation(nx);
 		whip->SetWhipPosition(D3DXVECTOR2(x, y), isStanding);
@@ -315,7 +339,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-			SetState(SIMON_STATE_IDLE);
+			if (!isOnStair)
+			{
+				SetState(SIMON_STATE_IDLE);
+			}
+			else
+			{
+				SetState(SIMON_STATE_ONSTAIR);
+			}
 		}
 	}
 	// Calculate dx, dy 
