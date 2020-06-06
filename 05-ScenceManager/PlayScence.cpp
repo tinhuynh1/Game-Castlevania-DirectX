@@ -45,6 +45,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define OBJECT_TYPE_BOTSTAIR	9
 #define OBJECT_TYPE_TOPSTAIR	10
 #define OBJECT_TYPE_ITEM_BOOMERANG	11
+#define OBJECT_TYPE_BOOMERANG					12	
 #define OBJECT_TYPE_MOVING_PFLATFORM	17
 
 #define OBJECT_TYPE_PORTAL	50
@@ -179,6 +180,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new Dagger();
 		dagger = (Dagger*)obj;
+		obj->visible = false;
+		break;
+	}
+	case OBJECT_TYPE_BOOMERANG:
+	{
+		obj = new Boomerang();
+		boomerang = (Boomerang*)obj;
 		obj->visible = false;
 		break;
 	}
@@ -359,6 +367,7 @@ void CPlayScene::Update(DWORD dt)
 	listTorch.clear();
 	listItem.clear();
 	listPortal.clear();
+	listBrick.clear();
 	for (UINT i = 0; i < objects.size(); i++)
 	{
 		LPGAMEOBJECT temp = objects.at(i);
@@ -378,11 +387,17 @@ void CPlayScene::Update(DWORD dt)
 		{
 			listPortal.push_back(objects.at(i));
 		}
+		else if (dynamic_cast<CBrick*>(temp))
+		{
+			listBrick.push_back(objects.at(i));
+		}
 	}
 	CheckCollision_ItemAndSimon();
 	CheckCollision_TorchAndSimon();
 	CheckCollision_PortalAndSimon();
 	CheckCollision_DaggerAndTorch();
+	CheckCollision_SimonAndBrick();
+	CheckCollision_SimonAndBoomerang();
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -445,6 +460,31 @@ void CPlayScene::Update(DWORD dt)
 		 if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x) - cx < -DAGGER_WEAPON_BBOX_WIDTH)
 		 {
 			 dagger->visible = false;
+		 }
+	 }
+	 else if (player->isCollectBoomerang)
+	 {
+		 if (!isReturn)
+		 {
+			 //boomerang đụng viền màn hình thì quay lại
+			 if (boomerang->x > (cx + SCREEN_WIDTH) - 32 || boomerang->x <= 0)
+			 {
+				 boomerang->nx = -boomerang->nx;
+				 isReturn = true;
+			 }
+			 //boomerang bay 1 khoảng 150 ki lô mét thì quay lại
+			 else if (abs(boomerang->x - player->x) > 150)
+			 {
+				 boomerang->nx = -boomerang->nx;
+				 isReturn = true;
+			 }
+		 }
+		 else
+		 {
+			 if (boomerang->x > (cx + SCREEN_WIDTH) + 16 || boomerang->x <= -16)
+			 {
+				 boomerang->visible = false;
+			 }
 		 }
 	 }
 	/*}
@@ -527,6 +567,7 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 			{
 				if (dynamic_cast<BoomerangItem*>(listItem.at(i)))
 				{
+					player->isCollectDagger = false; //không thể dùng dagger sau khi nhặt boomerang
 					player->isCollectBoomerang = true;
 					listItem.at(i)->visible = false;
 				}
@@ -560,7 +601,6 @@ void CPlayScene::CheckCollision_PortalAndSimon()
 }
 void CPlayScene::CheckCollision_DaggerAndTorch()
 {
-	DebugOut(L"Size torch is: %d \n", listTorch.size());
 	for (UINT i = 0; i < listTorch.size(); i++)
 	{
 		
@@ -572,12 +612,39 @@ void CPlayScene::CheckCollision_DaggerAndTorch()
 		}
 	}
 }
+void CPlayScene::CheckCollision_SimonAndBoomerang()
+{
+	for (UINT i = 0; i < objects.size(); i++)
+	{
+		if (dynamic_cast<Boomerang*>(objects.at(i)))
+		{
+			if (isReturn)
+			{
+				if (player->CheckCollision(objects.at(i)))
+				{
+					objects.at(i)->visible = false;
+					isReturn = false;
+				}
+				
+			}
+		}
+	}
+}
+void CPlayScene::CheckCollision_SimonAndBrick()
+{
+	for (UINT i = 0; i < objects.size(); i++)
+	{
+		;
+	}
+}
+
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	Simon *simon = ((CPlayScene*)scence)->GetPlayer();
 	Dagger* dagger = ((CPlayScene*)scence)->GetDagger();
+	Boomerang* boomerang = ((CPlayScene*)scence)->GetBoomerang();
 	
 	if (simon->isEatingItem)
 	{
@@ -616,6 +683,17 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			simon->SetState(SIMON_STATE_THROW);
 				
 			
+		}
+		else if (simon->isCollectBoomerang)
+		{
+			if (simon->GetState() == SIMON_STATE_THROW) return;
+			if (boomerang->visible) return;
+			float x, y;
+			simon->GetPosition(x, y);
+			boomerang->SetPosition(x, y + 5);
+			boomerang->SetOrientation(simon->nx);
+			boomerang->visible = true;
+			simon->SetState(SIMON_STATE_THROW);
 		}
 		else
 		{

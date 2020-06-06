@@ -18,13 +18,16 @@
 #include "Knight.h"
 #include "MovingPlatform.h"
 #include "BoomerangItem.h"
+#include "Boomerang.h"
 class CPlayScene: public CScene
 {
 public: 
+	bool isReturn = false;
 	int map_width;
 	int scene_id;
 	Simon *player;					// A play scene has to have player, right? 
 	Dagger* dagger;
+	Boomerang* boomerang;
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
 	vector<LPGAMEOBJECT> objects;
@@ -52,8 +55,11 @@ public:
 	void CheckCollision_TorchAndSimon();
 	void CheckCollision_PortalAndSimon();
 	void CheckCollision_DaggerAndTorch();
+	void CheckCollision_SimonAndBrick();
+	void CheckCollision_SimonAndBoomerang();
 	Simon * GetPlayer() { return player; } 
 	Dagger* GetDagger() { return dagger; }
+	Boomerang* GetBoomerang() { return boomerang; }
 	vector<LPGAMEOBJECT> GetObjects() { return objects; };
 	vector<LPGAMEOBJECT> GetListStair() { return listStair; };
 	vector<LPGAMEOBJECT> GetListBrick() { return listBrick; };

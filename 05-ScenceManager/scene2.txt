@@ -22,6 +22,11 @@
 60013	106	11	122	27	62
 #============= ITEM_Boomerang ===============
 40004	69	19	84	33	10
+#============= Boomerang ===============
+40005	69	19	84	33	10
+40006	53	20	67	33	10
+40007	87	19	102	33	10	
+
 [ANIMATIONS]
 #================= CANDLE ================
 #small
@@ -38,6 +43,8 @@
 660	60001	100	60002	100	60003	100
 #============ ITEM_Boomerang ===============
 404	40004	100
+#============ Boomerang ===============
+405	40005	100	40006	100	40007	100
 
 [ANIMATIONS_SETS]
 # BRICK 
@@ -47,7 +54,7 @@
 # CANDLE
 2	201	202	203
 #Boomerang
-44	404
+44	404	405
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Brick, 2 = Candle, 3= Whip, 4= Items_BigHeart, 5 = Items_Chain, 6 = Items_Dagger, 7 = Dagger
@@ -66,12 +73,14 @@
 
 #Small candle	extra1: item, extra 2: state
 2	76	116	2	11	1
-2	206	116	2	1	1
+2	206	116	2	4	1
 2	140	20	2	1	1
 #Dagger
 7	570	136	43
-#Boomerang
+#Boomerang Item
 11	76	116	44
+#Boomerang
+12	76	116	44
 #Black Knight
 8	74	48	5
 
