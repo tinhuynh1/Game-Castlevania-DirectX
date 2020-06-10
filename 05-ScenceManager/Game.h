@@ -67,8 +67,8 @@ public:
 		{
 			return false;
 		}
-
 		return true;
+	
 	}
 	void LoadGameFile(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
@@ -100,7 +100,8 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 
 	static CGame * GetInstance();
-	D3DXVECTOR2 GetCamPos();
+	//D3DXVECTOR2 GetCamPos();
+	void CGame::GetCamPos(float &cx, float &cy);
 	~CGame();
 };
 

@@ -117,6 +117,21 @@
     <ClCompile Include="Scence.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="BreakableBrick.cpp">
+      <Filter>ObjectsGame</Filter>
+    </ClCompile>
+    <ClCompile Include="CrownItem.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoomerangItem.h">
@@ -197,5 +212,28 @@
     <ClInclude Include="Scence.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="BreakableBrick.h">
+      <Filter>ObjectsGame</Filter>
+    </ClInclude>
+    <ClInclude Include="CrownItem.h">
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="05-ScenceManager.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Torch.h"
 #define DAGGER_SPEED				0.087f
 
 #define DAGGER_WEAPON_BBOX_WIDTH		16

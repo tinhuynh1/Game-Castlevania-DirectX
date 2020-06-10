@@ -7,8 +7,8 @@
 #include "Game.h"
 
 
-#define SCREEN_WIDTH 272
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH	272
+#define SCREEN_HEIGHT 270
 #define TILE_HEIGHT			16
 #define TILE_WIDTH			16
 #define	ID_TILE_MAP	100

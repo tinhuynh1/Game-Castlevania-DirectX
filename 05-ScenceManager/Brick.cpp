@@ -13,3 +13,11 @@ void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 	r = x + width;
 	b = y + height;
 }
+void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	
+}
+RECT CBrick::GetBound()
+{
+	return CGameObject::GetBound();
+}

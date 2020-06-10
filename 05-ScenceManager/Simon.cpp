@@ -154,6 +154,7 @@ void Simon::SetState(int state)
 		}
 		else
 		{
+			if (isJumping) return;
 			if (nx > 0)
 			{
 				vx = SIMON_WALKING_SPEED;
@@ -405,9 +406,18 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 		x += min_tx * dx + nx * 0.2f;
 		y += min_ty * dy + ny * 0.2f;
 
+		if (nx != 0)
+		{
+			//vx = SIMON_WALKING_SPEED;
+		};
+		if (ny != 0)
+		{
+			if (ny == -1)
+				vy = 0;
+			else
+				y += dy;
+		}
 
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
 
 		if (ny == -1)
 		{
@@ -416,7 +426,6 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 			}
 			firstY = this->GetPosition().y;
 		}
-
 		if (ny == -1 && isJumping == true)
 		{
 			if (isAttack == false /*&& isHitEnemy == false*/) //set đk này để khi chạm đất mà đánh chưa xong thì phải hoàn thành hd đánh r mới đứng yên

@@ -46,6 +46,9 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define OBJECT_TYPE_TOPSTAIR	10
 #define OBJECT_TYPE_ITEM_BOOMERANG	11
 #define OBJECT_TYPE_BOOMERANG					12	
+#define OBJECT_TYPE_BREAKABLE_BRICK	13
+#define OBJECT_TYPE_CROWN_ITEM	14
+#define	OBJECT_TYPE_ROCKS	15
 #define OBJECT_TYPE_MOVING_PFLATFORM	17
 
 #define OBJECT_TYPE_PORTAL	50
@@ -161,7 +164,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		//obj = new Simon(x,y); 
 		obj = Simon::GetInstance();
 		player = (Simon*)obj;  
 		DebugOut(L"[INFO] Player object created!\n");
@@ -191,6 +193,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_KNIGHT: obj = new Knight(); break;
+	case OBJECT_TYPE_ROCKS: 
+		obj = new Rock();
+		Rocks::GetInstance()->AddRock((Rock*)obj);
+		break;
 	case OBJECT_TYPE_MOVING_PFLATFORM: obj = new MovingPlatform(); break;
 	case OBJECT_TYPE_BOTSTAIR:
 	{
@@ -224,6 +230,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->SetItemId(i);
 		break;
 	}
+	case OBJECT_TYPE_BREAKABLE_BRICK:
+	{
+		obj = new BreakableBrick();
+		break;
+	}
 	case OBJECT_TYPE_ITEM_HEART: 
 	{
 		obj = new HeartItem();
@@ -234,6 +245,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new ChainItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_CHAIN, obj);
+		break;
+	}
+	case OBJECT_TYPE_CROWN_ITEM:
+	{
+		obj = new CrownItem();
+		//Items::GetInstance()->AddItem(OBJECT_TYPE_CROWN_ITEM, obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_DAGGER:
@@ -285,22 +302,25 @@ void CPlayScene::_ParseSection_MAP(string line)
 	{
 		RECT rectTile;
 		int index = atoi(tokens[i].c_str());
-		rectTile.left = (index % tileColumns) * TILE_WIDTH;
-		rectTile.top = (index / tileColumns) * TILE_HEIGHT;
-		rectTile.right = rectTile.left + TILE_WIDTH;
-		rectTile.bottom = rectTile.top + TILE_HEIGHT;
-		int x, y;
-		x = i * TILE_WIDTH;
-		y = this->tileMapLineY;
-		Map* map = new Map(x, y, rectTile.left, rectTile.top, rectTile.right, rectTile.bottom);
-		tileMap.push_back(map);
+		if (index >= 0)
+		{
+			rectTile.left = (index % tileColumns) * TILE_WIDTH;
+			rectTile.top = (index / tileColumns) * TILE_HEIGHT;
+			rectTile.right = rectTile.left + TILE_WIDTH;
+			rectTile.bottom = rectTile.top + TILE_HEIGHT;
+			int x, y;
+			x = i * TILE_WIDTH;
+			y = this->tileMapLineY;
+			Map* map = new Map(x, y, rectTile.left, rectTile.top, rectTile.right, rectTile.bottom);
+			tileMap.push_back(map);
+		}
 	}
 	this->tileMapLineY += TILE_HEIGHT;
 }
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
-
+	HUD = Board::GetInstance();
 	ifstream f;
 	f.open(sceneFilePath);
 
@@ -368,6 +388,7 @@ void CPlayScene::Update(DWORD dt)
 	listItem.clear();
 	listPortal.clear();
 	listBrick.clear();
+	listEnemy.clear();
 	for (UINT i = 0; i < objects.size(); i++)
 	{
 		LPGAMEOBJECT temp = objects.at(i);
@@ -391,6 +412,10 @@ void CPlayScene::Update(DWORD dt)
 		{
 			listBrick.push_back(objects.at(i));
 		}
+		/*else if (dynamic_cast<Knight*>(temp))
+		{
+			listEnemy.push_back(objects.at(i));
+		}*/
 	}
 	CheckCollision_ItemAndSimon();
 	CheckCollision_TorchAndSimon();
@@ -416,6 +441,11 @@ void CPlayScene::Update(DWORD dt)
 			listTorch.push_back(objects[i]);
 			continue;
 		}
+		/*else if (dynamic_cast<Knight*>(objects[i]))
+		{
+			listEnemy.push_back(objects[i]);
+			continue;
+		}*/
 		else
 			coObjects.push_back(objects[i]);
 	}
@@ -466,15 +496,18 @@ void CPlayScene::Update(DWORD dt)
 	 {
 		 if (!isReturn)
 		 {
+			
 			 //boomerang đụng viền màn hình thì quay lại
-			 if (boomerang->x > (cx + SCREEN_WIDTH) - 32 || boomerang->x <= 0)
+			 if (boomerang->x > (cx + SCREEN_WIDTH-16) || boomerang->x <= 0)
 			 {
+				 DebugOut(L"x boom is: %f , cx is: %f\n", boomerang->x, (cx + SCREEN_WIDTH-16));
 				 boomerang->nx = -boomerang->nx;
 				 isReturn = true;
 			 }
 			 //boomerang bay 1 khoảng 150 ki lô mét thì quay lại
 			 else if (abs(boomerang->x - player->x) > 150)
 			 {
+				 DebugOut(L"x boom is: %f, x player is: %f \n", boomerang->x, player->x);
 				 boomerang->nx = -boomerang->nx;
 				 isReturn = true;
 			 }
@@ -484,6 +517,7 @@ void CPlayScene::Update(DWORD dt)
 			 if (boomerang->x > (cx + SCREEN_WIDTH) + 16 || boomerang->x <= -16)
 			 {
 				 boomerang->visible = false;
+				 isReturn = false;
 			 }
 		 }
 	 }
@@ -493,19 +527,23 @@ void CPlayScene::Update(DWORD dt)
 	{
 		cx = 0.0f;
 	}*/
-	CGame::GetInstance()->SetCamPos(cx, -10.0f /*cy*/);
+	 HUD->Update(dt);
+	CGame::GetInstance()->SetCamPos(cx, -40.0f /*cy*/);
 }
 
 void CPlayScene::Render()
 {
 	for (int i = 0; i < tileMap.size(); i++)
+	{
 		tileMap[i]->Render();
+	}
 	for (int i = objects.size() - 1; i >= 0; i--)
 	{
 		if (objects[i]->visible == false)
 			continue;
 		objects[i]->Render();
 	}
+	HUD->Render();
 	//CGame* game = CGame::GetInstance();
 }
 /*
@@ -628,6 +666,20 @@ void CPlayScene::CheckCollision_SimonAndBoomerang()
 				
 			}
 		}
+	}
+}
+void CPlayScene::CheckCollision_BoomerangAndEnemy()
+{
+	for (UINT i = 0; i < objects.size(); i++)
+	{
+		if (dynamic_cast<Knight*>(objects.at(i)))
+		{
+			if (boomerang->CheckCollision(objects.at(i)))
+			{
+				objects.at(i)->visible = false;
+			}
+		}
+
 	}
 }
 void CPlayScene::CheckCollision_SimonAndBrick()
@@ -1049,7 +1101,7 @@ void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		}
 		else
 		{
-			if((simon->isAttack) ||(simon->state == SIMON_STATE_SIT) || simon->isJumping == true)
+			if ((simon->state == SIMON_STATE_ATTACK) || (simon->state == SIMON_STATE_SIT) || simon->state == SIMON_STATE_ATTACK || simon->isJumping == true)
 				return;
 			simon->SetState(SIMON_STATE_IDLE);
 		}
@@ -1084,15 +1136,11 @@ void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		break;
 	case DIK_UP:
 	{
-		
-		if (simon->isUpstair == true)
-		{
-			simon->isStopOnStair = true;
-			simon->vx = 0;
-			simon->vy = 0;
-		}
+		simon->isStopOnStair = true;
+		simon->vx = 0;
+		simon->vy = 0;
 		break;
 	}
-	}
 
+	}
 }

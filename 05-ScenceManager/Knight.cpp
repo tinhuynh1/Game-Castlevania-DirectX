@@ -44,3 +44,7 @@ void Knight::SetState(int state)
 	}
 
 }
+RECT Knight::GetBound()
+{
+	return CGameObject::GetBound();
+}

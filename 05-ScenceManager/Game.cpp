@@ -508,7 +508,12 @@ void CGame::SwitchScene(int scene_id)
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();	
 }
-D3DXVECTOR2 CGame::GetCamPos()
+//D3DXVECTOR2 CGame::GetCamPos()
+//{
+//	return D3DXVECTOR2(cam_x, cam_y);
+//}
+void CGame::GetCamPos(float &cx, float &cy)
 {
-	return D3DXVECTOR2(cam_x, cam_y);
+	cx = cam_x;
+	cy = cam_y;
 }

@@ -25,8 +25,9 @@ void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 bool CGameObject::AABB(RECT rect1, RECT rect2)
 {
-
-	return rect1.left < rect2.right && rect1.right > rect2.left && rect1.top < rect2.bottom && rect1.bottom > rect2.top;
+		if (rect1.left < rect2.right && rect1.right > rect2.left&& rect1.top < rect2.bottom && rect1.bottom > rect2.top)
+			return true;
+	return false;
 }
 
 /*
