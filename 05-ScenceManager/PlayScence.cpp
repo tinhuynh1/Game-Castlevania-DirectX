@@ -49,6 +49,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define OBJECT_TYPE_BREAKABLE_BRICK	13
 #define OBJECT_TYPE_CROWN_ITEM	14
 #define	OBJECT_TYPE_ROCKS	15
+#define OBJECT_TYPE_BAT	16
 #define OBJECT_TYPE_MOVING_PFLATFORM	17
 
 #define OBJECT_TYPE_PORTAL	50
@@ -168,6 +169,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (Simon*)obj;  
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
+	case OBJECT_TYPE_CROWN_ITEM:
+	{
+		obj = new CrownItem();
+		//Items::GetInstance()->AddItem(OBJECT_TYPE_CROWN_ITEM, obj);
+		break;
+	}
 	case OBJECT_TYPE_BRICK: 
 	{
 		int width = atoi(tokens[4].c_str());
@@ -178,6 +185,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_WHIP: obj = new Whip(); break;
+	case OBJECT_TYPE_BAT: obj = new Bat(x,y); break;
 	case OBJECT_TYPE_DAGGER: 
 	{
 		obj = new Dagger();
@@ -245,12 +253,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new ChainItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_CHAIN, obj);
-		break;
-	}
-	case OBJECT_TYPE_CROWN_ITEM:
-	{
-		obj = new CrownItem();
-		//Items::GetInstance()->AddItem(OBJECT_TYPE_CROWN_ITEM, obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_DAGGER:
@@ -400,7 +402,7 @@ void CPlayScene::Update(DWORD dt)
 		{
 			listTorch.push_back(objects.at(i));
 		}
-		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) || dynamic_cast<DaggerItem*>(temp) || dynamic_cast<BoomerangItem*>(temp))
+		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) || dynamic_cast<DaggerItem*>(temp) || dynamic_cast<BoomerangItem*>(temp) || dynamic_cast<CrownItem*>(temp))
 		{
 			listItem.push_back(objects.at(i));
 		}
@@ -583,34 +585,28 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 				{
 					listItem.at(i)->visible = false;
 				}
-			}
-			if (player->CheckCollision(listItem.at(i)))
-			{
 				if (dynamic_cast<ChainItem*>(listItem.at(i)))
 				{
 					player->isEatingItem = true;
 					listItem.at(i)->visible = false;
 					player->whip->LevelUp();
 				}
-			}
-			if (player->CheckCollision(listItem.at(i)))
-			{
 				if (dynamic_cast<DaggerItem*>(listItem.at(i)))
 				{
 					player->isCollectDagger = true;
 					listItem.at(i)->visible = false;
 				}
-			}
-			if (player->CheckCollision(listItem.at(i)))
-			{
 				if (dynamic_cast<BoomerangItem*>(listItem.at(i)))
 				{
 					player->isCollectDagger = false; //không thể dùng dagger sau khi nhặt boomerang
 					player->isCollectBoomerang = true;
 					listItem.at(i)->visible = false;
 				}
+				if (dynamic_cast<CrownItem*>(listItem.at(i)))
+				{
+					listItem.at(i)->visible = false;
+				}
 			}
-
 		}
 	}
 }
