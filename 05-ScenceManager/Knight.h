@@ -1,5 +1,7 @@
 #pragma once 
 #include "GameObject.h"
+#include "Simon.h"
+#include "Utils.h"
 #define KNIGHT_STATE_WALKING	0
 #define KNIGHT_STATE_DIE			1
 

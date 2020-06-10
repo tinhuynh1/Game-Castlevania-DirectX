@@ -22,6 +22,7 @@
 #include "BreakableBrick.h"
 #include "CrownItem.h"
 #include "Board.h"
+#include "Bat.h"
 class CPlayScene: public CScene
 {
 public: 

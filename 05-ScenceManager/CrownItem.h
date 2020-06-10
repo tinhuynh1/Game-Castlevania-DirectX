@@ -4,11 +4,12 @@
 
 #define CROWN_BBOX_WIDTH		16
 #define CROWN_BBOX_HEIGHT		16
+#define CROWN_GROWING_UP_SPEED	0.01
+#define MAX_Y		160
+#define DISTANCE_SIMON_GROW_UP_X 220
 
-#define CROWN_SPEED_Y 0,12f
 class CrownItem : public CGameObject
 {
-	bool isOn = false;
 public:
 	CrownItem();
 	void Render();
