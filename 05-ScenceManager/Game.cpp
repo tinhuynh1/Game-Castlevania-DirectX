@@ -517,3 +517,10 @@ void CGame::GetCamPos(float &cx, float &cy)
 	cx = cam_x;
 	cy = cam_y;
 }
+// camera boundingbox
+void CGame::CamereBoundingBox(float& left, float& top, float& right, float& bottom) {
+	left = this->cam_x;
+	top = this->cam_y;
+	right = left + GetScreenWidth();
+	bottom = top + GetScreenHeight();
+}

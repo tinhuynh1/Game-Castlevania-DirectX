@@ -1,11 +1,14 @@
 #pragma once
 #include "GameObject.h"
+#include "Game.h"
 #define BOOMERANG_SPEED				0.087f
 
 #define BOOMERANG_WEAPON_BBOX_WIDTH		16
 #define BOOMERANG_WEAPON_BBOX_HEIGHT		16
 class Boomerang : public CGameObject
 {
+	float sX;
+	bool isReturn = false;
 	DWORD turnoverDelayTime = 0;
 public:
 	Boomerang();

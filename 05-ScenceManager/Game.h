@@ -6,7 +6,6 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-#include "Simon.h"
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
@@ -18,7 +17,7 @@ using namespace std;
 #define RESOURCE_FILE_PATH L"Resources.txt"
 class CGame
 {
-	Simon* simon;
+	//Simon* simon;
 	CScene* scence;
 	static CGame * __instance;
 	HWND hWnd;									// Window handle
@@ -102,6 +101,8 @@ public:
 	static CGame * GetInstance();
 	//D3DXVECTOR2 GetCamPos();
 	void CGame::GetCamPos(float &cx, float &cy);
+	void CGame::CamereBoundingBox(float& left, float& top, float& right, float& bottom);
+
 	~CGame();
 };
 
