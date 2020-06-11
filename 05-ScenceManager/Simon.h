@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "Whip.h"
-#include "Dagger.h"
+//#include "Dagger.h"
 #include "HeartItem.h"
 #include "ChainItem.h"
  #include "DaggerItem.h"
@@ -56,7 +56,7 @@ public:
 	//static vector<LPGAMEOBJECT> listStair;
 	static Simon* __instance;
 	Whip* whip;
-	Dagger* dagger;
+	//Dagger* dagger;
 	int untouchable;
 	DWORD untouchable_start;
 	bool isJumping = false;

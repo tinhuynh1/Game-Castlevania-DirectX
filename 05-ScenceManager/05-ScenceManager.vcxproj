@@ -132,6 +132,7 @@
     <ClCompile Include="BotStair.cpp" />
     <ClCompile Include="BreakableBrick.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChainItem.cpp" />
     <ClCompile Include="Code.cpp" />
     <ClCompile Include="CrownItem.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="BotStair.h" />
     <ClInclude Include="BreakableBrick.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="ChainItem.h" />
     <ClInclude Include="Code.h" />
     <ClInclude Include="CrownItem.h" />

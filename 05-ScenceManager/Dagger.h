@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "Game.h"
+#include "Simon.h"
 
 #define DAGGER_SPEED				0.087f
 

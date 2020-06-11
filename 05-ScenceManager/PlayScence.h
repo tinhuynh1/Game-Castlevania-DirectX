@@ -27,7 +27,7 @@ class CPlayScene: public CScene
 {
 public: 
 
-	bool isReturn = false;
+	
 	int map_width;
 	int scene_id;
 	Simon *player;					// A play scene has to have player, right? 

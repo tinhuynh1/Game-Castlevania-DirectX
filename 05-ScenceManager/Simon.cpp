@@ -29,7 +29,7 @@ Simon::Simon(float x, float y) : CGameObject()
 	this->x = x;
 	this->y = y;
 	whip = new Whip();
-	dagger = new Dagger();
+	//dagger = new Dagger();
 }
 void Simon::Render()
 {

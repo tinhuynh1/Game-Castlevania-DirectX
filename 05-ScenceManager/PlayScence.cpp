@@ -487,42 +487,35 @@ void CPlayScene::Update(DWORD dt)
 	 {
 		 cx = 0.0f;
 	 }
-	 if (player->isCollectDagger)
-	 {
-		 if ((dagger->x - cx) > SCREEN_WIDTH || (dagger->x) - cx < -DAGGER_WEAPON_BBOX_WIDTH)
-		 {
-			 dagger->visible = false;
-		 }
-	 }
-	 else if (player->isCollectBoomerang)
-	 {
-		 if (!isReturn)
-		 {
-			
-			 //boomerang đụng viền màn hình thì quay lại
-			 if (boomerang->x > (cx + SCREEN_WIDTH-16) || boomerang->x <= 0)
-			 {
-				 DebugOut(L"x boom is: %f , cx is: %f\n", boomerang->x, (cx + SCREEN_WIDTH-16));
-				 boomerang->nx = -boomerang->nx;
-				 isReturn = true;
-			 }
-			 //boomerang bay 1 khoảng 150 ki lô mét thì quay lại
-			 else if (abs(boomerang->x - player->x) > 150)
-			 {
-				 DebugOut(L"x boom is: %f, x player is: %f \n", boomerang->x, player->x);
-				 boomerang->nx = -boomerang->nx;
-				 isReturn = true;
-			 }
-		 }
-		 else
-		 {
-			 if (boomerang->x > (cx + SCREEN_WIDTH) + 16 || boomerang->x <= -16)
-			 {
-				 boomerang->visible = false;
-				 isReturn = false;
-			 }
-		 }
-	 }
+	 //else if (player->isCollectBoomerang)
+	 //{
+		// if (!isReturn)
+		// {
+		//	
+		//	 //boomerang đụng viền màn hình thì quay lại
+		//	 if (boomerang->x > (cx + SCREEN_WIDTH-16) || boomerang->x <= 0)
+		//	 {
+		//		 DebugOut(L"x boom is: %f , cx is: %f\n", boomerang->x, (cx + SCREEN_WIDTH-16));
+		//		 boomerang->nx = -boomerang->nx;
+		//		 isReturn = true;
+		//	 }
+		//	 //boomerang bay 1 khoảng 150 ki lô mét thì quay lại
+		//	 else if (abs(boomerang->x - player->x) > 150)
+		//	 {
+		//		 DebugOut(L"x boom is: %f, x player is: %f \n", boomerang->x, player->x);
+		//		 boomerang->nx = -boomerang->nx;
+		//		 isReturn = true;
+		//	 }
+		// }
+		// else
+		// {
+		//	 if (boomerang->x > (cx + SCREEN_WIDTH) + 16 || boomerang->x <= -16)
+		//	 {
+		//		 boomerang->visible = false;
+		//		 isReturn = false;
+		//	 }
+		// }
+	 //}
 	/*}
 
 	else
@@ -652,15 +645,7 @@ void CPlayScene::CheckCollision_SimonAndBoomerang()
 	{
 		if (dynamic_cast<Boomerang*>(objects.at(i)))
 		{
-			if (isReturn)
-			{
-				if (player->CheckCollision(objects.at(i)))
-				{
-					objects.at(i)->visible = false;
-					isReturn = false;
-				}
-				
-			}
+			
 		}
 	}
 }
