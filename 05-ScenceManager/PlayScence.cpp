@@ -1063,8 +1063,15 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			simon->SetState(SIMON_STATE_ONSTAIR);
 		}
 	}
-	/*else
-		simon->SetState(SIMON_STATE_IDLE);*/
+	else
+	{
+		if (simon->isOnStair)
+		{
+			simon->SetState(SIMON_STATE_ONSTAIR);
+		}
+		else
+			simon->SetState(SIMON_STATE_IDLE);
+	}
 }
 
 void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)

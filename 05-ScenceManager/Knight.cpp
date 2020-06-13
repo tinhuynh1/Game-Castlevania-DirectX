@@ -9,18 +9,30 @@ void  Knight::GetBoundingBox(float &left, float &top, float &right, float &botto
 void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
+	//vy += 0.0018f * dt;
 	x += dx;
 	y += dy;
-
+	vx = (nx > 0) ? BLACK_KNIGHT_WALKING_SPEED : -BLACK_KNIGHT_WALKING_SPEED;
+	if (start_untouchable != 0)
+	{
+		Untouchable();
+	}
 	if (vx < 0 && x < 36) {
 		nx = -nx;
 		x = 36; vx = -vx;
+
 	}
 
 	if (vx > 0 && x > 122) {
 		nx = -nx;
 		x = 122; vx = -vx;
 	}
+	if (Simon::GetInstance()->isJumping == true && Simon::GetInstance()->GetPosition().y < 80)
+	{
+		nx = 1;
+		vx = BLACK_KNIGHT_WALKING_SPEED;
+	}
+
 }
 void Knight::Render()
 {
@@ -30,6 +42,7 @@ void Knight::Render()
 
 Knight::Knight()
 {
+	this->healthPoint = 3;
 	SetState(KNIGHT_STATE_WALKING);
 }
 

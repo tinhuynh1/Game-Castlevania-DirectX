@@ -12,7 +12,7 @@ class Whip : public CGameObject
 	static Whip* __instance;
 public:
 	Whip();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render(){}
 	virtual void Render(int currentFrame);
 	virtual void SetState(int state);
@@ -21,6 +21,7 @@ public:
 	void SetWhipPosition(D3DXVECTOR2 simonPos, bool isStanding);
 	void LevelUp();
 	RECT GetBound();
+	void SetDamage();
 	static Whip* GetInstance();
 };
 

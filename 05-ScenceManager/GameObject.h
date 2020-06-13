@@ -11,6 +11,7 @@ using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 #define ITEM_GRAVITY	0.004f
+#define  UNTOUCHABLE_TIME	200
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
 
@@ -61,10 +62,14 @@ public:
 	float vx;
 	float vy;
 
-	int nx;	 
+	int nx;
+
+	int healthPoint = 0;
+	int damage = 0;
 
 	int state;
 	DWORD dt; 
+	DWORD start_untouchable = 0;
 
 	LPANIMATION_SET animation_set;
 	bool visible;
@@ -128,6 +133,13 @@ public:
 
 	void SetHeight(int h) { this->height = h; }
 	int GetHeight() { return this->height; }
+
+	// When the enemies is hitted, start untouchable state
+	void Untouchable();
+
+	// Enemies section, wil have a specific class later
+	void TakeDamage(int damage);
+	void Die();
 
 	virtual RECT GetBound();
 	~CGameObject();

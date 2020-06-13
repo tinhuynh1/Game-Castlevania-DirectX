@@ -218,7 +218,6 @@ void Simon::SetState(int state)
 		isSitAttack = false;
 		isAttack = false;
 		vx = 0;
-		vy = 0;
 		break;
 	}
 	case SIMON_STATE_DIE:
@@ -282,8 +281,7 @@ RECT Simon::GetBound()
 }
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	
-	whip->Update(dt, coObjects);
+	CGameObject::Update(dt, coObjects);
 	//dagger->Update(dt, coObjects);
 
 	if (isEatingItem)
@@ -322,8 +320,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (animation_set->at(ani)->GetCurrentFrame() == 2)
 		 
 		{
-			int count = 0;
-			for (UINT i = 0; i < coObjects->size(); i++) {
+			/*for (UINT i = 0; i < coObjects->size(); i++) {
 				LPGAMEOBJECT temp = coObjects->at(i);
 
 				if (dynamic_cast<Torch*>(temp))
@@ -339,7 +336,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						temp->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
 					}
 				}
-			}
+			}*/
 			if (!isOnStair)
 			{
 				SetState(SIMON_STATE_IDLE);
@@ -348,10 +345,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				SetState(SIMON_STATE_ONSTAIR);
 			}
+			whip->Update(dt, coObjects);
 		}
 	}
-	// Calculate dx, dy 
-	CGameObject::Update(dt);
 	//simon không ở trên cầu thang
 	if (!isOnStair)
 	{
