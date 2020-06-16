@@ -200,7 +200,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->visible = false;
 		break;
 	}
-	case OBJECT_TYPE_KNIGHT: obj = new Knight(); break;
+	case OBJECT_TYPE_KNIGHT: obj = new Knight(x,y); break;
 	case OBJECT_TYPE_ROCKS: 
 		obj = new Rock();
 		Rocks::GetInstance()->AddRock((Rock*)obj);
@@ -576,6 +576,7 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 			{
 				if (dynamic_cast<HeartItem*>(listItem.at(i)))
 				{
+					player->IncreaseNumHeart(5);
 					listItem.at(i)->visible = false;
 				}
 				if (dynamic_cast<ChainItem*>(listItem.at(i)))
@@ -586,17 +587,20 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 				}
 				if (dynamic_cast<DaggerItem*>(listItem.at(i)))
 				{
+					player->SetSubWeapon(ID_DAGGER);
 					player->isCollectDagger = true;
 					listItem.at(i)->visible = false;
 				}
 				if (dynamic_cast<BoomerangItem*>(listItem.at(i)))
 				{
+					player->SetSubWeapon(ID_BOOMERANG);
 					player->isCollectDagger = false; //không thể dùng dagger sau khi nhặt boomerang
 					player->isCollectBoomerang = true;
 					listItem.at(i)->visible = false;
 				}
 				if (dynamic_cast<CrownItem*>(listItem.at(i)))
 				{
+					player->SetScore(2000);
 					listItem.at(i)->visible = false;
 				}
 			}
@@ -782,6 +786,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		return;
 	if (simon->GetState() == SIMON_STATE_THROW &&
 		simon->animation_set->at(SIMON_ANI_THROW)->IsOver(SIMON_ATTACK_TIME) == false)
+		return;
+	if (simon->GetState() == SIMON_STATE_DEFLECT &&
+		simon->animation_set->at(SIMON_ANI_DEFLECT)->IsOver(SIMON_DEFLECT_TIME) == false)
 		return;
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;

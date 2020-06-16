@@ -23,6 +23,7 @@
 #define SIMON_STATE_THROW	900
 #define SIMON_STATE_ATTACK_UPSTAIR	1000
 #define SIMON_STATE_ATTACK_DOWNSTAIR	1100
+#define SIMON_STATE_DEFLECT	1200
 
 
 #define SIMON_ANI_IDLE			0
@@ -39,20 +40,28 @@
 #define SIMON_ANI_ATTACK_DOWNSTAIR	11
 #define SIMON_ANI_CHANGECOLOR 13
 #define SIMON_ANI_THROW	14
-//#define SIMON_ANI_DOWNSTAIR	8
-//#define SIMON_ANI_DOWNSTAIR_STOP	9
+#define SIMON_ANI_DEFLECT	15
+#define	SIMON_ANI_THROW_UP_STAIR	16
+#define	SIMON_ANI_THROW_DOWN_STAIR	17
 
-//#define SIMON_ANI_DIE				8
- 
 #define SIMON_BBOX_WIDTH  16
 #define SIMON_BBOX_HEIGHT 30
 
 #define SIMON_UNTOUCHABLE_TIME 5000
 #define SIMON_ATTACK_TIME	300
+#define SIMON_DEFLECT_TIME				1000
+#define SIMON_DEFLECT_SPEED_X			0.06f
+#define SIMON_DEFLECT_SPEED_Y			0.14f
 
 class Simon : public CGameObject
 {
 public:
+	//thông tin trên HUB
+	int health; //Health Simon
+	int numLife;
+	int numHeart;
+	int idSubWeapon;
+	int score;
 	//static vector<LPGAMEOBJECT> listStair;
 	static Simon* __instance;
 	Whip* whip;
@@ -99,6 +108,23 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	RECT GetBound();
 	void CheckCollisionOnStair(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
-	void CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);	
+	void CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
+	void UpdateOnBoard(DWORD dt);
+
+	//Get
+	int GetHealth() { return health; }
+	int GetNumLife() { return numLife; }
+	int GetNumHeart() { return numHeart; }
+	int GetSubWeapon() { return idSubWeapon; }
+	int GetScore() { return score; }
+	//set
+	void SetNumLife(int numLife) { this->numLife = numLife; }
+	void SetHealth(int health) { this->health = health; }
+	void SetNumHeart(int numHeart) { this->numHeart = numHeart; }
+	void SetSubWeapon(int subWeapon) { this->idSubWeapon = subWeapon; }
+	void SetScore(int score) { this->score += score; }
+	//calculate
+	void DecreaseHealth() { health = health - 2; }
+	void IncreaseNumHeart(int heartSimonNum) { this->numHeart += heartSimonNum; }
 };
 

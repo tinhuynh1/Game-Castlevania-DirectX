@@ -8,6 +8,8 @@
 #include "Brick.h"
 #include "BotStair.h"
 #include "TopStair.h"
+#include "Bat.h"
+#include "Knight.h"
 
 Simon* Simon::__instance = NULL;
 
@@ -30,6 +32,9 @@ Simon::Simon(float x, float y) : CGameObject()
 	this->y = y;
 	whip = new Whip();
 	//dagger = new Dagger();
+	SetNumLife(3);
+	SetHealth(16);
+	SetNumHeart(5);
 }
 void Simon::Render()
 {
@@ -42,7 +47,23 @@ void Simon::Render()
 	else if (state == SIMON_STATE_SIT_AND_ATTACK) ani = SIMON_ANI_SIT_AND_ATTACK;
 	else if (state == SIMON_STATE_ATTACK_UPSTAIR) ani = SIMON_ANI_ATTACK_UPSTAIR;
 	else if (state == SIMON_STATE_ATTACK_DOWNSTAIR) ani = SIMON_ANI_ATTACK_DOWNSTAIR;
-	else if (state == SIMON_STATE_THROW) ani = SIMON_ANI_THROW;
+	else if (state == SIMON_STATE_DEFLECT) ani = SIMON_ANI_DEFLECT;
+	else if (state == SIMON_STATE_THROW)
+	{	
+			if (isOnStair)
+			{
+				if (isUpstair)
+				{
+					ani = SIMON_ANI_THROW_UP_STAIR;
+				}
+				else
+				{
+					ani = SIMON_ANI_THROW_DOWN_STAIR;
+				}
+			}
+			else
+				ani = SIMON_ANI_THROW;
+	}
 	else if (state == SIMON_STATE_ONSTAIR)
 	{
 		if (isUpstair)
@@ -88,7 +109,11 @@ void Simon::Render()
 	}
 
 	int alpha = 255;
-	if (untouchable) alpha = 128;
+	if (untouchable)
+	{
+		alpha = rand() % 255;
+	}
+	
 
 	animation_set->at(ani)->Render(x, y,nx, alpha);
 	
@@ -167,8 +192,8 @@ void Simon::SetState(int state)
 			break;
 	case SIMON_STATE_THROW:
 	{
-		animation_set->at(SIMON_ANI_THROW)->Reset();
-		animation_set->at(SIMON_ANI_THROW)->SetAniStartTime(GetTickCount());
+			animation_set->at(SIMON_ANI_THROW)->Reset();
+			animation_set->at(SIMON_ANI_THROW)->SetAniStartTime(GetTickCount());
 		break;
 	}
 	case SIMON_STATE_ATTACK_UPSTAIR:
@@ -218,6 +243,18 @@ void Simon::SetState(int state)
 		isSitAttack = false;
 		isAttack = false;
 		vx = 0;
+		break;
+	}
+	case SIMON_STATE_DEFLECT:
+	{
+		vx = vy = dx = dy = 0;
+
+		this->vx = (-this->nx) * SIMON_DEFLECT_SPEED_X;
+		vy = -SIMON_DEFLECT_SPEED_Y;
+
+		animation_set->at(SIMON_ANI_DEFLECT)->Reset();
+		animation_set->at(SIMON_ANI_DEFLECT)->SetAniStartTime(GetTickCount());
+
 		break;
 	}
 	case SIMON_STATE_DIE:
@@ -283,7 +320,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	//dagger->Update(dt, coObjects);
-
 	if (isEatingItem)
 	{
 		if (timerChangeColor < 700)
@@ -320,23 +356,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (animation_set->at(ani)->GetCurrentFrame() == 2)
 		 
 		{
-			/*for (UINT i = 0; i < coObjects->size(); i++) {
-				LPGAMEOBJECT temp = coObjects->at(i);
-
-				if (dynamic_cast<Torch*>(temp))
-				{
-					Torch* torch = dynamic_cast<Torch*>(temp);
-					float left, top, right, bottom;
-					temp->GetBoundingBox(left, top, right, bottom);
-					
-					if (whip->isColliding(temp->GetBound()) == true)
-					{
-						DebugOut(L"[INFO]Whip Collision with Torch \n");
-						temp->SetState(TORCH_DESTROYED);
-						temp->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
-					}
-				}
-			}*/
 			if (!isOnStair)
 			{
 				SetState(SIMON_STATE_IDLE);
@@ -382,7 +401,11 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 
 	coEvents.clear();
 
-
+	if (GetTickCount() - untouchable_start > SIMON_DEFLECT_TIME)
+	{
+		untouchable_start = 0;
+		untouchable = 0;
+	}
 	CalcPotentialCollisions(colliable_objects, coEvents);
 
 	if (coEvents.size() == 0)
@@ -401,6 +424,38 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 		//block 	
 		x += min_tx * dx + nx * 0.2f;
 		y += min_ty * dy + ny * 0.2f;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT  e = coEventsResult[i];
+			if (dynamic_cast<Bat*>(e->obj))
+			{
+				DecreaseHealth();
+				e->obj->SetVisible(false);
+				if (e->nx != 0 && untouchable == 0)
+				{
+					SetScore(100);
+					StartUntouchable();
+					DebugOut(L"[INFO] Enemies collision, Simon is Damaged \n");
+					this->nx = (e->nx != 0) ?-(e->nx) :-(e->obj->GetOrientation());
+					SetState(SIMON_STATE_DEFLECT);
+				}
+			}
+			if (dynamic_cast<Knight*>(e->obj))
+			{
+				if (e->nx != 0 && untouchable == 0)
+				{
+					DecreaseHealth();
+					StartUntouchable();
+					DebugOut(L"[INFO] Enemies collision, Simon is Damaged \n");
+
+					this->nx = (e->nx != 0) ?
+						-(e->nx) :
+						-(e->obj->GetOrientation());
+
+					SetState(SIMON_STATE_DEFLECT);
+				}
+			}
+		}
 
 		if (nx != 0)
 		{

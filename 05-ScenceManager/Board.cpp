@@ -4,25 +4,32 @@ Board* Board::__instance = NULL;
 void Board::Render()
 {
 	CSprites* sprites = CSprites::GetInstance();
-
+	Simon* simon = Simon::GetInstance();
 	CGame* game = CGame::GetInstance();
 	float cx, cy;
 	game->GetCamPos(cx, cy);
 
 	sprites->Get(70000)->Draw(cx, cy + 2, -1);
-	code->DrawNumber(4, cx + 150, cy + 8, time);
-	code->DrawNumber(6, cx + 55, cy + 8, 123456);
-	code->DrawNumber(2, cx + 234, cy + 8, game->GetSceneId());
-
-	code->DrawHP(cx + 60, cy + 18, 0, 0);
-	code->DrawHP(cx + 60, cy + 28, 1, 6);
+	//STATE
+	code->DrawNumber(game->GetSceneId(), { cx + 234, cy + 8 }, 2);
+	//HEALTH SIMON
+	code->DrawHP({ cx + 60, cy + 18 }, simon->GetHealth(), NUM_ID_SIMON);
+	code->DrawHP({ cx + 60, cy + 28 }, 16, NUM_ID_BOSS);
+	//NUM LIFE
+	code->DrawNumber(simon->GetNumLife(), { cx + 200, cy + 28 }, 2);
+	//TIME
+	code->DrawNumber(GetTimeBoard(), { cx + 150, cy + 8 }, 4);
+	//SCORE HEART
+	code->DrawNumber(simon->GetNumHeart(), { cx + 200, cy + 18 }, 2);
+	//SUB WEAPON
+	code->DrawSubWeapon({ cx + 157, cy + 19 }, simon->GetSubWeapon());
+	//SCORE
+	code->DrawNumber(simon->GetScore(), { cx + 55, cy + 8 }, 6 );
 }
 Board::Board()
 {
-	time = 300;
-	count = GetTickCount();
-	isStop = false;
-	code = new Code();
+	timeBoard = NUM_TIME;
+	timecount = GetTickCount();
 }
 
 Board* Board::GetInstance()
@@ -35,13 +42,10 @@ Board* Board::GetInstance()
 
 void Board::Update(DWORD dt)
 {
-	if (isStop)
+	//SET TIME
+	if (GetTickCount() - timecount > NUM_COUNT_TIME&& timecount > 0)
 	{
-		return;
-	}
-	if (GetTickCount() - count >= 1000)
-	{
-		time--;
-		count = GetTickCount();
+		timeBoard--;
+		timecount = GetTickCount();
 	}
 }

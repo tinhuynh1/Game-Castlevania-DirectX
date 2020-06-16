@@ -138,6 +138,7 @@
     <ClCompile Include="CrownItem.cpp" />
     <ClCompile Include="Dagger.cpp" />
     <ClCompile Include="DaggerItem.cpp" />
+    <ClCompile Include="define.cpp" />
     <ClCompile Include="HeartItem.cpp" />
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Knight.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="CrownItem.h" />
     <ClInclude Include="Dagger.h" />
     <ClInclude Include="DaggerItem.h" />
+    <ClInclude Include="define.h" />
     <ClInclude Include="HeartItem.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="Knight.h" />

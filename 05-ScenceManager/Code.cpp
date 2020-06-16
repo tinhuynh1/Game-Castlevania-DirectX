@@ -1,49 +1,66 @@
-#include "Code.h"
+﻿#include "Code.h"
 #include "Sprites.h"
 
-void Code::DrawNumber(int max, float x, float y, int s)
+void Code::DrawNumber(int number, D3DXVECTOR2 position, int length)
 {
-	string str = to_string(s);
+	string str = to_string(number);
 
-	for (int i = 0; i < max - str.size(); i++)
+	//Dùng khi tăng điểm thì sẽ trừ bớt số 0 thay thế là điểm ở hàm dưới(Nếu không có thì sẽ thêm điểm ở phía sau vầ giữ nguyên length
+	for (int i = 0; i < length - str.size(); i++)
 	{
-		CSprites::GetInstance()->Get(77000)->Draw(x, y, -1);
-		x += 7;
+		CSprites::GetInstance()->Get(77000)->Draw(position.x, position.y,-1);
+		position.x += 7;
 	}
 
+	//Đếm có bao nhiêu chữ số và ghi điểm
 	for (int i = 0; i < str.size(); i++)
 	{
-		CSprites::GetInstance()->Get(77000 + Convert(str[i]))->Draw(x, y, -1);
-		x += 7;
+		CSprites::GetInstance()->Get(77000 + Convert(str[i]))->Draw(position.x, position.y,-1);
+		position.x += 7;
 	}
 }
-
-void Code::DrawHP(float x, float y, int type, int s)
+void Code::DrawSubWeapon(D3DXVECTOR2 position, int info)
+{
+	switch (info)
+	{
+	case ID_DAGGER:
+		CSprites::GetInstance()->Get(ID_DAGGER)->Draw(position.x, position.y, 1);
+		break;
+	case ID_BOOMERANG:
+		CSprites::GetInstance()->Get(ID_BOOMERANG)->Draw(position.x, position.y, 1);
+		break;
+	default:
+		break;
+	}
+}
+void Code::DrawHP(D3DXVECTOR2 position, int health, int kind)
 {
 	CSprites* sprites = CSprites::GetInstance();
-	CSprite* sprite1 = sprites->Get(77101);
-	CSprite* sprite2 = NULL;
+	CSprite* spriteHealthMinus = sprites->Get(77102);
+	CSprite* spriteHealth = NULL;
+	int healthGeneral = NUM_HEALTH;
 
-	if (type == 0) // simon health point
-		sprite2 = sprites->Get(77102);
-	else // Enemy
-		sprite2 = sprites->Get(77103);
+	if (kind == NUM_ID_SIMON)
+		spriteHealth = sprites->Get(77101); //HEALTH SIMON
+	else
+		spriteHealth = sprites->Get(77103); //HEALTH BOSS
 
-	for (int i = 0; i < s; i++)
+	for (int i = 0; i < health; i++)
 	{
-		sprite2->Draw(x, y, -1);
-		x += 6;
+		spriteHealth->Draw(position.x, position.y, -1);
+		position.x += 5;
 	}
 
-	for (int i = 0; i < 6 - s; i++)
+
+	for (int i = 0; i < healthGeneral - health; i++)
 	{
-		sprite1->Draw(x, y, -1);
-		x += 6;
+		spriteHealthMinus->Draw(position.x, position.y, -1);
+		position.x += 5;
 	}
+
 	sprites = NULL;
-	sprite1 = NULL;
-	sprite2 = NULL;
-
+	spriteHealthMinus = NULL;
+	spriteHealth = NULL;
 }
 
 int Code::Convert(char c)

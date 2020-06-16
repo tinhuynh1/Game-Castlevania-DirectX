@@ -110,6 +110,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
+	void ReDirection() { this->nx = -nx; this->vx = -vx; }
 	// Orientation
 	void SetOrientation(int nx) { this->nx = nx; }
 	int GetOrientation() { return nx; }
