@@ -43,6 +43,7 @@
 #define SIMON_ANI_DEFLECT	15
 #define	SIMON_ANI_THROW_UP_STAIR	16
 #define	SIMON_ANI_THROW_DOWN_STAIR	17
+#define SIMON_ANI_DIE 18
 
 #define SIMON_BBOX_WIDTH  16
 #define SIMON_BBOX_HEIGHT 30
@@ -97,6 +98,7 @@ public:
 	DWORD timerDie = 0;
 	DWORD timerChangeColor = 0;
 	DWORD timerLand = 0;
+	bool isRevive;
 public:
 	static Simon* GetInstance();
 	Simon(float x = 0.0f, float y = 0.0f);

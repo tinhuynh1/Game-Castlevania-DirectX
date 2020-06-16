@@ -33,14 +33,13 @@ Simon::Simon(float x, float y) : CGameObject()
 	whip = new Whip();
 	//dagger = new Dagger();
 	SetNumLife(3);
-	SetHealth(16);
+	SetHealth(4);
 	SetNumHeart(5);
 }
 void Simon::Render()
 {
 	int ani = -1;
-	if (state == SIMON_STATE_DIE) return;
-		//ani = SIMON_ANI_DIE;
+	if (state == SIMON_STATE_DIE) ani = SIMON_ANI_DIE;
 	else if (state == SIMON_STATE_SIT) ani = SIMON_ANI_SIT;
 	else if (state == SIMON_STATE_JUMP) ani = SIMON_ANI_JUMP;
 	else if (state == SIMON_STATE_ATTACK) ani = SIMON_ANI_ATTACK;
@@ -258,7 +257,7 @@ void Simon::SetState(int state)
 		break;
 	}
 	case SIMON_STATE_DIE:
-		vy = -SIMON_DIE_DEFLECT_SPEED;
+		vy = SIMON_DIE_DEFLECT_SPEED;
 		break;
 	}
 }
@@ -319,6 +318,21 @@ RECT Simon::GetBound()
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
+	if (this->health == 0)
+	{
+			SetState(SIMON_STATE_DIE);
+	}
+	if (state == SIMON_STATE_DIE)
+	{
+		vx = 0;
+		if (timerDie < 2500)
+			timerDie += dt;
+		else
+		{
+			timerDie = 0;
+			isRevive = true;
+		}
+	}
 	//dagger->Update(dt, coObjects);
 	if (isEatingItem)
 	{

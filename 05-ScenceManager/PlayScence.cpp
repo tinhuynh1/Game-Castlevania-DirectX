@@ -487,41 +487,19 @@ void CPlayScene::Update(DWORD dt)
 	 {
 		 cx = 0.0f;
 	 }
-	 //else if (player->isCollectBoomerang)
-	 //{
-		// if (!isReturn)
-		// {
-		//	
-		//	 //boomerang đụng viền màn hình thì quay lại
-		//	 if (boomerang->x > (cx + SCREEN_WIDTH-16) || boomerang->x <= 0)
-		//	 {
-		//		 DebugOut(L"x boom is: %f , cx is: %f\n", boomerang->x, (cx + SCREEN_WIDTH-16));
-		//		 boomerang->nx = -boomerang->nx;
-		//		 isReturn = true;
-		//	 }
-		//	 //boomerang bay 1 khoảng 150 ki lô mét thì quay lại
-		//	 else if (abs(boomerang->x - player->x) > 150)
-		//	 {
-		//		 DebugOut(L"x boom is: %f, x player is: %f \n", boomerang->x, player->x);
-		//		 boomerang->nx = -boomerang->nx;
-		//		 isReturn = true;
-		//	 }
-		// }
-		// else
-		// {
-		//	 if (boomerang->x > (cx + SCREEN_WIDTH) + 16 || boomerang->x <= -16)
-		//	 {
-		//		 boomerang->visible = false;
-		//		 isReturn = false;
-		//	 }
-		// }
-	 //}
-	/*}
+	 if (player->isRevive)
+	 {
+		 player->isRevive = false;
 
-	else
-	{
-		cx = 0.0f;
-	}*/
+		 player->SetVisible(true);
+		 player->SetState(SIMON_STATE_IDLE);
+		 player->SetHealth(16);
+		 player->numLife--;
+		 HUD->SetTimeHud(300);
+		 //NOTE chỉ mới xử lí ở scene 2, chưa xử lí các scene khác
+		 if (game->GetSceneId() == 2)
+			 player->SetPosition(32, 130);
+	 }
 	 HUD->Update(dt);
 	CGame::GetInstance()->SetCamPos(cx, -40.0f /*cy*/);
 }
@@ -682,7 +660,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	Simon *simon = ((CPlayScene*)scence)->GetPlayer();
 	Dagger* dagger = ((CPlayScene*)scence)->GetDagger();
 	Boomerang* boomerang = ((CPlayScene*)scence)->GetBoomerang();
-	
+	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (simon->isEatingItem)
 	{
 		simon->SetState(SIMON_STATE_IDLE);
@@ -723,15 +701,19 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 		if (simon->isCollectDagger)
 		{
-			if (simon->GetState() == SIMON_STATE_THROW) return;
-			if (dagger->visible) return;
-			DebugOut(L" Dagger Available\n");
-			float x, y;
-			simon->GetPosition(x, y);
-			dagger->SetPosition(x, y+5);
-			dagger->SetOrientation(simon->nx);
-			dagger->visible = true;
-			simon->SetState(SIMON_STATE_THROW);
+			if (simon->GetNumHeart() > 0)
+			{
+				if (simon->GetState() == SIMON_STATE_THROW) return;
+				if (dagger->visible) return;
+				DebugOut(L" Dagger Available\n");
+				float x, y;
+				simon->GetPosition(x, y);
+				dagger->SetPosition(x, y + 5);
+				dagger->SetOrientation(simon->nx);
+				dagger->SetVisible(true);
+				simon->SetState(SIMON_STATE_THROW);
+				simon->SetNumHeart(simon->GetNumHeart() - 1);
+			}
 				
 			
 		}
@@ -743,8 +725,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			simon->GetPosition(x, y);
 			boomerang->SetPosition(x, y + 5);
 			boomerang->SetOrientation(simon->nx);
-			boomerang->visible = true;
+			boomerang->SetVisible(true);
 			simon->SetState(SIMON_STATE_THROW);
+			simon->SetNumHeart(simon->GetNumHeart() - 1);
 		}
 		else
 		{
@@ -774,6 +757,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CGame *game = CGame::GetInstance();
 	Simon* simon = ((CPlayScene*)scence)->GetPlayer();
 	vector<LPGAMEOBJECT> listStair = ((CPlayScene*)scence)->GetListStair();
+	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (simon->isEatingItem)
 	{
 		simon->SetState(SIMON_STATE_IDLE);
