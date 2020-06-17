@@ -33,7 +33,7 @@ Simon::Simon(float x, float y) : CGameObject()
 	whip = new Whip();
 	//dagger = new Dagger();
 	SetNumLife(3);
-	SetHealth(4);
+	SetHealth(16);
 	SetNumHeart(5);
 }
 void Simon::Render()

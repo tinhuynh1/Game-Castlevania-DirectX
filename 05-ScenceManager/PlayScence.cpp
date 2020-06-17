@@ -672,6 +672,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 		if ((simon->GetState() == SIMON_STATE_ATTACK) || (simon->GetState() == SIMON_STATE_SIT_AND_ATTACK))
 			return;
+		if ((simon->GetState() == SIMON_STATE_ATTACK_UPSTAIR) || (simon->GetState() == SIMON_STATE_ATTACK_DOWNSTAIR))
+			return;
 		if (simon->isOnStair)
 		{
 			if (simon->isUpstair)
@@ -767,6 +769,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	if (simon->GetState() == SIMON_STATE_ATTACK && simon->animation_set->at(SIMON_ANI_ATTACK)->IsOver(SIMON_ATTACK_TIME) == false)
 		return;
 	if (simon->GetState() == SIMON_STATE_SIT_AND_ATTACK && simon->animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->IsOver(SIMON_ATTACK_TIME) == false)
+		return;
+	if (simon->GetState() == SIMON_STATE_ATTACK_UPSTAIR && simon->animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->IsOver(SIMON_ATTACK_TIME) == false)
+		return;
+	if (simon->GetState() == SIMON_STATE_ATTACK_DOWNSTAIR && simon->animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->IsOver(SIMON_ATTACK_TIME) == false)
 		return;
 	if (simon->GetState() == SIMON_STATE_THROW &&
 		simon->animation_set->at(SIMON_ANI_THROW)->IsOver(SIMON_ATTACK_TIME) == false)
