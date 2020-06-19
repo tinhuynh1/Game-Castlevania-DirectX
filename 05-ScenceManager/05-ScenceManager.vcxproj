@@ -143,10 +143,12 @@
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MoneyBagItem.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Rock.cpp" />
     <ClCompile Include="Simon.cpp" />
+    <ClCompile Include="SmallHeartItem.cpp" />
     <ClCompile Include="TopStair.cpp" />
     <ClCompile Include="Torch.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -179,11 +181,13 @@
     <ClInclude Include="Items.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MoneyBagItem.h" />
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rock.h" />
     <ClInclude Include="Simon.h" />
+    <ClInclude Include="SmallHeartItem.h" />
     <ClInclude Include="TopStair.h" />
     <ClInclude Include="Torch.h" />
     <ClInclude Include="Utils.h" />

@@ -1,6 +1,24 @@
 [TILESHEET]
 4	resources\tilesheet4.png	5	5	5
 [OBJECTS]
+# SIMON
+0	736	116	0
+#Dagger
+7	570	136	43
+#BigHeart
+4	352	80	41
+#Small Candle
+2	731	126	2	4	1
+2	667	142	2	4	1
+2	603	142	2	4	1
+2	539	142	2	4	1
+2	475	142	2	4	1
+2	411	142	2	4	1
+2	347	142	2	4	1
+2	283	142	2	4	1
+2	219	142	2	4	1
+2	155	62	2	4	1
+2	91	126	2	4	1
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
 1	0	176	1	768	16
@@ -9,8 +27,6 @@
 1	672	160	1	96	16
 1	0	128	1	64	16
 1	96	96	1	96	16
-# SIMON
-0	736	116	0
 # STAIR bottom
 # type	x	y	direction
 9	166	82	-1

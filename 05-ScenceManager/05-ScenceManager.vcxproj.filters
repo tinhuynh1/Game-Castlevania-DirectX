@@ -141,6 +141,12 @@
     <ClCompile Include="define.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SmallHeartItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MoneyBagItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoomerangItem.h">
@@ -246,6 +252,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SmallHeartItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MoneyBagItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

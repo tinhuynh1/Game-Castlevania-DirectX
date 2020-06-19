@@ -24,6 +24,8 @@
 #include "CrownItem.h"
 #include "Board.h"
 #include "Bat.h"
+#include "SmallHeartItem.h"
+#include "MoneyBagItem.h"
 class CPlayScene: public CScene
 {
 public: 

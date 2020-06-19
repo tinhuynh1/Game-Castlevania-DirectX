@@ -51,6 +51,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define	OBJECT_TYPE_ROCKS	15
 #define OBJECT_TYPE_BAT	16
 #define OBJECT_TYPE_MOVING_PFLATFORM	17
+#define OBJECT_TYPE_ITEM_SMALL_HEART 18
+#define OBJECT_TYPE_ITEM_MONEY_BAG 19
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -249,6 +251,20 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_HEART, obj);
 		break;
 	}
+	case OBJECT_TYPE_ITEM_SMALL_HEART:
+	{
+		obj = new SmallHeartItem();
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_SMALL_HEART, obj);
+		break;
+	}
+	case OBJECT_TYPE_ITEM_MONEY_BAG:
+	{
+		int state = atoi(tokens[4].c_str());
+		obj = new MoneyBagItem();
+		obj->SetState(state);
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_MONEY_BAG, obj);
+		break;
+	}
 	case OBJECT_TYPE_ITEM_CHAIN:
 	{
 		obj = new ChainItem();
@@ -402,7 +418,9 @@ void CPlayScene::Update(DWORD dt)
 		{
 			listTorch.push_back(objects.at(i));
 		}
-		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) || dynamic_cast<DaggerItem*>(temp) || dynamic_cast<BoomerangItem*>(temp) || dynamic_cast<CrownItem*>(temp))
+		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) 
+			|| dynamic_cast<DaggerItem*>(temp) || dynamic_cast<BoomerangItem*>(temp) || dynamic_cast<CrownItem*>(temp) 
+			|| dynamic_cast<SmallHeartItem*>(temp) || dynamic_cast<MoneyBagItem*>(temp))
 		{
 			listItem.push_back(objects.at(i));
 		}
@@ -579,6 +597,17 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 				if (dynamic_cast<CrownItem*>(listItem.at(i)))
 				{
 					player->SetScore(2000);
+					listItem.at(i)->visible = false;
+				}
+				if (dynamic_cast<SmallHeartItem*>(listItem.at(i)))
+				{
+					player->IncreaseNumHeart(1);
+					player->SetScore(100);
+					listItem.at(i)->visible = false;
+				}
+				if (dynamic_cast<MoneyBagItem*>(listItem.at(i)))
+				{
+					player->SetScore(1000);
 					listItem.at(i)->visible = false;
 				}
 			}
