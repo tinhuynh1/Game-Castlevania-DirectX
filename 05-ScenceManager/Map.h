@@ -5,10 +5,7 @@
 #include "Sprites.h"
 #include "Textures.h"
 #include "Game.h"
-
-
-#define SCREEN_WIDTH	272
-#define SCREEN_HEIGHT 270
+#include "define.h"
 #define TILE_HEIGHT			16
 #define TILE_WIDTH			16
 #define	ID_TILE_MAP	100

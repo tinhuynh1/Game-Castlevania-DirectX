@@ -99,7 +99,7 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 
 	static CGame * GetInstance();
-	//D3DXVECTOR2 GetCamPos();
+	D3DXVECTOR2 CGame::GetCamPosition() { return D3DXVECTOR2(cam_x, cam_y); };
 	void CGame::GetCamPos(float &cx, float &cy);
 	void CGame::CamereBoundingBox(float& left, float& top, float& right, float& bottom);
 

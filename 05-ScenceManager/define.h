@@ -3,3 +3,7 @@
 #define ID_DAGGER	    40003
 #define ID_BOOMERANG	40004
 
+//SCREEN
+
+#define SCREEN_WIDTH	272
+#define SCREEN_HEIGHT 270

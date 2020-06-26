@@ -15,7 +15,7 @@ void SmallHeartItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vx += vx_variability * dt;
 		vy = 0.06f;
 
-		if (vx >= 0.15f || vx <= -0.15f)
+		if (vx >= 0.1f || vx <= -0.1f)
 			vx_variability *= -1;
 	}
 	else vy = 0;

@@ -175,6 +175,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CrownItem();
 		//Items::GetInstance()->AddItem(OBJECT_TYPE_CROWN_ITEM, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_BRICK: 
@@ -184,10 +185,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrick();
 		obj->SetWidth(width);
 		obj->SetHeight(height);
+		listBrick.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_WHIP: obj = new Whip(); break;
-	case OBJECT_TYPE_BAT: obj = new Bat(x,y); break;
+	case OBJECT_TYPE_BAT: 
+		obj = new Bat(x,y);
+		listEnemy.push_back(obj);
+		break;
 	case OBJECT_TYPE_DAGGER: 
 	{
 		obj = new Dagger();
@@ -217,6 +222,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->StairTag = CGameObject::StairTypes::ToRight;
 		else
 		obj->StairTag = CGameObject::StairTypes::ToLeft;
+		listStair.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_TOPSTAIR:
@@ -228,7 +234,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->StairTag = CGameObject::StairTypes::ToRight;
 		else		
 		obj->StairTag = CGameObject::StairTypes::ToLeft;
-
+		listStair.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_TORCH: 
@@ -238,6 +244,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Torch();
 		obj->SetState(state);
 		obj->SetItemId(i);
+		listTorch.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_BREAKABLE_BRICK:
@@ -249,12 +256,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new HeartItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_HEART, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_SMALL_HEART:
 	{
 		obj = new SmallHeartItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_SMALL_HEART, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_MONEY_BAG:
@@ -263,24 +272,28 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new MoneyBagItem();
 		obj->SetState(state);
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_MONEY_BAG, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_CHAIN:
 	{
 		obj = new ChainItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_CHAIN, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_DAGGER:
 	{
 		obj = new DaggerItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_DAGGER, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_BOOMERANG:
 	{
 		obj = new BoomerangItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_BOOMERANG, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_PORTAL:
@@ -289,6 +302,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			float b = atof(tokens[5].c_str());
 			scene_id = atoi(tokens[6].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
+			listPortal.push_back(obj);
 		}
 		break;
 	default:
@@ -302,7 +316,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
 	obj->SetAnimationSet(ani_set);
-	objects.push_back(obj);
+	//objects.push_back(obj);
 }
 void CPlayScene::_ParseSection_MAP_INFO(string line)
 {
@@ -339,44 +353,53 @@ void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 	HUD = Board::GetInstance();
-	ifstream f;
-	f.open(sceneFilePath);
+	grid = new Grid();
+	
 
-	// current resource section flag
-	int section = SCENE_SECTION_UNKNOWN;					
-
-	char str[MAX_SCENE_LINE];
-	while (f.getline(str, MAX_SCENE_LINE))
+	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	if (CScene::GetSceneId() == 1)
 	{
-		string line(str);
+		ifstream f;
+		f.open(sceneFilePath);
 
-		if (line[0] == '#') continue;	// skip comment lines	
-		if (line == "[TILESHEET]") {
-			section = SCENE_SECTION_TILE_SHEET; continue;
-		}
-		if (line == "[SPRITES]") {
-			section = SCENE_SECTION_SPRITES; continue;
-		}
-		if (line == "[ANIMATIONS]") {
-			section = SCENE_SECTION_ANIMATIONS; continue;
-		}
-		if (line == "[ANIMATIONS_SETS]") {
-			section = SCENE_SECTION_ANIMATION_SETS; continue;
-		}
-		if (line == "[OBJECTS]") { 
-			section = SCENE_SECTION_OBJECTS; continue; }
-		if (line == "[MAP_INFO]") {
-			section = SCENE_SECTION_MAP_INFO; continue;}
-		if (line == "[MAP]") {
-			section = SCENE_SECTION_MAPS; continue;
-		}
-		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
+		// current resource section flag
+		int section = SCENE_SECTION_UNKNOWN;
 
-		//
-		// data section
-		//
-		switch (section)
-		{ 
+		char str[MAX_SCENE_LINE];
+		while (f.getline(str, MAX_SCENE_LINE))
+		{
+			string line(str);
+
+			if (line[0] == '#') continue;	// skip comment lines	
+			if (line == "[TILESHEET]") {
+				section = SCENE_SECTION_TILE_SHEET; continue;
+			}
+			if (line == "[SPRITES]") {
+				section = SCENE_SECTION_SPRITES; continue;
+			}
+			if (line == "[ANIMATIONS]") {
+				section = SCENE_SECTION_ANIMATIONS; continue;
+			}
+			if (line == "[ANIMATIONS_SETS]") {
+				section = SCENE_SECTION_ANIMATION_SETS; continue;
+			}
+			if (line == "[OBJECTS]") {
+				section = SCENE_SECTION_OBJECTS; continue;
+			}
+			if (line == "[MAP_INFO]") {
+				section = SCENE_SECTION_MAP_INFO; continue;
+			}
+			if (line == "[MAP]") {
+				section = SCENE_SECTION_MAPS; continue;
+			}
+			if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
+			//
+			// data section
+			//
+
+			switch (section)
+			{
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 			case SCENE_SECTION_MAP_INFO: _ParseSection_MAP_INFO(line); break;
 			case SCENE_SECTION_MAPS:	_ParseSection_MAP(line); break;
@@ -384,29 +407,119 @@ void CPlayScene::Load()
 			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
+			}
+		}
+
+		f.close();
+
+		CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
+		for (UINT i = 0; i < listTorch.size(); i++)
+		{
+			grid->InsertIntoGrid(listTorch.at(i));
+		}
+		for (UINT i = 0; i < listBrick.size(); i++)
+		{
+			grid->InsertIntoGrid(listBrick.at(i));
 		}
 	}
+	else
+	{
+		listBrick.clear();
+		listTorch.clear();
+		listPortal.clear();
+		listStair.clear();
+		listItem.clear();
+		ifstream f;
+		f.open(sceneFilePath);
 
-	f.close();
+		// current resource section flag
+		int section = SCENE_SECTION_UNKNOWN;
 
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
+		char str[MAX_SCENE_LINE];
+		while (f.getline(str, MAX_SCENE_LINE))
+		{
+			string line(str);
 
-	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
-	DebugOut(L"[INFO] Size is: %d \n", this->objects.size());
+			if (line[0] == '#') continue;	// skip comment lines	
+			if (line == "[TILESHEET]") {
+				section = SCENE_SECTION_TILE_SHEET; continue;
+			}
+			if (line == "[SPRITES]") {
+				section = SCENE_SECTION_SPRITES; continue;
+			}
+			if (line == "[ANIMATIONS]") {
+				section = SCENE_SECTION_ANIMATIONS; continue;
+			}
+			if (line == "[ANIMATIONS_SETS]") {
+				section = SCENE_SECTION_ANIMATION_SETS; continue;
+			}
+			if (line == "[OBJECTS]") {
+				section = SCENE_SECTION_OBJECTS; continue;
+			}
+			if (line == "[MAP_INFO]") {
+				section = SCENE_SECTION_MAP_INFO; continue;
+			}
+			if (line == "[MAP]") {
+				section = SCENE_SECTION_MAPS; continue;
+			}
+			if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
+			//
+			// data section
+			//
+
+			switch (section)
+			{
+			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_MAP_INFO: _ParseSection_MAP_INFO(line); break;
+			case SCENE_SECTION_MAPS:	_ParseSection_MAP(line); break;
+			case SCENE_SECTION_TILE_SHEET: _ParseSection_TILE_SHEET(line); break;
+			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
+			}
+		}
+
+		f.close();
+
+		CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
+	
+		for (UINT i = 0; i < listBrick.size(); i++)
+		{
+			grid->InsertIntoGrid(listBrick.at(i));
+		}
+		for (UINT i = 0; i < listTorch.size(); i++)
+		{
+			grid->InsertIntoGrid(listTorch.at(i));
+		}
+		for (UINT i = 0; i < listStair.size(); i++)
+		{
+			grid->InsertIntoGrid(listStair.at(i));
+		}
+	}
 }
 
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
-	
+	grid->GetListCollisionFromGrid(listColObjects);
+	DebugOut(L"Size of listCoObjects is %d \n", listColObjects.size());
 	listStair.clear();
 	listTorch.clear();
-	listItem.clear();
-	listPortal.clear();
 	listBrick.clear();
 	listEnemy.clear();
+	for (UINT i = 0; i < listColObjects.size(); i++)
+	{
+		LPGAMEOBJECT temp = listColObjects.at(i);
+		if (dynamic_cast<Torch*>(temp))
+			listTorch.push_back(listColObjects.at(i));
+		else
+			if (dynamic_cast<TopStair*>(temp) || dynamic_cast<BotStair*>(temp))
+				listStair.push_back(listColObjects.at(i));
+			else
+				listBrick.push_back(listColObjects.at(i));
+	}
 	for (UINT i = 0; i < objects.size(); i++)
 	{
 		LPGAMEOBJECT temp = objects.at(i);
@@ -443,6 +556,17 @@ void CPlayScene::Update(DWORD dt)
 	CheckCollision_DaggerAndTorch();
 	CheckCollision_SimonAndBrick();
 	CheckCollision_SimonAndBoomerang();
+	player->Update(dt, &listBrick);
+	for (UINT i = 0; i < listTorch.size(); i++)
+	{
+		if (listTorch[i]->isVisible() == true)
+			listTorch[i]->Update(dt, &listBrick);
+	}
+	for (UINT i = 0; i < listItem.size(); i++)
+	{
+		if (listItem[i]->isVisible() == true)
+			listItem[i]->Update(dt, &listBrick);
+	}
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -524,18 +648,37 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	for (int i = 0; i < tileMap.size(); i++)
-	{
-		tileMap[i]->Render();
-	}
-	for (int i = objects.size() - 1; i >= 0; i--)
-	{
-		if (objects[i]->visible == false)
-			continue;
-		objects[i]->Render();
-	}
-	HUD->Render();
-	//CGame* game = CGame::GetInstance();
+		for (int i = 0; i < tileMap.size(); i++)
+		{
+			tileMap[i]->Render();
+		}
+		/*for (int i = objects.size() - 1; i >= 0; i--)
+		{
+			if (objects[i]->visible == false)
+				continue;
+			objects[i]->Render();
+		}*/
+		for (UINT i = 0; i < listPortal.size(); i++)
+		{
+			listPortal.at(i)->Render();
+		}
+		for (UINT i = 0; i < listItem.size(); i++)
+		{
+			if(listItem.at(i)->isVisible()==true)
+			listItem.at(i)->Render();
+		}
+		for (UINT i = 0; i < listTorch.size(); i++)
+		{
+			listTorch.at(i)->Render();
+		}
+		for (UINT i = 0; i < listStair.size(); i++)
+		{
+			listStair.at(i)->Render();
+		}
+		player->Render();
+		HUD->Render();
+		//CGame* game = CGame::GetInstance();
+	
 }
 /*
 	Unload current scene
@@ -555,9 +698,10 @@ void CPlayScene::Unload()
 	}
 	objects.clear();
 	listTorch.clear();
+	listBrick.clear();
 	listItem.clear();
 	listStair.clear();
-	player = NULL;
+	//player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 	tileMap.clear();

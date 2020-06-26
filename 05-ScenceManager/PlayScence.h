@@ -26,6 +26,7 @@
 #include "Bat.h"
 #include "SmallHeartItem.h"
 #include "MoneyBagItem.h"
+#include "Grid.h"
 class CPlayScene: public CScene
 {
 public: 
@@ -37,6 +38,8 @@ public:
 	Dagger* dagger;
 	Boomerang* boomerang;
 	Board* HUD;
+	Grid* grid;
+	CGame* game;
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
 	vector<LPGAMEOBJECT> objects;
@@ -46,6 +49,7 @@ public:
 	vector<LPGAMEOBJECT> listItem;
 	vector<LPGAMEOBJECT> listPortal;
 	vector<LPGAMEOBJECT> listEnemy;
+	vector<LPGAMEOBJECT> listColObjects;
 
 	vector<LPMAP> tileMap;
 	void _ParseSection_TILE_SHEET(string line);

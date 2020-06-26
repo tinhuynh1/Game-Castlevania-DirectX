@@ -86,7 +86,7 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void Knight::Render()
 {
 	animation_set->at(state)->Render(x, y, nx);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 Knight::Knight(float x, float y)

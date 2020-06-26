@@ -95,13 +95,15 @@
 #Small candle	extra1: item, extra 2: state
 2	76	116	2	11	1
 2	206	116	2	4	1
-2	140	20	2	1	1
+2	140	20	2	19	1
 #BigHeart
 4	206	116	41
 #Dagger
 7	570	136	43
 #Boomerang Item
 11	76	116	44
+#moneybag
+19	352	80	47	2
 #Boomerang
 12	76	116	44
 #Black Knight
