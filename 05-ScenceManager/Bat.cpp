@@ -16,6 +16,7 @@ void Bat::Render()
 	else
 		ani = 1;
 	animation_set->at(ani)->Render(x, y, nx);
+	RenderBoundingBox();
 }
 
 void Bat::SetState(int state)

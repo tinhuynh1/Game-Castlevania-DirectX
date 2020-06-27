@@ -7,7 +7,7 @@ void BreakableBrick::Render()
 {
 
 	animation_set->at(state)->Render(x, y, -1);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 void BreakableBrick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {

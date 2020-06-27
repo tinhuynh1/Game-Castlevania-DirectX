@@ -94,16 +94,18 @@
 14	130	178	49
 #Small candle	extra1: item, extra 2: state
 2	76	116	2	11	1
-2	206	116	2	4	1
-2	140	20	2	19	1
+2	206	116	2	20	1
+2	140	20	2	21	1
 #BigHeart
 4	206	116	41
 #Dagger
 7	570	136	43
 #Boomerang Item
 11	76	116	44
-#moneybag
-19	352	80	47	2
+#axeItem
+21	352	80	52
+#holywaterItem
+20	206	116	51
 #Boomerang
 12	76	116	44
 #Black Knight
@@ -117,7 +119,6 @@
 16	40	20	6
 # STAIR bottom
 # type	l	t	r	b	direction
-#9	94	162	126	170	1
 9	94	162	1
 9	62	66	1
 # STAIR top

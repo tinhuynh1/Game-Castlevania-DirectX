@@ -367,8 +367,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		whip->SetOrientation(nx);
 		whip->SetWhipPosition(D3DXVECTOR2(x, y), isStanding);
-		if (animation_set->at(ani)->GetCurrentFrame() == 2)
-		 
+		if (animation_set->at(ani)->GetCurrentFrame() == 2)	 
 		{
 			if (!isOnStair)
 			{
@@ -441,34 +440,7 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT  e = coEventsResult[i];
-			if (dynamic_cast<Bat*>(e->obj))
-			{
-				DecreaseHealth();
-				e->obj->SetVisible(false);
-				if (e->nx != 0 && untouchable == 0)
-				{
-					SetScore(100);
-					StartUntouchable();
-					DebugOut(L"[INFO] Enemies collision, Simon is Damaged \n");
-					this->nx = (e->nx != 0) ?-(e->nx) :-(e->obj->GetOrientation());
-					SetState(SIMON_STATE_DEFLECT);
-				}
-			}
-			if (dynamic_cast<Knight*>(e->obj))
-			{
-				if (e->nx != 0 && untouchable == 0)
-				{
-					DecreaseHealth();
-					StartUntouchable();
-					DebugOut(L"[INFO] Enemies collision, Simon is Damaged \n");
 
-					this->nx = (e->nx != 0) ?
-						-(e->nx) :
-						-(e->obj->GetOrientation());
-
-					SetState(SIMON_STATE_DEFLECT);
-				}
-			}
 		}
 
 		if (nx != 0)

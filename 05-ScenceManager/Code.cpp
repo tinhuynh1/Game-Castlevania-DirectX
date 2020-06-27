@@ -29,6 +29,15 @@ void Code::DrawSubWeapon(D3DXVECTOR2 position, int info)
 	case ID_BOOMERANG:
 		CSprites::GetInstance()->Get(ID_BOOMERANG)->Draw(position.x, position.y, 1);
 		break;
+	case ID_HOLYWATER:
+		CSprites::GetInstance()->Get(ID_HOLYWATER)->Draw(position.x-2, position.y-2, 1);
+		break;
+	case ID_AXE:
+		CSprites::GetInstance()->Get(ID_AXE)->Draw(position.x, position.y, 1);
+		break;
+	case ID_WATCH:
+		CSprites::GetInstance()->Get(ID_WATCH)->Draw(position.x, position.y-3, 1);
+		break;
 	default:
 		break;
 	}

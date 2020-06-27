@@ -27,6 +27,9 @@
 #include "SmallHeartItem.h"
 #include "MoneyBagItem.h"
 #include "Grid.h"
+#include "HolyWaterItem.h"
+#include "AxeItem.h"
+#include "WatchItem.h"
 class CPlayScene: public CScene
 {
 public: 
@@ -49,6 +52,8 @@ public:
 	vector<LPGAMEOBJECT> listItem;
 	vector<LPGAMEOBJECT> listPortal;
 	vector<LPGAMEOBJECT> listEnemy;
+	vector<LPGAMEOBJECT> listWeapon;
+	vector<LPGAMEOBJECT> listEfect;
 	vector<LPGAMEOBJECT> listColObjects;
 
 	vector<LPMAP> tileMap;
@@ -67,12 +72,13 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	void CheckCollision_ItemAndSimon();
-	void CheckCollision_TorchAndSimon();
+	void CheckCollision_WhipAndEnemy();
 	void CheckCollision_PortalAndSimon();
 	void CheckCollision_DaggerAndTorch();
-	void CheckCollision_SimonAndBrick();
 	void CheckCollision_SimonAndBoomerang();
 	void CheckCollision_BoomerangAndEnemy();
+	void CheckCollision_SimonAndEnemy();
+	void Handle_SimonAndMoving();
 	Simon * GetPlayer() { return player; } 
 	Dagger* GetDagger() { return dagger; }
 	Boomerang* GetBoomerang() { return boomerang; }

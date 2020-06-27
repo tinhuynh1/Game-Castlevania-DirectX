@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="AxeItem.cpp" />
     <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Boomerang.cpp" />
@@ -141,6 +142,8 @@
     <ClCompile Include="define.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="HeartItem.cpp" />
+    <ClCompile Include="HolyWater.cpp" />
+    <ClCompile Include="HolyWaterItem.cpp" />
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -160,10 +163,12 @@
     <ClCompile Include="Scence.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="WatchItem.cpp" />
     <ClCompile Include="Whip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="AxeItem.h" />
     <ClInclude Include="Bat.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Boomerang.h" />
@@ -180,6 +185,8 @@
     <ClInclude Include="define.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="HeartItem.h" />
+    <ClInclude Include="HolyWater.h" />
+    <ClInclude Include="HolyWaterItem.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Map.h" />
@@ -200,6 +207,7 @@
     <ClInclude Include="Scence.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="WatchItem.h" />
     <ClInclude Include="Whip.h" />
   </ItemGroup>
   <ItemGroup>
