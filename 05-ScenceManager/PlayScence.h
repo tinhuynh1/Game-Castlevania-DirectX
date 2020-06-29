@@ -49,6 +49,7 @@ public:
 	CGame* game;
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
+	DWORD timeToEnemyStop = 0;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listStair;
 	vector<LPGAMEOBJECT> listBrick;

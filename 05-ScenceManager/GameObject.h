@@ -75,11 +75,9 @@ public:
 	LPANIMATION_SET animation_set;
 	bool visible;
 	bool isCollisionWithStair = false;
-	bool isMoving = false;
 	int itemId;
-	bool isDeleted = false;
 
-
+	bool isStop = false;
 public: 
 	static CGameObject* GetInstance();
 	void SetPosition(float x, float y) { this->x = x, this->y = y;}

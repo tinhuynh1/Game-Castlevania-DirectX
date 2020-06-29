@@ -21,7 +21,11 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 	CalcPotentialCollisions(coObjects, coEvents);
-
+	if (isStop)
+	{
+		vx = 0;
+		vy = 0;
+	}
 	if (coEvents.size() == 0)
 	{
 		y += dy;
@@ -51,9 +55,12 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = 0;
 					y += ny * 0.4f;
 				}
-				
+				if (e->nx != 0)
+				{
+					ReDirection();
+					y += ny * 0.4f;
+				}
 			}
-
 		}
 	}
 	//Update knight khi đang ở scene 2
@@ -65,7 +72,6 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				ReDirection();
 				count++;
-
 			}
 		}
 		else
@@ -74,7 +80,6 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				ReDirection();
 				count++;
-
 			}
 		}
 	}
@@ -84,7 +89,12 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void Knight::Render()
 {
-	animation_set->at(state)->Render(x, y, nx);
+	if (!isStop)
+		animation_set->at(state)->Render(x, y, nx);
+	else
+	{
+		animation_set->at(state)->RenderByFrame(animation_set->at(state)->GetCurrentFrame(), nx, x, y);
+	}
 	//RenderBoundingBox();
 }
 

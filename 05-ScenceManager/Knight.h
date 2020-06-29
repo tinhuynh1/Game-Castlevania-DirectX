@@ -26,6 +26,8 @@ public:
 	virtual void Render();
 	virtual void SetState(int state);
 	RECT GetBound();
+	float GetFirstPos() { return firstx; }
+	float firstx;
 
 };
 

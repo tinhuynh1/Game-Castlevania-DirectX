@@ -76,6 +76,7 @@ public:
 	bool isCollectBoomerang = false;
 	bool isCollectHolyWater = false;
 	bool isCollectAxe = false;
+	bool isCollectStopWatch = false;
 	
 	bool isLastFrame = false;
 	bool isInvisible;
@@ -101,6 +102,8 @@ public:
 	DWORD timerChangeColor = 0;
 	DWORD timerLand = 0;
 	bool isRevive;
+
+	bool isUseStop = false;
 
 public:
 	static Simon* GetInstance();

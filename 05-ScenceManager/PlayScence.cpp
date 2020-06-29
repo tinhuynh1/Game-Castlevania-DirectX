@@ -608,6 +608,24 @@ void CPlayScene::Update(DWORD dt)
 	{
 		if (listEnemy[i]->isVisible() == true)
 			listEnemy[i]->Update(dt, &listBrick);
+		if (player->isUseStop)
+		{		
+			if (timeToEnemyStop < 3000)
+			{
+				listEnemy.at(i)->isStop = true;
+				timeToEnemyStop += dt;
+			}
+			else
+			{
+				timeToEnemyStop = 0;
+				player->isUseStop = false;
+				
+			}
+		}
+		else
+		{
+			listEnemy.at(i)->isStop = false;
+		}
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
@@ -796,7 +814,7 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 				if (dynamic_cast<WatchItem*>(listItem.at(i)))
 				{
 					player->SetSubWeapon(ID_WATCH);
-					//player->isCollectDagger = true;
+					player->isCollectStopWatch = true;
 					listItem.at(i)->visible = false;
 				}
 			}
@@ -1009,15 +1027,13 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				dagger->SetVisible(true);
 				simon->SetState(SIMON_STATE_THROW);
 				simon->SetNumHeart(simon->GetNumHeart() - 1);
-			}
-				
-			
+			}			
 		}
 		//use boomerang
 		else if (simon->isCollectBoomerang)
 		{
 			if (simon->GetNumHeart() > 0)
-			{
+			{	
 				if (simon->GetState() == SIMON_STATE_THROW) return;
 				if (boomerang->visible) return;
 				float x, y;
@@ -1062,6 +1078,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				simon->SetState(SIMON_STATE_THROW);
 				simon->SetNumHeart(simon->GetNumHeart() - 1);
 			}
+		}
+		//use stopwatch
+		else if (simon->isCollectStopWatch)
+		{
+			simon->isUseStop = true;
+			//simon->SetNumHeart(simon->GetNumHeart() - 5);
 		}
 		else
 		{
