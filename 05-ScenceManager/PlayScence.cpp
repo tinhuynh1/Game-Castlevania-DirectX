@@ -56,6 +56,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define OBJECT_TYPE_ITEM_HOLYWATER 20
 #define OBJECT_TYPE_ITEM_AXE 21
 #define OBJECT_TYPE_ITEM_WATCH 22
+#define OBJECT_TYPE_HOLYWATER					23
+#define OBJECT_TYPE_AXE	24
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -208,6 +210,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new Boomerang();
 		boomerang = (Boomerang*)obj;
+		obj->visible = false;
+		listWeapon.push_back(obj);
+		break;
+	}
+	case OBJECT_TYPE_HOLYWATER:
+	{
+		obj = new HolyWater();
+		holywater = (HolyWater*)obj;
+		obj->visible = false;
+		listWeapon.push_back(obj);
+		break;
+	}
+	case OBJECT_TYPE_AXE:
+	{
+		obj = new Axe();
+		axe = (Axe*)obj;
 		obj->visible = false;
 		listWeapon.push_back(obj);
 		break;
@@ -580,7 +598,7 @@ void CPlayScene::Update(DWORD dt)
 	for (UINT i = 0; i < listWeapon.size(); i++)
 	{
 		if (listWeapon[i]->isVisible() == true)
-			listWeapon[i]->Update(dt, &listTorch);
+			listWeapon[i]->Update(dt, &listBrick);
 	}
 	for (UINT i = 0; i < listBrick.size(); i++)
 	{
@@ -738,6 +756,8 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 				}
 				if (dynamic_cast<BoomerangItem*>(listItem.at(i)))
 				{
+					player->isCollectHolyWater = false;
+					player->isCollectDagger = false;
 					player->SetSubWeapon(ID_BOOMERANG);
 					player->isCollectDagger = false; //không thể dùng dagger sau khi nhặt boomerang
 					player->isCollectBoomerang = true;
@@ -761,14 +781,16 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 				}
 				if (dynamic_cast<HolyWaterItem*>(listItem.at(i)))
 				{
+					player->isCollectBoomerang = false;
+					player->isCollectDagger = false;
 					player->SetSubWeapon(ID_HOLYWATER);
-					//player->isCollectDagger = true;
+					player->isCollectHolyWater = true;
 					listItem.at(i)->visible = false;
 				}
 				if (dynamic_cast<AxeItem*>(listItem.at(i)))
 				{
 					player->SetSubWeapon(ID_AXE);
-					//player->isCollectDagger = true;
+					player->isCollectAxe = true;
 					listItem.at(i)->visible = false;
 				}
 				if (dynamic_cast<WatchItem*>(listItem.at(i)))
@@ -930,6 +952,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	Simon *simon = ((CPlayScene*)scence)->GetPlayer();
 	Dagger* dagger = ((CPlayScene*)scence)->GetDagger();
 	Boomerang* boomerang = ((CPlayScene*)scence)->GetBoomerang();
+	HolyWater* holywater = ((CPlayScene*)scence)->GetHolyWater();
+	Axe* axe = ((CPlayScene*)scence)->GetAxe();
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (simon->isEatingItem)
 	{
@@ -989,17 +1013,55 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				
 			
 		}
+		//use boomerang
 		else if (simon->isCollectBoomerang)
 		{
-			if (simon->GetState() == SIMON_STATE_THROW) return;
-			if (boomerang->visible) return;
-			float x, y;
-			simon->GetPosition(x, y);
-			boomerang->SetPosition(x, y + 5);
-			boomerang->SetOrientation(simon->nx);
-			boomerang->SetVisible(true);
-			simon->SetState(SIMON_STATE_THROW);
-			simon->SetNumHeart(simon->GetNumHeart() - 1);
+			if (simon->GetNumHeart() > 0)
+			{
+				if (simon->GetState() == SIMON_STATE_THROW) return;
+				if (boomerang->visible) return;
+				float x, y;
+				simon->GetPosition(x, y);
+				boomerang->SetPosition(x, y + 5);
+				boomerang->SetOrientation(simon->nx);
+				boomerang->SetVisible(true);
+				simon->SetState(SIMON_STATE_THROW);
+				simon->SetNumHeart(simon->GetNumHeart() - 1);
+			}
+		}
+		//use holywater
+		else if (simon->isCollectHolyWater)
+		{
+			if (simon->GetNumHeart() > 0)
+			{
+				if (simon->GetState() == SIMON_STATE_THROW) return;
+				if (holywater->visible) return;
+				float x, y;
+				simon->GetPosition(x, y);
+				holywater->firstx = x;
+				holywater->SetPosition(x, y + 5);
+				holywater->SetOrientation(simon->nx);
+				holywater->SetVisible(true);
+				simon->SetState(SIMON_STATE_THROW);
+				simon->SetNumHeart(simon->GetNumHeart() - 1);
+			}
+		}
+		//use axe
+		else if (simon->isCollectAxe)
+		{
+			if (simon->GetNumHeart() > 0)
+			{
+				if (simon->GetState() == SIMON_STATE_THROW) return;
+				if (holywater->visible) return;
+				float x, y;
+				simon->GetPosition(x, y);
+				axe->firstx = x;
+				axe->SetPosition(x, y + 5);
+				axe->SetOrientation(simon->nx);
+				axe->SetVisible(true);
+				simon->SetState(SIMON_STATE_THROW);
+				simon->SetNumHeart(simon->GetNumHeart() - 1);
+			}
 		}
 		else
 		{

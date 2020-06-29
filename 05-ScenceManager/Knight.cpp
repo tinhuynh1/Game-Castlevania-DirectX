@@ -36,7 +36,6 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx;
 		y += min_ty * dy;
 
-
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT  e = coEventsResult[i];

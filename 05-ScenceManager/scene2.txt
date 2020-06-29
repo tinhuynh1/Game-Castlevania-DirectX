@@ -106,6 +106,10 @@
 21	352	80	52
 #holywaterItem
 20	206	116	51
+#holywaterweapon
+23	206	116	54
+#axeWeapon
+24	352	80	55
 #Boomerang
 12	76	116	44
 #Black Knight

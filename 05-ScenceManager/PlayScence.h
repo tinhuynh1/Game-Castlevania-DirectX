@@ -30,6 +30,8 @@
 #include "HolyWaterItem.h"
 #include "AxeItem.h"
 #include "WatchItem.h"
+#include "HolyWater.h"
+#include "Axe.h"
 class CPlayScene: public CScene
 {
 public: 
@@ -39,7 +41,9 @@ public:
 	int scene_id;
 	Simon *player;					// A play scene has to have player, right? 
 	Dagger* dagger;
+	HolyWater* holywater;
 	Boomerang* boomerang;
+	Axe* axe;
 	Board* HUD;
 	Grid* grid;
 	CGame* game;
@@ -81,7 +85,9 @@ public:
 	void Handle_SimonAndMoving();
 	Simon * GetPlayer() { return player; } 
 	Dagger* GetDagger() { return dagger; }
+	HolyWater* GetHolyWater() { return holywater; }
 	Boomerang* GetBoomerang() { return boomerang; }
+	Axe* GetAxe() { return axe; }
 	vector<LPGAMEOBJECT> GetObjects() { return objects; };
 	vector<LPGAMEOBJECT> GetListStair() { return listStair; };
 	vector<LPGAMEOBJECT> GetListBrick() { return listBrick; };

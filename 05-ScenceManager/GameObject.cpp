@@ -180,14 +180,6 @@ void CGameObject::SetOnGround(bool flag)
 {
 	isOnGround = flag;
 }
-bool CGameObject::IsDelete()
-{
-	return this->isDeleted;
-}
-void CGameObject::SetDelete(bool flag)
-{
-	isDeleted = flag;
-}
 void CGameObject::Untouchable()
 {
 	if(GetTickCount() - start_untouchable > UNTOUCHABLE_TIME)

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3dx9.h>
@@ -12,6 +12,7 @@ using namespace std;
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 #define ITEM_GRAVITY	0.002f
 #define  UNTOUCHABLE_TIME	200
+#define ENEMY_FREEZE_TIME 3000
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
 
@@ -78,6 +79,7 @@ public:
 	int itemId;
 	bool isDeleted = false;
 
+
 public: 
 	static CGameObject* GetInstance();
 	void SetPosition(float x, float y) { this->x = x, this->y = y;}
@@ -121,10 +123,6 @@ public:
 	virtual bool IsOnGround();
 	virtual void SetOnGround(bool flag);
 	bool isOnGround = false;
-
-	//object state
-	virtual bool IsDelete();
-	virtual void SetDelete(bool flag);
 
 	int GetItemId() { return itemId; }
 	void SetItemId(int id) { this->itemId = id; }
