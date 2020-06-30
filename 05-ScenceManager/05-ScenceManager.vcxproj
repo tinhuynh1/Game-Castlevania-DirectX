@@ -131,6 +131,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="BoomerangItem.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BotStair.cpp" />
     <ClCompile Include="BreakableBrick.cpp" />
     <ClCompile Include="Brick.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="DaggerItem.cpp" />
     <ClCompile Include="define.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Ghoul.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="HeartItem.cpp" />
     <ClCompile Include="HolyWater.cpp" />
@@ -175,6 +177,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="BoomerangItem.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="BotStair.h" />
     <ClInclude Include="BreakableBrick.h" />
     <ClInclude Include="Brick.h" />
@@ -185,6 +188,7 @@
     <ClInclude Include="DaggerItem.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Ghoul.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="HeartItem.h" />
     <ClInclude Include="HolyWater.h" />

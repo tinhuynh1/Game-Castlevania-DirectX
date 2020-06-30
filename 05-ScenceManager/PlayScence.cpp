@@ -58,6 +58,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define OBJECT_TYPE_ITEM_WATCH 22
 #define OBJECT_TYPE_HOLYWATER					23
 #define OBJECT_TYPE_AXE	24
+#define OBJECT_TYPE_GHOUL	25
+#define OBJECT_TYPE_BOSS	26
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -232,6 +234,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_KNIGHT: 
 		obj = new Knight(x,y);
+		listEnemy.push_back(obj);
+		break;
+	case OBJECT_TYPE_GHOUL:
+		obj = new Ghoul();
+		listEnemy.push_back(obj);
+		break;
+	case OBJECT_TYPE_BOSS:
+		obj = new Boss(player);
 		listEnemy.push_back(obj);
 		break;
 	case OBJECT_TYPE_ROCKS: 
@@ -605,7 +615,15 @@ void CPlayScene::Update(DWORD dt)
 			listBrick[i]->Update(dt, &listBrick);
 	}
 	for (UINT i = 0; i < listEnemy.size(); i++)
-	{
+	{ 
+		if (listEnemy.at(i)->GetPosition().x >= CGame::GetInstance()->GetCamPosition().x && listEnemy.at(i)->GetPosition().x < CGame::GetInstance()->GetCamPosition().x+ SCREEN_WIDTH-20)
+		{
+			listEnemy.at(i)->SetOutOfCamera(false);
+		}
+		else
+		{
+			listEnemy.at(i)->SetOutOfCamera(true);
+		}
 		if (listEnemy[i]->isVisible() == true)
 			listEnemy[i]->Update(dt, &listBrick);
 		if (player->isUseStop)
@@ -637,10 +655,14 @@ void CPlayScene::Update(DWORD dt)
 	{
 		player->x = 0;
 	}
+	if (isStateBoss)
+	{
+		if (player->x <= 512)
+		{
+			player->x = 512;
+		}
+	}
 	CGame *game = CGame::GetInstance();
-	/*if ((cx > game->GetScreenWidth()/2))
-	{*/
-	
 	 if(cx >= game->GetScreenWidth() / 2)
 	 {
 		
@@ -669,8 +691,22 @@ void CPlayScene::Update(DWORD dt)
 		 if (game->GetSceneId() == 2)
 			 player->SetPosition(32, 130);
 	 }
+	 if (game->GetSceneId() == 6)
+	 {
+		 if(player->x> map_width - (game->GetScreenWidth()/2))
+		 {
+			 isStateBoss = true;
+		 }
+	 }
 	 HUD->Update(dt);
-	CGame::GetInstance()->SetCamPos(cx, -40.0f /*cy*/);
+	 if (isStateBoss)
+	 {
+		 CGame::GetInstance()->SetCamPos(512, -40.0f /*cy*/);
+	 }
+	 else
+	 {
+		 CGame::GetInstance()->SetCamPos(cx, -40.0f /*cy*/);
+	 }
 }
 
 void CPlayScene::Render()

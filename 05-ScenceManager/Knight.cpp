@@ -8,6 +8,10 @@ void  Knight::GetBoundingBox(float &left, float &top, float &right, float &botto
 }
 void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isOutOfCamera)
+	{
+		return;
+	}
 	CGameObject::Update(dt, coObjects);
 	vy += 0.0018f * dt;
 	vx = (nx > 0) ? BLACK_KNIGHT_WALKING_SPEED : -BLACK_KNIGHT_WALKING_SPEED;
@@ -82,6 +86,11 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				count++;
 			}
 		}
+	}
+	if (CGame::GetInstance()->GetSceneId() == 3 && y < 60 )
+	{
+		if (x < 96 || x > 144)
+			ReDirection();
 	}
 	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];

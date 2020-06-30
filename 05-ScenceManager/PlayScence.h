@@ -32,11 +32,13 @@
 #include "WatchItem.h"
 #include "HolyWater.h"
 #include "Axe.h"
+#include "Ghoul.h"
+#include "Boss.h"
 class CPlayScene: public CScene
 {
 public: 
 
-	
+	bool isStateBoss = false;
 	int map_width;
 	int scene_id;
 	Simon *player;					// A play scene has to have player, right? 

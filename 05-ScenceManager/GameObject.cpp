@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Sprites.h"
+#include "define.h"
 
 CGameObject::CGameObject()
 {
@@ -209,3 +210,4 @@ void CGameObject::Die()
 
 	this->SetVisible(false);
 }
+

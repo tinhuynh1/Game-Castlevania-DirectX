@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "Utils.h"
 
-#define CELL_WIDTH 80  //320/4
+#define CELL_WIDTH 68  //272/4
 #define CELL_HEIGHT 60  //240/4
 class Grid
 {
@@ -23,8 +23,6 @@ public:
 	Grid()
 	{
 	}
-
-
 	void InsertIntoGrid(CGameObject* object);
 	void CheckSimonRevive(bool isRevive);
 

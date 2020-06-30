@@ -76,7 +76,7 @@ public:
 	bool visible;
 	bool isCollisionWithStair = false;
 	int itemId;
-
+	bool isOutOfCamera;
 	bool isStop = false;
 public: 
 	static CGameObject* GetInstance();
@@ -137,8 +137,8 @@ public:
 	// Enemies section, wil have a specific class later
 	void TakeDamage(int damage);
 	void Die();
-
+	void SetOutOfCamera(bool isOutOfCamera) { this->isOutOfCamera = isOutOfCamera; }
+	bool IsOutofCamera() { return this->isOutOfCamera; }
 	virtual RECT GetBound();
 	~CGameObject();
 };
-

@@ -1,5 +1,5 @@
 [SETTINGS]
-start	2
+start	6
 #scene list
 [SCENES]
 1	scene1.txt
@@ -12,6 +12,7 @@ start	2
 0	resources\simon.png	116	116	116
 10	resources\Objects.png	116	116	116
 30	resources\whip.png	255	0	255
+40	resources\Enemies.png	116	116	116
 -1	resources\Board.png	5	5	5
 [SPRITES]
 #small
