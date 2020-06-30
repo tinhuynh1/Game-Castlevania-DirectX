@@ -7,7 +7,7 @@ Boomerang::Boomerang()
 void Boomerang::Render()
 {
 	animation_set->at(1)->Render(x, y, nx);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

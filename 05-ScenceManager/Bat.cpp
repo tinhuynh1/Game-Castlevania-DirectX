@@ -11,11 +11,17 @@ Bat::Bat(float x, float y) : CGameObject()
 void Bat::Render()
 {
 	int ani = -1;
-	if (vx == 0)
+	if (state == BAT_STATE_IDLE)
 		ani = 0;
 	else
 		ani = 1;
-	animation_set->at(ani)->Render(x, y, nx);
+	if (!isStop)
+		animation_set->at(ani)->Render(x, y, nx);
+	else
+	{
+		animation_set->at(ani)->RenderByFrame(animation_set->at(ani)->GetCurrentFrame(), nx, x, y);
+	}
+	RenderBoundingBox();
 }
 
 void Bat::SetState(int state)
@@ -65,11 +71,18 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 	CalcPotentialCollisions(coObjects, coEvents);
-
+	if (isStop)
+	{
+		vx = 0;
+		vy = 0;
+	}
 	if (coEvents.size() == 0)
 	{
-		y += dy;
-		x += dx;
+		if (!isStop)
+		{
+			y += dy;
+			x += dx;
+		}
 	}
 	else
 	{
@@ -81,8 +94,6 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y += min_ty * dy;
 
 	}
-
-
 	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
 

@@ -8,7 +8,7 @@ void Torch::Render()
 {
 	
 	animation_set->at(state)->Render(x, y, nx);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 void Torch::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {

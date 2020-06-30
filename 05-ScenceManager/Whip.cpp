@@ -58,7 +58,7 @@ void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Whip::Render(int currentFrame)
 {
 	CAnimationSets::GetInstance()->Get(WHIP_ANI_SET)->at(state)->RenderByFrame(currentFrame, nx, x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -68,7 +68,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coObjects->size(); i++)
 		{
 			LPGAMEOBJECT temp = coObjects->at(i);
-			if (dynamic_cast<Torch*>(temp))
+			/*if (dynamic_cast<Torch*>(temp))
 			{
 				Torch* torch = dynamic_cast<Torch*> (temp);
 				if (this->AABB(GetBound(), temp->GetBound()))
@@ -77,7 +77,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					temp->SetState(TORCH_DESTROYED);
 					temp->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
 				}
-			}
+			}*/
 			if (dynamic_cast<BreakableBrick*>(temp))
 			{
 				BreakableBrick* breakable_brick = dynamic_cast<BreakableBrick*> (temp);

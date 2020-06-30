@@ -53,6 +53,13 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define OBJECT_TYPE_MOVING_PFLATFORM	17
 #define OBJECT_TYPE_ITEM_SMALL_HEART 18
 #define OBJECT_TYPE_ITEM_MONEY_BAG 19
+#define OBJECT_TYPE_ITEM_HOLYWATER 20
+#define OBJECT_TYPE_ITEM_AXE 21
+#define OBJECT_TYPE_ITEM_WATCH 22
+#define OBJECT_TYPE_HOLYWATER					23
+#define OBJECT_TYPE_AXE	24
+#define OBJECT_TYPE_GHOUL	25
+#define OBJECT_TYPE_BOSS	26
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -175,6 +182,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CrownItem();
 		//Items::GetInstance()->AddItem(OBJECT_TYPE_CROWN_ITEM, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_BRICK: 
@@ -184,15 +192,20 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrick();
 		obj->SetWidth(width);
 		obj->SetHeight(height);
+		listBrick.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_WHIP: obj = new Whip(); break;
-	case OBJECT_TYPE_BAT: obj = new Bat(x,y); break;
+	case OBJECT_TYPE_BAT: 
+		obj = new Bat(x,y);
+		listEnemy.push_back(obj);
+		break;
 	case OBJECT_TYPE_DAGGER: 
 	{
 		obj = new Dagger();
 		dagger = (Dagger*)obj;
 		obj->visible = false;
+		listWeapon.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_BOOMERANG:
@@ -200,14 +213,46 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Boomerang();
 		boomerang = (Boomerang*)obj;
 		obj->visible = false;
+		listWeapon.push_back(obj);
 		break;
 	}
-	case OBJECT_TYPE_KNIGHT: obj = new Knight(x,y); break;
+	case OBJECT_TYPE_HOLYWATER:
+	{
+		obj = new HolyWater();
+		holywater = (HolyWater*)obj;
+		obj->visible = false;
+		listWeapon.push_back(obj);
+		break;
+	}
+	case OBJECT_TYPE_AXE:
+	{
+		obj = new Axe();
+		axe = (Axe*)obj;
+		obj->visible = false;
+		listWeapon.push_back(obj);
+		break;
+	}
+	case OBJECT_TYPE_KNIGHT: 
+		obj = new Knight(x,y);
+		listEnemy.push_back(obj);
+		break;
+	case OBJECT_TYPE_GHOUL:
+		obj = new Ghoul();
+		listEnemy.push_back(obj);
+		break;
+	case OBJECT_TYPE_BOSS:
+		obj = new Boss(player);
+		listEnemy.push_back(obj);
+		break;
 	case OBJECT_TYPE_ROCKS: 
 		obj = new Rock();
 		Rocks::GetInstance()->AddRock((Rock*)obj);
+		listEfect.push_back(obj);
 		break;
-	case OBJECT_TYPE_MOVING_PFLATFORM: obj = new MovingPlatform(); break;
+	case OBJECT_TYPE_MOVING_PFLATFORM: 
+		obj = new MovingPlatform();
+		listBrick.push_back(obj);
+		break;
 	case OBJECT_TYPE_BOTSTAIR:
 	{
 		obj = new BotStair(); 
@@ -217,6 +262,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->StairTag = CGameObject::StairTypes::ToRight;
 		else
 		obj->StairTag = CGameObject::StairTypes::ToLeft;
+		listStair.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_TOPSTAIR:
@@ -228,7 +274,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->StairTag = CGameObject::StairTypes::ToRight;
 		else		
 		obj->StairTag = CGameObject::StairTypes::ToLeft;
-
+		listStair.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_TORCH: 
@@ -238,23 +284,27 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Torch();
 		obj->SetState(state);
 		obj->SetItemId(i);
+		listTorch.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_BREAKABLE_BRICK:
 	{
 		obj = new BreakableBrick();
+		listEnemy.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_HEART: 
 	{
 		obj = new HeartItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_HEART, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_SMALL_HEART:
 	{
 		obj = new SmallHeartItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_SMALL_HEART, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_MONEY_BAG:
@@ -263,24 +313,49 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new MoneyBagItem();
 		obj->SetState(state);
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_MONEY_BAG, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_CHAIN:
 	{
 		obj = new ChainItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_CHAIN, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_DAGGER:
 	{
 		obj = new DaggerItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_DAGGER, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_ITEM_BOOMERANG:
 	{
 		obj = new BoomerangItem();
 		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_BOOMERANG, obj);
+		listItem.push_back(obj);
+		break;
+	}
+	case OBJECT_TYPE_ITEM_HOLYWATER:
+	{
+		obj = new HolyWaterItem();
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_HOLYWATER, obj);
+		listItem.push_back(obj);
+		break;
+	}
+	case OBJECT_TYPE_ITEM_AXE:
+	{
+		obj = new AxeItem();
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_AXE, obj);
+		listItem.push_back(obj);
+		break;
+	}
+	case OBJECT_TYPE_ITEM_WATCH:
+	{
+		obj = new WatchItem();
+		Items::GetInstance()->AddItem(OBJECT_TYPE_ITEM_WATCH, obj);
+		listItem.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_PORTAL:
@@ -289,6 +364,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			float b = atof(tokens[5].c_str());
 			scene_id = atoi(tokens[6].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
+			listPortal.push_back(obj);
 		}
 		break;
 	default:
@@ -302,7 +378,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
 	obj->SetAnimationSet(ani_set);
-	objects.push_back(obj);
+	//objects.push_back(obj);
 }
 void CPlayScene::_ParseSection_MAP_INFO(string line)
 {
@@ -339,44 +415,53 @@ void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 	HUD = Board::GetInstance();
-	ifstream f;
-	f.open(sceneFilePath);
+	grid = new Grid();
+	
 
-	// current resource section flag
-	int section = SCENE_SECTION_UNKNOWN;					
-
-	char str[MAX_SCENE_LINE];
-	while (f.getline(str, MAX_SCENE_LINE))
+	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	if (CScene::GetSceneId() == 1)
 	{
-		string line(str);
+		ifstream f;
+		f.open(sceneFilePath);
 
-		if (line[0] == '#') continue;	// skip comment lines	
-		if (line == "[TILESHEET]") {
-			section = SCENE_SECTION_TILE_SHEET; continue;
-		}
-		if (line == "[SPRITES]") {
-			section = SCENE_SECTION_SPRITES; continue;
-		}
-		if (line == "[ANIMATIONS]") {
-			section = SCENE_SECTION_ANIMATIONS; continue;
-		}
-		if (line == "[ANIMATIONS_SETS]") {
-			section = SCENE_SECTION_ANIMATION_SETS; continue;
-		}
-		if (line == "[OBJECTS]") { 
-			section = SCENE_SECTION_OBJECTS; continue; }
-		if (line == "[MAP_INFO]") {
-			section = SCENE_SECTION_MAP_INFO; continue;}
-		if (line == "[MAP]") {
-			section = SCENE_SECTION_MAPS; continue;
-		}
-		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
+		// current resource section flag
+		int section = SCENE_SECTION_UNKNOWN;
 
-		//
-		// data section
-		//
-		switch (section)
-		{ 
+		char str[MAX_SCENE_LINE];
+		while (f.getline(str, MAX_SCENE_LINE))
+		{
+			string line(str);
+
+			if (line[0] == '#') continue;	// skip comment lines	
+			if (line == "[TILESHEET]") {
+				section = SCENE_SECTION_TILE_SHEET; continue;
+			}
+			if (line == "[SPRITES]") {
+				section = SCENE_SECTION_SPRITES; continue;
+			}
+			if (line == "[ANIMATIONS]") {
+				section = SCENE_SECTION_ANIMATIONS; continue;
+			}
+			if (line == "[ANIMATIONS_SETS]") {
+				section = SCENE_SECTION_ANIMATION_SETS; continue;
+			}
+			if (line == "[OBJECTS]") {
+				section = SCENE_SECTION_OBJECTS; continue;
+			}
+			if (line == "[MAP_INFO]") {
+				section = SCENE_SECTION_MAP_INFO; continue;
+			}
+			if (line == "[MAP]") {
+				section = SCENE_SECTION_MAPS; continue;
+			}
+			if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
+			//
+			// data section
+			//
+
+			switch (section)
+			{
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 			case SCENE_SECTION_MAP_INFO: _ParseSection_MAP_INFO(line); break;
 			case SCENE_SECTION_MAPS:	_ParseSection_MAP(line); break;
@@ -384,97 +469,181 @@ void CPlayScene::Load()
 			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
+			}
+		}
+
+		f.close();
+
+		CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
+		for (UINT i = 0; i < listTorch.size(); i++)
+		{
+			grid->InsertIntoGrid(listTorch.at(i));
+		}
+		for (UINT i = 0; i < listBrick.size(); i++)
+		{
+			grid->InsertIntoGrid(listBrick.at(i));
 		}
 	}
+	else
+	{
+		listBrick.clear();
+		listTorch.clear();
+		listPortal.clear();
+		listEnemy.clear();
+		listStair.clear();
+		listItem.clear();
+		ifstream f;
+		f.open(sceneFilePath);
 
-	f.close();
+		// current resource section flag
+		int section = SCENE_SECTION_UNKNOWN;
 
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
+		char str[MAX_SCENE_LINE];
+		while (f.getline(str, MAX_SCENE_LINE))
+		{
+			string line(str);
 
-	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
-	DebugOut(L"[INFO] Size is: %d \n", this->objects.size());
+			if (line[0] == '#') continue;	// skip comment lines	
+			if (line == "[TILESHEET]") {
+				section = SCENE_SECTION_TILE_SHEET; continue;
+			}
+			if (line == "[SPRITES]") {
+				section = SCENE_SECTION_SPRITES; continue;
+			}
+			if (line == "[ANIMATIONS]") {
+				section = SCENE_SECTION_ANIMATIONS; continue;
+			}
+			if (line == "[ANIMATIONS_SETS]") {
+				section = SCENE_SECTION_ANIMATION_SETS; continue;
+			}
+			if (line == "[OBJECTS]") {
+				section = SCENE_SECTION_OBJECTS; continue;
+			}
+			if (line == "[MAP_INFO]") {
+				section = SCENE_SECTION_MAP_INFO; continue;
+			}
+			if (line == "[MAP]") {
+				section = SCENE_SECTION_MAPS; continue;
+			}
+			if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
+			//
+			// data section
+			//
+
+			switch (section)
+			{
+			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_MAP_INFO: _ParseSection_MAP_INFO(line); break;
+			case SCENE_SECTION_MAPS:	_ParseSection_MAP(line); break;
+			case SCENE_SECTION_TILE_SHEET: _ParseSection_TILE_SHEET(line); break;
+			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
+			}
+		}
+
+		f.close();
+
+		CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
+	
+		for (UINT i = 0; i < listBrick.size(); i++)
+		{
+			grid->InsertIntoGrid(listBrick.at(i));
+		}
+		for (UINT i = 0; i < listTorch.size(); i++)
+		{
+			grid->InsertIntoGrid(listTorch.at(i));
+		}
+		for (UINT i = 0; i < listStair.size(); i++)
+		{
+			grid->InsertIntoGrid(listStair.at(i));
+		}
+	}
 }
 
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
-	
+	grid->GetListCollisionFromGrid(listColObjects);
+	DebugOut(L"Size of listCoObjects is %d \n", listColObjects.size());
 	listStair.clear();
 	listTorch.clear();
-	listItem.clear();
-	listPortal.clear();
 	listBrick.clear();
-	listEnemy.clear();
-	for (UINT i = 0; i < objects.size(); i++)
+	for (UINT i = 0; i < listColObjects.size(); i++)
 	{
-		LPGAMEOBJECT temp = objects.at(i);
-		if (dynamic_cast<BotStair*>(temp) || dynamic_cast<TopStair*>(temp))
-		{
-			listStair.push_back(objects.at(i));
-		}
-		else if(dynamic_cast<Torch*>(temp))
-		{
-			listTorch.push_back(objects.at(i));
-		}
-		else if (dynamic_cast<HeartItem*>(temp) || dynamic_cast<ChainItem*>(temp) 
-			|| dynamic_cast<DaggerItem*>(temp) || dynamic_cast<BoomerangItem*>(temp) || dynamic_cast<CrownItem*>(temp) 
-			|| dynamic_cast<SmallHeartItem*>(temp) || dynamic_cast<MoneyBagItem*>(temp))
-		{
-			listItem.push_back(objects.at(i));
-		}
-		else if (dynamic_cast<CPortal*>(temp))
-		{
-			listPortal.push_back(objects.at(i));
-		}
-		else if (dynamic_cast<CBrick*>(temp))
-		{
-			listBrick.push_back(objects.at(i));
-		}
-		/*else if (dynamic_cast<Knight*>(temp))
-		{
-			listEnemy.push_back(objects.at(i));
-		}*/
+		LPGAMEOBJECT temp = listColObjects.at(i);
+		if (dynamic_cast<Torch*>(temp))
+			listTorch.push_back(listColObjects.at(i));
+		else
+			if (dynamic_cast<TopStair*>(temp) || dynamic_cast<BotStair*>(temp))
+				listStair.push_back(listColObjects.at(i));
+			else
+				listBrick.push_back(listColObjects.at(i));
 	}
 	CheckCollision_ItemAndSimon();
-	CheckCollision_TorchAndSimon();
+	CheckCollision_WhipAndEnemy();
 	CheckCollision_PortalAndSimon();
 	CheckCollision_DaggerAndTorch();
-	CheckCollision_SimonAndBrick();
 	CheckCollision_SimonAndBoomerang();
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 0; i < objects.size(); i++)
+	CheckCollision_SimonAndEnemy();
+	Handle_SimonAndMoving();
+	player->Update(dt, &listBrick);
+	for (UINT i = 0; i < listTorch.size(); i++)
 	{
-		if (objects[i]->visible == false)
-			continue;
-		if (dynamic_cast<BotStair*>(objects[i]) || dynamic_cast<TopStair*>(objects[i]))
-		{
-			continue;
-		}
-		else if (dynamic_cast<DaggerItem*>(objects[i]))
-		{
-			continue;
-		}
-		else if (dynamic_cast<Torch*>(objects[i]))
-		{
-			listTorch.push_back(objects[i]);
-			continue;
-		}
-		/*else if (dynamic_cast<Knight*>(objects[i]))
-		{
-			listEnemy.push_back(objects[i]);
-			continue;
-		}*/
-		else
-			coObjects.push_back(objects[i]);
+		if (listTorch[i]->isVisible() == true)
+			listTorch[i]->Update(dt, &listBrick);
 	}
-
-	for (size_t i = 0; i < objects.size(); i++)
+	for (UINT i = 0; i < listItem.size(); i++)
 	{
-		if (objects[i]->visible == false)
-			continue;
-		objects[i]->Update(dt, &coObjects);
+		if (listItem[i]->isVisible() == true)
+			listItem[i]->Update(dt, &listBrick);
+	}
+	for (UINT i = 0; i < listEfect.size(); i++)
+	{
+		if (listEfect[i]->isVisible() == true)
+			listEfect[i]->Update(dt, &listBrick);
+	}
+	for (UINT i = 0; i < listWeapon.size(); i++)
+	{
+		if (listWeapon[i]->isVisible() == true)
+			listWeapon[i]->Update(dt, &listBrick);
+	}
+	for (UINT i = 0; i < listBrick.size(); i++)
+	{
+			listBrick[i]->Update(dt, &listBrick);
+	}
+	for (UINT i = 0; i < listEnemy.size(); i++)
+	{ 
+		if (listEnemy.at(i)->GetPosition().x >= CGame::GetInstance()->GetCamPosition().x && listEnemy.at(i)->GetPosition().x < CGame::GetInstance()->GetCamPosition().x+ SCREEN_WIDTH-20)
+		{
+			listEnemy.at(i)->SetOutOfCamera(false);
+		}
+		else
+		{
+			listEnemy.at(i)->SetOutOfCamera(true);
+		}
+		if (listEnemy[i]->isVisible() == true)
+			listEnemy[i]->Update(dt, &listBrick);
+		if (player->isUseStop)
+		{		
+			if (timeToEnemyStop < 3000)
+			{
+				listEnemy.at(i)->isStop = true;
+				timeToEnemyStop += dt;
+			}
+			else
+			{
+				timeToEnemyStop = 0;
+				player->isUseStop = false;
+				
+			}
+		}
+		else
+		{
+			listEnemy.at(i)->isStop = false;
+		}
 	}
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
@@ -486,10 +655,14 @@ void CPlayScene::Update(DWORD dt)
 	{
 		player->x = 0;
 	}
+	if (isStateBoss)
+	{
+		if (player->x <= 512)
+		{
+			player->x = 512;
+		}
+	}
 	CGame *game = CGame::GetInstance();
-	/*if ((cx > game->GetScreenWidth()/2))
-	{*/
-	
 	 if(cx >= game->GetScreenWidth() / 2)
 	 {
 		
@@ -518,24 +691,71 @@ void CPlayScene::Update(DWORD dt)
 		 if (game->GetSceneId() == 2)
 			 player->SetPosition(32, 130);
 	 }
+	 if (game->GetSceneId() == 6)
+	 {
+		 if(player->x> map_width - (game->GetScreenWidth()/2))
+		 {
+			 isStateBoss = true;
+		 }
+	 }
 	 HUD->Update(dt);
-	CGame::GetInstance()->SetCamPos(cx, -40.0f /*cy*/);
+	 if (isStateBoss)
+	 {
+		 CGame::GetInstance()->SetCamPos(512, -40.0f /*cy*/);
+	 }
+	 else
+	 {
+		 CGame::GetInstance()->SetCamPos(cx, -40.0f /*cy*/);
+	 }
 }
 
 void CPlayScene::Render()
 {
-	for (int i = 0; i < tileMap.size(); i++)
-	{
-		tileMap[i]->Render();
-	}
-	for (int i = objects.size() - 1; i >= 0; i--)
-	{
-		if (objects[i]->visible == false)
-			continue;
-		objects[i]->Render();
-	}
-	HUD->Render();
-	//CGame* game = CGame::GetInstance();
+		for (int i = 0; i < tileMap.size(); i++)
+		{
+			tileMap[i]->Render();
+		}
+		for (UINT i = 0; i < listPortal.size(); i++)
+		{
+			listPortal.at(i)->Render();
+		}
+		for (UINT i = 0; i < listItem.size(); i++)
+		{
+			if(listItem.at(i)->isVisible()==true)
+			listItem.at(i)->Render();
+		}
+		for (UINT i = 0; i < listEfect.size(); i++)
+		{
+			if (listEfect.at(i)->isVisible() == true)
+				listEfect.at(i)->Render();
+		}
+		for (UINT i = 0; i < listWeapon.size(); i++)
+		{
+			if (listWeapon.at(i)->isVisible() == true)
+				listWeapon.at(i)->Render();
+		}
+		for (UINT i = 0; i < listTorch.size(); i++)
+		{
+			listTorch.at(i)->Render();
+		}
+		for (UINT i = 0; i < listStair.size(); i++)
+		{
+			listStair.at(i)->Render();
+		}
+		for (UINT i = 0; i < listEnemy.size(); i++)
+		{
+			if(listEnemy.at(i)->isVisible() == true)
+			listEnemy.at(i)->Render();
+		}
+		//Vẽ gạch
+		for (UINT i = 0; i < listBrick.size(); i++)
+		{
+				listBrick.at(i)->Render();
+		}
+		player->Render();
+		HUD->Render();
+		//CGame* game = CGame::GetInstance();
+	
 }
 /*
 	Unload current scene
@@ -555,9 +775,10 @@ void CPlayScene::Unload()
 	}
 	objects.clear();
 	listTorch.clear();
+	listBrick.clear();
 	listItem.clear();
 	listStair.clear();
-	player = NULL;
+	//player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 	tileMap.clear();
@@ -589,6 +810,8 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 				}
 				if (dynamic_cast<BoomerangItem*>(listItem.at(i)))
 				{
+					player->isCollectHolyWater = false;
+					player->isCollectDagger = false;
 					player->SetSubWeapon(ID_BOOMERANG);
 					player->isCollectDagger = false; //không thể dùng dagger sau khi nhặt boomerang
 					player->isCollectBoomerang = true;
@@ -610,21 +833,74 @@ void CPlayScene::CheckCollision_ItemAndSimon()
 					player->SetScore(1000);
 					listItem.at(i)->visible = false;
 				}
+				if (dynamic_cast<HolyWaterItem*>(listItem.at(i)))
+				{
+					player->isCollectBoomerang = false;
+					player->isCollectDagger = false;
+					player->SetSubWeapon(ID_HOLYWATER);
+					player->isCollectHolyWater = true;
+					listItem.at(i)->visible = false;
+				}
+				if (dynamic_cast<AxeItem*>(listItem.at(i)))
+				{
+					player->SetSubWeapon(ID_AXE);
+					player->isCollectAxe = true;
+					listItem.at(i)->visible = false;
+				}
+				if (dynamic_cast<WatchItem*>(listItem.at(i)))
+				{
+					player->SetSubWeapon(ID_WATCH);
+					player->isCollectStopWatch = true;
+					listItem.at(i)->visible = false;
+				}
 			}
 		}
 	}
 }
-void CPlayScene::CheckCollision_TorchAndSimon()
+void CPlayScene::CheckCollision_WhipAndEnemy()
 {
-	if (player->animation_set->at(SIMON_ANI_ATTACK)->GetCurrentFrame() == 2 || player->animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->GetCurrentFrame() == 2)
+	player->whip->SetDamage();
+	if (player->state == SIMON_STATE_ATTACK || player->state == SIMON_STATE_SIT_AND_ATTACK || player->state == SIMON_STATE_THROW || player->state == SIMON_STATE_ATTACK_UPSTAIR || player->state == SIMON_STATE_ATTACK_DOWNSTAIR)
 	{
-		for (UINT i = 0; i < listTorch.size(); i++)
-			if (player->whip->CheckCollision(listTorch.at(i)))
+		if (player->animation_set->at(SIMON_ANI_ATTACK)->GetCurrentFrame() == 2 || player->animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->GetCurrentFrame() == 2)
+		{
+			for (UINT i = 0; i < listTorch.size(); i++)
 			{
-
-				listTorch.at(i)->SetState(TORCH_DESTROYED);
-				listTorch.at(i)->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
+				if (player->whip->CheckCollision(listTorch.at(i)))
+				{
+					listTorch.at(i)->SetState(TORCH_DESTROYED);
+					listTorch.at(i)->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
+				}
 			}
+			for (UINT i = 0; i < listEnemy.size(); i++)
+			{
+				LPGAMEOBJECT temp = listEnemy.at(i);
+				if (dynamic_cast<BreakableBrick*>(temp))
+				{
+					//BreakableBrick* breakable_brick = dynamic_cast<BreakableBrick*> (temp);
+					if (player->whip->AABB(player->whip->GetBound(), temp->GetBound()))
+					{
+						DebugOut(L"[INFO]Whip Collision with Breakable \n");
+						if (temp->GetState() == BREAKABLE_BRICK_STATE_ORIGIN)
+							temp->SetState(BREAKABLE_BRICK_STATE_HALF_PART);
+						else if (temp->GetState() == BREAKABLE_BRICK_STATE_HALF_PART)
+						{
+							temp->Die();
+							DebugOut(L"abcccccccccccccc\n");
+						}
+						Rocks::GetInstance()->DropRock(temp->x, temp->y);
+					}
+				}
+				else if (dynamic_cast<Knight*>(temp))
+				{
+					if (player->whip->AABB(player->whip->GetBound(), temp->GetBound()))
+					{
+						DebugOut(L"[INFO] Whip Collision with Knight \n");
+						temp->TakeDamage(player->whip->damage);
+					}
+				}
+			}
+		}
 	}
 }
 void CPlayScene::CheckCollision_PortalAndSimon()
@@ -674,14 +950,55 @@ void CPlayScene::CheckCollision_BoomerangAndEnemy()
 
 	}
 }
-void CPlayScene::CheckCollision_SimonAndBrick()
+void CPlayScene::CheckCollision_SimonAndEnemy()
 {
-	for (UINT i = 0; i < objects.size(); i++)
+	if (player->GetState() == SIMON_STATE_DIE)
+		return;
+	for (UINT i = 0; i < listEnemy.size(); i++)
 	{
-		;
+		if (listEnemy.at(i)->visible == true)
+		{
+			if (player->CheckCollision(listEnemy.at(i)))
+			{
+				if (dynamic_cast<Bat*>(listEnemy.at(i)))
+				{
+					player->DecreaseHealth();
+					listEnemy.at(i)->visible = false;
+					player->SetScore(100);
+					player->StartUntouchable();
+					player->SetState(SIMON_STATE_DEFLECT);
+				}
+				if (dynamic_cast<Knight*>(listEnemy.at(i)))
+				{
+					player->DecreaseHealth();
+					player->StartUntouchable();
+					player->SetState(SIMON_STATE_DEFLECT);
+				}
+				if (dynamic_cast<BreakableBrick*>(listEnemy.at(i)))
+				{
+					DebugOut(L"Bug!\n");
+				}	
+			}
+		}
 	}
 }
-
+void CPlayScene::Handle_SimonAndMoving()
+{
+	for (UINT i = 0; i < listBrick.size(); i++)
+	{
+		if (player->CheckCollision(listBrick.at(i)))
+		{
+			if (dynamic_cast<MovingPlatform*>(listBrick.at(i)))
+			{
+				DebugOut(L"xxxxxxxxxxxxxxxxxxx\n");
+			}
+			else
+			{
+				DebugOut(L"yyyyyyyyyyyyyyyyyy\n");
+			}
+		}
+	}
+}
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -689,6 +1006,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	Simon *simon = ((CPlayScene*)scence)->GetPlayer();
 	Dagger* dagger = ((CPlayScene*)scence)->GetDagger();
 	Boomerang* boomerang = ((CPlayScene*)scence)->GetBoomerang();
+	HolyWater* holywater = ((CPlayScene*)scence)->GetHolyWater();
+	Axe* axe = ((CPlayScene*)scence)->GetAxe();
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (simon->isEatingItem)
 	{
@@ -744,21 +1063,63 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				dagger->SetVisible(true);
 				simon->SetState(SIMON_STATE_THROW);
 				simon->SetNumHeart(simon->GetNumHeart() - 1);
-			}
-				
-			
+			}			
 		}
+		//use boomerang
 		else if (simon->isCollectBoomerang)
 		{
-			if (simon->GetState() == SIMON_STATE_THROW) return;
-			if (boomerang->visible) return;
-			float x, y;
-			simon->GetPosition(x, y);
-			boomerang->SetPosition(x, y + 5);
-			boomerang->SetOrientation(simon->nx);
-			boomerang->SetVisible(true);
-			simon->SetState(SIMON_STATE_THROW);
-			simon->SetNumHeart(simon->GetNumHeart() - 1);
+			if (simon->GetNumHeart() > 0)
+			{	
+				if (simon->GetState() == SIMON_STATE_THROW) return;
+				if (boomerang->visible) return;
+				float x, y;
+				simon->GetPosition(x, y);
+				boomerang->SetPosition(x, y + 5);
+				boomerang->SetOrientation(simon->nx);
+				boomerang->SetVisible(true);
+				simon->SetState(SIMON_STATE_THROW);
+				simon->SetNumHeart(simon->GetNumHeart() - 1);
+			}
+		}
+		//use holywater
+		else if (simon->isCollectHolyWater)
+		{
+			if (simon->GetNumHeart() > 0)
+			{
+				if (simon->GetState() == SIMON_STATE_THROW) return;
+				if (holywater->visible) return;
+				float x, y;
+				simon->GetPosition(x, y);
+				holywater->firstx = x;
+				holywater->SetPosition(x, y + 5);
+				holywater->SetOrientation(simon->nx);
+				holywater->SetVisible(true);
+				simon->SetState(SIMON_STATE_THROW);
+				simon->SetNumHeart(simon->GetNumHeart() - 1);
+			}
+		}
+		//use axe
+		else if (simon->isCollectAxe)
+		{
+			if (simon->GetNumHeart() > 0)
+			{
+				if (simon->GetState() == SIMON_STATE_THROW) return;
+				if (holywater->visible) return;
+				float x, y;
+				simon->GetPosition(x, y);
+				axe->firstx = x;
+				axe->SetPosition(x, y + 5);
+				axe->SetOrientation(simon->nx);
+				axe->SetVisible(true);
+				simon->SetState(SIMON_STATE_THROW);
+				simon->SetNumHeart(simon->GetNumHeart() - 1);
+			}
+		}
+		//use stopwatch
+		else if (simon->isCollectStopWatch)
+		{
+			simon->isUseStop = true;
+			//simon->SetNumHeart(simon->GetNumHeart() - 5);
 		}
 		else
 		{

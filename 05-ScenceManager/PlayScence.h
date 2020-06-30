@@ -26,19 +26,32 @@
 #include "Bat.h"
 #include "SmallHeartItem.h"
 #include "MoneyBagItem.h"
+#include "Grid.h"
+#include "HolyWaterItem.h"
+#include "AxeItem.h"
+#include "WatchItem.h"
+#include "HolyWater.h"
+#include "Axe.h"
+#include "Ghoul.h"
+#include "Boss.h"
 class CPlayScene: public CScene
 {
 public: 
 
-	
+	bool isStateBoss = false;
 	int map_width;
 	int scene_id;
 	Simon *player;					// A play scene has to have player, right? 
 	Dagger* dagger;
+	HolyWater* holywater;
 	Boomerang* boomerang;
+	Axe* axe;
 	Board* HUD;
+	Grid* grid;
+	CGame* game;
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
+	DWORD timeToEnemyStop = 0;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listStair;
 	vector<LPGAMEOBJECT> listBrick;
@@ -46,6 +59,9 @@ public:
 	vector<LPGAMEOBJECT> listItem;
 	vector<LPGAMEOBJECT> listPortal;
 	vector<LPGAMEOBJECT> listEnemy;
+	vector<LPGAMEOBJECT> listWeapon;
+	vector<LPGAMEOBJECT> listEfect;
+	vector<LPGAMEOBJECT> listColObjects;
 
 	vector<LPMAP> tileMap;
 	void _ParseSection_TILE_SHEET(string line);
@@ -63,15 +79,18 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	void CheckCollision_ItemAndSimon();
-	void CheckCollision_TorchAndSimon();
+	void CheckCollision_WhipAndEnemy();
 	void CheckCollision_PortalAndSimon();
 	void CheckCollision_DaggerAndTorch();
-	void CheckCollision_SimonAndBrick();
 	void CheckCollision_SimonAndBoomerang();
 	void CheckCollision_BoomerangAndEnemy();
+	void CheckCollision_SimonAndEnemy();
+	void Handle_SimonAndMoving();
 	Simon * GetPlayer() { return player; } 
 	Dagger* GetDagger() { return dagger; }
+	HolyWater* GetHolyWater() { return holywater; }
 	Boomerang* GetBoomerang() { return boomerang; }
+	Axe* GetAxe() { return axe; }
 	vector<LPGAMEOBJECT> GetObjects() { return objects; };
 	vector<LPGAMEOBJECT> GetListStair() { return listStair; };
 	vector<LPGAMEOBJECT> GetListBrick() { return listBrick; };

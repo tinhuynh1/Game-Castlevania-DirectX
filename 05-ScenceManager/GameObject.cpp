@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Sprites.h"
+#include "define.h"
 
 CGameObject::CGameObject()
 {
@@ -180,14 +181,6 @@ void CGameObject::SetOnGround(bool flag)
 {
 	isOnGround = flag;
 }
-bool CGameObject::IsDelete()
-{
-	return this->isDeleted;
-}
-void CGameObject::SetDelete(bool flag)
-{
-	isDeleted = flag;
-}
 void CGameObject::Untouchable()
 {
 	if(GetTickCount() - start_untouchable > UNTOUCHABLE_TIME)
@@ -217,3 +210,4 @@ void CGameObject::Die()
 
 	this->SetVisible(false);
 }
+

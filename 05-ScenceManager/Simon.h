@@ -74,7 +74,10 @@ public:
 	bool isAttack = false;
 	bool isCollectDagger = false;
 	bool isCollectBoomerang = false;
-
+	bool isCollectHolyWater = false;
+	bool isCollectAxe = false;
+	bool isCollectStopWatch = false;
+	
 	bool isLastFrame = false;
 	bool isInvisible;
 	bool isEatingItem = false;
@@ -99,6 +102,9 @@ public:
 	DWORD timerChangeColor = 0;
 	DWORD timerLand = 0;
 	bool isRevive;
+
+	bool isUseStop = false;
+
 public:
 	static Simon* GetInstance();
 	Simon(float x = 0.0f, float y = 0.0f);

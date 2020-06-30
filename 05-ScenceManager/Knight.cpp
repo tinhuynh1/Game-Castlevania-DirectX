@@ -8,6 +8,10 @@ void  Knight::GetBoundingBox(float &left, float &top, float &right, float &botto
 }
 void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isOutOfCamera)
+	{
+		return;
+	}
 	CGameObject::Update(dt, coObjects);
 	vy += 0.0018f * dt;
 	vx = (nx > 0) ? BLACK_KNIGHT_WALKING_SPEED : -BLACK_KNIGHT_WALKING_SPEED;
@@ -21,7 +25,11 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 	CalcPotentialCollisions(coObjects, coEvents);
-
+	if (isStop)
+	{
+		vx = 0;
+		vy = 0;
+	}
 	if (coEvents.size() == 0)
 	{
 		y += dy;
@@ -35,7 +43,6 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		x += min_tx * dx;
 		y += min_ty * dy;
-
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -52,9 +59,12 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = 0;
 					y += ny * 0.4f;
 				}
-				
+				if (e->nx != 0)
+				{
+					ReDirection();
+					y += ny * 0.4f;
+				}
 			}
-
 		}
 	}
 	//Update knight khi đang ở scene 2
@@ -66,7 +76,6 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				ReDirection();
 				count++;
-
 			}
 		}
 		else
@@ -75,9 +84,13 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				ReDirection();
 				count++;
-
 			}
 		}
+	}
+	if (CGame::GetInstance()->GetSceneId() == 3 && y < 60 )
+	{
+		if (x < 96 || x > 144)
+			ReDirection();
 	}
 	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
@@ -85,8 +98,13 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void Knight::Render()
 {
-	animation_set->at(state)->Render(x, y, nx);
-	RenderBoundingBox();
+	if (!isStop)
+		animation_set->at(state)->Render(x, y, nx);
+	else
+	{
+		animation_set->at(state)->RenderByFrame(animation_set->at(state)->GetCurrentFrame(), nx, x, y);
+	}
+	//RenderBoundingBox();
 }
 
 Knight::Knight(float x, float y)

@@ -1,5 +1,5 @@
 [SETTINGS]
-start	2
+start	6
 #scene list
 [SCENES]
 1	scene1.txt
@@ -12,6 +12,7 @@ start	2
 0	resources\simon.png	116	116	116
 10	resources\Objects.png	116	116	116
 30	resources\whip.png	255	0	255
+40	resources\Enemies.png	116	116	116
 -1	resources\Board.png	5	5	5
 [SPRITES]
 #small
@@ -86,13 +87,30 @@ start	2
 40003	1	22	17	31	10
 #============= ITEM_SmallHeart ===========
 40015	18	1	26	9	10
-#============= MONEY BAG ===========
+#============= ITEM_MONEY_BAG ===========
 #red
 40016	45	1	60	16	10
 #purple
 40017	62	1	77	16	10
 #yellow
 40018	79	1	94	16	10
+#============= ITEM_HOLYWATER ============
+40019	35	18	51	34	10
+#============= ITEM_AXE ==================
+40020	18	18	33	32	10
+#============= ITEM_WATCH ==================
+40021	104	18	119	34	10
+#============= HOLYWATER-WEAPON ===========
+#state1
+40022	297	132	305	140	0
+#state2
+40023	333	126	349	140	0
+40024	351	124	365	140	0
+#============= AXE-WEAPON ================
+40025	460	75	475	89	0
+40026	478	75	493	89	0
+40027	495	77	510	91	0
+40028	511	77	526	91	0
 #================= WHIP ==================
 #normal
 30001	0	0	120	32	30
@@ -190,7 +208,19 @@ start	2
 417	40017	100
 #yellow
 418	40018	100
-
+#holywaterItem
+419	40019	100
+#axeItem
+420	40020	100
+#watchItem
+421	40021	100
+#holywaterWeapon
+#state1
+422	40022	100
+#state2
+423	40023	100	40024	100
+#axeWeapon
+424	40025	100	40026	100	40027	100	40028	100
 [ANIMATIONS_SETS]
 # CANDLE
 2	201	202	203
@@ -209,3 +239,13 @@ start	2
 46	415
 #moneybag
 47	416	417	418
+#holywaterItem
+51	419
+#axeItem
+52	420
+#axeItem
+53	421
+#holywaterWeapon
+54	422	423
+#axeWeapon
+55	424

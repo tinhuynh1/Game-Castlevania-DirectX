@@ -10,7 +10,7 @@
 #define KNIGHT_BBOX_WIDTH	16
 #define KNIGHT_BBOX_HEIGHT	32
 
-#define BLACK_KNIGHT_WALKING_SPEED	0.04f
+#define BLACK_KNIGHT_WALKING_SPEED	0.03f
 #define MAX_X1 80
 #define MAX_X2 114
 class Knight : public CGameObject
@@ -26,6 +26,5 @@ public:
 	virtual void Render();
 	virtual void SetState(int state);
 	RECT GetBound();
-
 };
 
