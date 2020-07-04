@@ -438,7 +438,6 @@ void CGame::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
-
 /*
 	Load game campaign file and load/initiate first scene
 */

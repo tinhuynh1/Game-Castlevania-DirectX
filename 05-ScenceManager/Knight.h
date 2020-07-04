@@ -11,8 +11,6 @@
 #define KNIGHT_BBOX_HEIGHT	32
 
 #define BLACK_KNIGHT_WALKING_SPEED	0.03f
-#define MAX_X1 80
-#define MAX_X2 114
 class Knight : public CGameObject
 {
 	float start_x;

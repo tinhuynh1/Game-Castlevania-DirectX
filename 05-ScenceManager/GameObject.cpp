@@ -148,6 +148,9 @@ bool CGameObject::CheckCollision(CGameObject* object)
 	{
 		return true;
 	}
+	else
+		return false;
+
 
 	LPCOLLISIONEVENT e = SweptAABBEx(object);
 	if (e->t > 0 && e->t <= 1.0f)
@@ -193,13 +196,13 @@ void CGameObject::TakeDamage(int damage)
 	if (start_untouchable == 0)
 	{
 		if (healthPoint > 0)
+		{
 			healthPoint -= damage;
-
+		}
 		if (healthPoint <= 0)
 		{
 			this->Die();
 		}
-
 		else
 			start_untouchable = GetTickCount();
 	}
@@ -207,7 +210,6 @@ void CGameObject::TakeDamage(int damage)
 
 void CGameObject::Die()
 {
-
 	this->SetVisible(false);
 }
 

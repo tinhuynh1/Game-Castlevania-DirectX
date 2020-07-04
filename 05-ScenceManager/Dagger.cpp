@@ -2,6 +2,7 @@
 Dagger::Dagger() : CGameObject()
 {
 	vx = DAGGER_SPEED;
+	this->damage = 1;
 }
 //void Dagger::Render()
 //{
@@ -18,16 +19,12 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy = 0;
 	CGameObject::Update(dt);
 	x += dx; 
-	if (Simon::GetInstance()->isCollectDagger)
+	float l, t, r, b;
+	CGame::GetInstance()->CamereBoundingBox(l, t, r, b);
+	if ((x > r) || (x+ DAGGER_WEAPON_BBOX_WIDTH   < l))
 	{
-		float l, t, r, b;
-		CGame::GetInstance()->CamereBoundingBox(l, t, r, b);
-		if ((x > r) || (x+ DAGGER_WEAPON_BBOX_WIDTH   < l))
-		{
-				 visible = false;
-		}
+		visible = false;
 	}
-
 }
 
 void Dagger::GetBoundingBox(float& left, float& top, float& right, float& bottom)

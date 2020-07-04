@@ -11,7 +11,7 @@ using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 #define ITEM_GRAVITY	0.002f
-#define  UNTOUCHABLE_TIME	200
+#define  UNTOUCHABLE_TIME	300
 #define ENEMY_FREEZE_TIME 3000
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
@@ -71,7 +71,7 @@ public:
 	int state;
 	DWORD dt; 
 	DWORD start_untouchable = 0;
-
+	int currentAniID;
 	LPANIMATION_SET animation_set;
 	bool visible;
 	bool isCollisionWithStair = false;
@@ -92,6 +92,7 @@ public:
 	bool CheckCollision(CGameObject* object);
 	D3DXVECTOR2 GetPosition() { return D3DXVECTOR2(x, y); }
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+	LPANIMATION_SET GetAnimationSet(){ return animation_set; }
 	bool AABB(RECT rect1, RECT rect2);
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
@@ -136,7 +137,7 @@ public:
 
 	// Enemies section, wil have a specific class later
 	void TakeDamage(int damage);
-	void Die();
+	virtual void Die();
 	void SetOutOfCamera(bool isOutOfCamera) { this->isOutOfCamera = isOutOfCamera; }
 	bool IsOutofCamera() { return this->isOutOfCamera; }
 	virtual RECT GetBound();

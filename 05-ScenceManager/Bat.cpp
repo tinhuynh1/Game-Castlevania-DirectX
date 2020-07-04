@@ -5,6 +5,7 @@ Bat::Bat(float x, float y) : CGameObject()
 	start_x = x;
 	start_y = y;
 	vx = vy = 0;
+	this->healthPoint = 1;
 	SetState(BAT_STATE_IDLE);
 }
 

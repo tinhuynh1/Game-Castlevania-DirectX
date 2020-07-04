@@ -14,8 +14,14 @@
 0	374	166	0
 # Moving Platform
 17	48	80	71
-#Dagger
-7	570	136	43
+#holywaterweapon
+23	0	0	54
+#axeWeapon
+24	0	0	55
+#Boomerang
+12	0	0	44
+#Dagger 
+7	0	0	43
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
 1	463	112	1	48	16
@@ -29,14 +35,14 @@
 1	64	112	1	32	16
 1	0	80	1	32	16
 #Black Knight
-8	324	70	5
-8	112	44	5
+#8	324	70	5
+#8	112	44	5
 #Bat
-16	298	20	6
+#16	298	20	6
 #Small Candle
 2	458	17	2	18	1
 2	394	17	2	22	1
-2	330	17	2	4	1
+2	330	17	2	19	1
 2	266	17	2	4	1
 2	202	17	2	4	1
 2	138	17	2	4	1
@@ -48,7 +54,9 @@
 #stopwatch
 22	352	80	53
 #moneybag
-19	394	17	47	1
+19	394	17	47	2
+#effect
+100	0	0	100
 # STAIR top
 # type	l	t	r	b
 10	450	80	179	104	-1

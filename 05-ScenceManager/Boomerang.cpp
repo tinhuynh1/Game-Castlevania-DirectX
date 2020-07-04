@@ -3,6 +3,7 @@
 #include "Brick.h"
 Boomerang::Boomerang()
 {
+	SetDame(2);
 }
 void Boomerang::Render()
 {
@@ -37,44 +38,39 @@ void Boomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	if (Simon::GetInstance()->isCollectBoomerang)
+	float left, top, right, bottom;
+	CGame::GetInstance()->CamereBoundingBox(left, top, right, bottom);
+	if (!isReturn)
 	{
-		float left, top, right, bottom;
-		CGame::GetInstance()->CamereBoundingBox(left, top, right, bottom);
-			if (!isReturn)
-			{
-
-				//boomerang đụng viền màn hình thì quay lại
-				if (x > (right - 16) || x <= left)
-				{
-					//DebugOut(L"x boom is: %f , cx is: %f\n", boomerang->x, (cx + SCREEN_WIDTH-16));
-					nx = -nx;
-					isReturn = true;
-				}
-				//boomerang bay 1 khoảng 150 ki lô mét thì quay lại
-				else if (abs(x - Simon::GetInstance()->GetPosition().x) > 150)
-				{
-					//DebugOut(L"x boom is: %f, x player is: %f \n", boomerang->x, player->x);
-					nx = -nx;
-					isReturn = true;
-				}
-			}
-			else
-			{
-				if ((x > right) || (x <= left))
-				{
-					SetVisible(false);
-					isReturn = false;
-				}
-			}
-		if (isReturn)
+		//boomerang đụng viền màn hình thì quay lại
+		if (x > (right - 16) || x <= left)
 		{
-			if (Simon::GetInstance()->CheckCollision(this))
-			{
-				SetVisible(false);
-				isReturn = false;
-			}
-
+		//DebugOut(L"x boom is: %f , cx is: %f\n", boomerang->x, (cx + SCREEN_WIDTH-16));
+			nx = -nx;
+			isReturn = true;
+		}
+		//boomerang bay 1 khoảng 150 ki lô mét thì quay lại
+		else if (abs(x - Simon::GetInstance()->GetPosition().x) > 150)
+		{
+		//DebugOut(L"x boom is: %f, x player is: %f \n", boomerang->x, player->x);
+			nx = -nx;
+			isReturn = true;
+		}
+	}
+	else
+	{
+		if ((x > right) || (x <= left))
+		{
+			SetVisible(false);
+			isReturn = false;
+		}
+	}
+	if (isReturn)
+	{
+		if (Simon::GetInstance()->CheckCollision(this))
+		{
+			SetVisible(false);
+			isReturn = false;
 		}
 	}
 }

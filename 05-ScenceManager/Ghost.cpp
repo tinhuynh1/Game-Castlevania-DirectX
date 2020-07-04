@@ -1,15 +1,14 @@
-﻿#include "Ghoul.h"
-Ghoul::Ghoul()
-{
-
-}
-Ghoul::~Ghoul()
+﻿#include "Ghost.h"
+Ghost::Ghost()
 {
 }
-void Ghoul::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+Ghost::~Ghost()
+{
+}
+void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isOutOfCamera == true)
-		SetVisible(false);
+		return;
 	CGameObject::Update(dt, coObjects);
 	vy += 0.015f * dt;
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -24,7 +23,7 @@ void Ghoul::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (coEvents.size() == 0)
 	{
-		
+
 		x += dx; //dx=vx*dt
 		y += dy;
 	}
@@ -53,14 +52,14 @@ void Ghoul::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 
 
-	if (nx>0)
+	if (nx > 0)
 		vx = 0.052f;
 	else
 		vx = -0.052f;
 
 }
 
-void Ghoul::Render()
+void Ghost::Render()
 {
 	if (!isStop)
 		animation_set->at(state)->Render(x, y, nx);
@@ -71,14 +70,14 @@ void Ghoul::Render()
 	//RenderBoundingBox();
 }
 
-RECT Ghoul::GetBound()
+RECT Ghost::GetBound()
 {
 	return CGameObject::GetBound();
 }
 
-void Ghoul::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void Ghost::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (nx>0)
+	if (nx > 0)
 	{
 		left = x - 16;
 		top = y;

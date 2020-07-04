@@ -1,6 +1,8 @@
 ﻿#include "Axe.h"
 Axe::Axe()
 {
+	this->visible = false;
+	this->damage = 2;
 }
 Axe::~Axe()
 {
@@ -61,6 +63,11 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			vy = 0.3f;
 
 	}
+	if (this->y  > 195)
+	{
+		visible = false;
+	}
+
 
 	this->SetPosition(x, y);
 }
@@ -68,11 +75,6 @@ void Axe::Render()
 {
 	if (this->visible==false)
 		return;
-	if (this->y - this->GetPosition().y > 195)
-	{
-		visible = false;
-	}
-
 	animation_set->at(0)->Render(x, y, nx);
 
 }

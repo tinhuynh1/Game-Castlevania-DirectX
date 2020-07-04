@@ -2,6 +2,11 @@
 #include "Torch.h"
 #include "Knight.h"
 #include "BreakableBrick.h"
+#include "Fleaman.h"
+#include "Skeleton.h"
+#include "Ghoul.h"
+#include "Ghost.h"
+#include "Bat.h"
 #define WHIP_ANI_SET 3
 
 Whip* Whip::__instance = NULL;
@@ -62,47 +67,9 @@ void Whip::Render(int currentFrame)
 }
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	{
-		SetDamage();
-
-		for (UINT i = 0; i < coObjects->size(); i++)
-		{
-			LPGAMEOBJECT temp = coObjects->at(i);
-			/*if (dynamic_cast<Torch*>(temp))
-			{
-				Torch* torch = dynamic_cast<Torch*> (temp);
-				if (this->AABB(GetBound(), temp->GetBound()))
-				{
-					DebugOut(L"[INFO]Whip Collision with Torch \n");
-					temp->SetState(TORCH_DESTROYED);
-					temp->animation_set->at(TORCH_DESTROYED)->SetAniStartTime(GetTickCount());
-				}
-			}*/
-			if (dynamic_cast<BreakableBrick*>(temp))
-			{
-				BreakableBrick* breakable_brick = dynamic_cast<BreakableBrick*> (temp);
-				if (this->AABB(GetBound(), temp->GetBound()))
-				{
-					DebugOut(L"[INFO]Whip Collision with Breakable \n");
-					if (temp->GetState() == BREAKABLE_BRICK_STATE_ORIGIN)
-						temp->SetState(BREAKABLE_BRICK_STATE_HALF_PART);
-					else if (temp->GetState() == BREAKABLE_BRICK_STATE_HALF_PART)
-						temp->Die();
-					Rocks::GetInstance()->DropRock(temp->x, temp->y);
-				}
-			}
-			else if (dynamic_cast<Knight*>(temp))
-			{
-
-				if (this->AABB(GetBound(), temp->GetBound()))
-				{
-					DebugOut(L"[INFO] Whip Collision with Knight \n");
-					temp->TakeDamage(this->damage);
-				}
-			}
-		}
-	}
+	CGameObject::Update(dt);
 }
+
 bool Whip::isColliding(RECT rect_object)
 {
 	float whip_left, whip_top, whip_right, whip_bottom;

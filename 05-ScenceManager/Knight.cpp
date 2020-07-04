@@ -52,12 +52,34 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				// The limmied of the knight is the width of the bricks under its feet
 				CBrick* b = dynamic_cast<CBrick*>(e->obj);
-
-				this->start_x = b->x + 1;
 				if (e->ny != 0)
 				{
 					vy = 0;
 					y += ny * 0.4f;
+					if (Simon::GetInstance()->GetState() == SIMON_STATE_JUMP && abs(Simon::GetInstance()->GetPosition().y - this->y) < 1 && this->nx < 0)
+					{
+						ReDirection();
+					}
+					else if((count / 2) % 2 == 0 && isNormal == true)
+					{
+						if (this->x <= 40 || this->x >= 80)
+						{
+							ReDirection();
+							count++;
+						}
+					}
+					else if((count / 2) % 2 != 0 && isNormal == true)
+					{
+						if (this->x >= 112 || this->x <= 40)
+						{
+							ReDirection();
+							count++;
+						}
+					}		
+					else if (this->x >= b->x + b->GetWidth() - 20)
+					{
+						ReDirection();
+					}
 				}
 				if (e->nx != 0)
 				{
@@ -67,30 +89,13 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-	//Update knight khi đang ở scene 2
-	if (CGame::GetInstance()->GetSceneId() == 2)
+	if (Simon::GetInstance()->GetState() == SIMON_STATE_JUMP && abs(Simon::GetInstance()->GetPosition().y - this->y) < 1)
 	{
-		if ((count / 2) % 2 == 0 && isNormal == true)
-		{
-			if (x >= MAX_X1 || x <= start_x)
-			{
-				ReDirection();
-				count++;
-			}
-		}
-		else
-		{
-			if (x >= MAX_X2 || x <= start_x)
-			{
-				ReDirection();
-				count++;
-			}
-		}
+		isNormal = false;
 	}
-	if (CGame::GetInstance()->GetSceneId() == 3 && y < 60 )
+	else if (y > 100)
 	{
-		if (x < 96 || x > 144)
-			ReDirection();
+		isNormal = true;
 	}
 	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];

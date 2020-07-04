@@ -34,10 +34,15 @@
 #include "Axe.h"
 #include "Ghoul.h"
 #include "Boss.h"
+#include "Ghost.h"
+#include "Fleaman.h"
+//#include "Raven.h"
+#include "Skeleton.h"
+#include "Effect.h"
 class CPlayScene: public CScene
 {
 public: 
-
+	Effect* effect;
 	bool isStateBoss = false;
 	int map_width;
 	int scene_id;
@@ -62,6 +67,7 @@ public:
 	vector<LPGAMEOBJECT> listWeapon;
 	vector<LPGAMEOBJECT> listEfect;
 	vector<LPGAMEOBJECT> listColObjects;
+	vector<LPGAMEOBJECT> listEffet1;
 
 	vector<LPMAP> tileMap;
 	void _ParseSection_TILE_SHEET(string line);
@@ -79,13 +85,12 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	void CheckCollision_ItemAndSimon();
+	void CheckCollision_WhipAndTorch();
 	void CheckCollision_WhipAndEnemy();
 	void CheckCollision_PortalAndSimon();
-	void CheckCollision_DaggerAndTorch();
-	void CheckCollision_SimonAndBoomerang();
-	void CheckCollision_BoomerangAndEnemy();
+	void CheckCollision_WeaponAndTorch();
 	void CheckCollision_SimonAndEnemy();
-	void Handle_SimonAndMoving();
+	void CheckCollision_WeaponAndEnemy();
 	Simon * GetPlayer() { return player; } 
 	Dagger* GetDagger() { return dagger; }
 	HolyWater* GetHolyWater() { return holywater; }

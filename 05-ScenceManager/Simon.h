@@ -5,10 +5,10 @@
 #include "HeartItem.h"
 #include "ChainItem.h"
  #include "DaggerItem.h"
-#define SIMON_WALKING_SPEED		0.08f 
+#define SIMON_WALKING_SPEED		0.06f 
 #define SIMON_WALKING_TO_STAIR_SPEED	0.058f 
 #define SIMON_JUMP_SPEED_Y		0.18f
-#define SIMON_JUMP_DEFLECT_SPEED 0.2f
+#define SIMON_JUMP_DEFLECT_SPEED 0.188f
 #define SIMON_GRAVITY			 0.0005f
 #define SIMON_DIE_DEFLECT_SPEED	 0.5f
 
@@ -28,8 +28,8 @@
 
 #define SIMON_ANI_IDLE			0
 #define SIMON_ANI_WALKING	    1
-#define SIMON_ANI_JUMP			3
-#define SIMON_ANI_SIT		    2
+#define SIMON_ANI_JUMP			2
+#define SIMON_ANI_SIT		    3
 #define SIMON_ANI_ATTACK	    4
 #define SIMON_ANI_SIT_AND_ATTACK	5
 #define SIMON_ANI_UPSTAIR	6
@@ -48,7 +48,7 @@
 #define SIMON_BBOX_WIDTH  16
 #define SIMON_BBOX_HEIGHT 30
 
-#define SIMON_UNTOUCHABLE_TIME 5000
+#define SIMON_UNTOUCHABLE_TIME 10000
 #define SIMON_ATTACK_TIME	300
 #define SIMON_DEFLECT_TIME				1000
 #define SIMON_DEFLECT_SPEED_X			0.06f
@@ -72,12 +72,6 @@ public:
 	bool isJumping = false;
 	bool isSitAttack = false;
 	bool isAttack = false;
-	bool isCollectDagger = false;
-	bool isCollectBoomerang = false;
-	bool isCollectHolyWater = false;
-	bool isCollectAxe = false;
-	bool isCollectStopWatch = false;
-	
 	bool isLastFrame = false;
 	bool isInvisible;
 	bool isEatingItem = false;
@@ -100,10 +94,10 @@ public:
 	DWORD timerHitEnemy = 0;
 	DWORD timerDie = 0;
 	DWORD timerChangeColor = 0;
-	DWORD timerLand = 0;
 	bool isRevive;
 
 	bool isUseStop = false;
+	bool isOnMoving = false;
 
 public:
 	static Simon* GetInstance();
@@ -117,7 +111,6 @@ public:
 	RECT GetBound();
 	void CheckCollisionOnStair(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
 	void CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects);
-	void UpdateOnBoard(DWORD dt);
 
 	//Get
 	int GetHealth() { return health; }

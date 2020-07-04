@@ -44,17 +44,20 @@
 5	330	136	42
 #Dagger
 6	570	136	43
-
-#DAGGER
-7	46	100	43
-
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
 1	0	144	1	768	16
-
+#WEAPON
 # WHIP
 3	0	0	3
-
+#DAGGER
+7	0	0	43
+#BOMMERANG
+12	0	0	44
+#holywaterweapon
+23	0	0	54
+#axeWeapon
+24	0	0	55
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
 50	690	110	0	700	144	2

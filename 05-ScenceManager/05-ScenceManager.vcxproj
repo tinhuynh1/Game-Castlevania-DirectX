@@ -142,6 +142,8 @@
     <ClCompile Include="DaggerItem.cpp" />
     <ClCompile Include="define.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="Fleaman.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Ghoul.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="HeartItem.cpp" />
@@ -153,8 +155,10 @@
     <ClCompile Include="MoneyBagItem.cpp" />
     <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="Raven.cpp" />
     <ClCompile Include="Rock.cpp" />
     <ClCompile Include="Simon.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="SmallHeartItem.cpp" />
     <ClCompile Include="TopStair.cpp" />
     <ClCompile Include="Torch.cpp" />
@@ -188,6 +192,8 @@
     <ClInclude Include="DaggerItem.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Fleaman.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="Ghoul.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="HeartItem.h" />
@@ -199,9 +205,11 @@
     <ClInclude Include="MoneyBagItem.h" />
     <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="Raven.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rock.h" />
     <ClInclude Include="Simon.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="SmallHeartItem.h" />
     <ClInclude Include="TopStair.h" />
     <ClInclude Include="Torch.h" />

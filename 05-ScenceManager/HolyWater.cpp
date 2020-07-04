@@ -1,6 +1,7 @@
 ﻿#include "HolyWater.h"
 HolyWater::HolyWater()
 {
+	this->visible = false;
 }
 
 HolyWater::~HolyWater()
@@ -8,10 +9,10 @@ HolyWater::~HolyWater()
 }
 void HolyWater::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
-	if (this->isVisible()==false)
+	/*if (this->isVisible()==false)
 	{
 		return;
-	}
+	}*/
 	CGameObject::Update(dt, colliable_objects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -81,21 +82,24 @@ void HolyWater::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		}
 		//this->SetPosition(x, y);
 	}
-}
-
-void HolyWater::Render()
-{
 	if (isOnGround)
 	{
-		if (timer < 700)
+		if (timer < 1000)
 			timer += dt;
 		else
 		{
+			isOnGround = false;
+			timer = 0;
 			SetVisible(false);
 			return;
 		}
 	}
 
+}
+
+void HolyWater::Render()
+{
+	
 	if (isOnGround)
 		animation_set->at(1)->Render(x, y, nx);
 	else

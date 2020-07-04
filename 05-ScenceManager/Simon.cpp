@@ -10,6 +10,7 @@
 #include "TopStair.h"
 #include "Bat.h"
 #include "Knight.h"
+#include "MovingPlatform.h"
 
 Simon* Simon::__instance = NULL;
 
@@ -41,7 +42,15 @@ void Simon::Render()
 	int ani = -1;
 	if (state == SIMON_STATE_DIE) ani = SIMON_ANI_DIE;
 	else if (state == SIMON_STATE_SIT) ani = SIMON_ANI_SIT;
-	else if (state == SIMON_STATE_JUMP) ani = SIMON_ANI_JUMP;
+	else if (state == SIMON_STATE_JUMP)
+	{  
+		if (vy > 0)
+		{
+			ani = SIMON_ANI_IDLE;
+		}
+		else
+			ani = SIMON_ANI_JUMP;
+	}
 	else if (state == SIMON_STATE_ATTACK) ani = SIMON_ANI_ATTACK;
 	else if (state == SIMON_STATE_SIT_AND_ATTACK) ani = SIMON_ANI_SIT_AND_ATTACK;
 	else if (state == SIMON_STATE_ATTACK_UPSTAIR) ani = SIMON_ANI_ATTACK_UPSTAIR;
@@ -103,7 +112,15 @@ void Simon::Render()
 			}
 
 		}
-		else ani = SIMON_ANI_WALKING;
+		else
+		{
+			if (vx == MOVING_PLATFORM_SPEED || vx == -MOVING_PLATFORM_SPEED)
+			{
+				ani = SIMON_ANI_IDLE;
+			}
+			else
+			ani = SIMON_ANI_WALKING;
+		}
 
 	}
 
@@ -112,9 +129,7 @@ void Simon::Render()
 	{
 		alpha = rand() % 255;
 	}
-	
-
-	animation_set->at(ani)->Render(x, y,nx, alpha);
+	animation_set->at(ani)->Render(x, y, nx, alpha);
 	
 	//RenderBoundingBox();
 	if (state == SIMON_STATE_ATTACK || state == SIMON_STATE_SIT_AND_ATTACK || state == SIMON_STATE_ATTACK_UPSTAIR || state == SIMON_STATE_ATTACK_DOWNSTAIR)
@@ -212,6 +227,7 @@ void Simon::SetState(int state)
 	case SIMON_STATE_SIT:
 	{
 		isStanding = false;
+		if(!isOnMoving)
 		vx = 0;
 		break;
 	}
@@ -241,6 +257,7 @@ void Simon::SetState(int state)
 		isStanding = true;
 		isSitAttack = false;
 		isAttack = false;
+		if(!isOnMoving)
 		vx = 0;
 		break;
 	}
@@ -273,9 +290,9 @@ void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 	else if (state == SIMON_STATE_JUMP)
 	{
 		left = x;
-		top = y + 7;
+		top = y;
 		right = x + SIMON_BBOX_WIDTH;
-		bottom = y + SIMON_BBOX_HEIGHT + 2;
+		bottom = y + SIMON_BBOX_HEIGHT;
 	}
 	else if (state == SIMON_STATE_DIE)
 	{
@@ -333,7 +350,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isRevive = true;
 		}
 	}
-	//dagger->Update(dt, coObjects);
 	if (isEatingItem)
 	{
 		if (timerChangeColor < 700)
@@ -377,7 +393,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				SetState(SIMON_STATE_ONSTAIR);
 			}
-			whip->Update(dt, coObjects);
+			//whip->Update(dt, coObjects);
 		}
 	}
 	//simon không ở trên cầu thang
@@ -425,7 +441,6 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 	{
 		x += dx; //dx=vx*dt
 		y += dy;
-
 	}
 	else
 	{
@@ -435,34 +450,59 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		//block 	
-		x += min_tx * dx + nx * 0.2f;
-		y += min_ty * dy + ny * 0.2f;
+		x += min_tx * dx + nx * 0.1f;
+		y += min_ty * dy + ny * 0.1f;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT  e = coEventsResult[i];
-
+			if (dynamic_cast<MovingPlatform*>(e->obj))
+			{
+				MovingPlatform* m = dynamic_cast<MovingPlatform*> (e->obj);	
+				if (ny != 0)
+				{			
+					if (ny == -1)
+					{
+						isOnMoving = true;
+						this->vx = m->vx;
+						vy = 0;
+					}
+					else
+					{
+						isOnMoving = false;
+						y += dy;
+					}
+				}
+			}
+			else if  (dynamic_cast<CBrick*>(e->obj))
+			{
+				isOnMoving = false;
+				if (ny != 0)
+				{
+					//vy = 0.3f;
+					if (ny == -1)
+					{
+						continue;
+					}
+					else
+						y += dy;
+				}
+			}
+			else
+			{
+				isOnMoving = false;
+			}
 		}
-
 		if (nx != 0)
 		{
 			//vx = SIMON_WALKING_SPEED;
 		};
-		if (ny != 0)
+	/*	if (ny != 0)
 		{
 			if (ny == -1)
 				vy = 0;
 			else
 				y += dy;
-		}
-
-
-		if (ny == -1)
-		{
-			if (this->GetPosition().y - firstY >= 50 /*&& isLand == false*/)
-			{
-			}
-			firstY = this->GetPosition().y;
-		}
+		}*/
 		if (ny == -1 && isJumping == true)
 		{
 			if (isAttack == false /*&& isHitEnemy == false*/) //set đk này để khi chạm đất mà đánh chưa xong thì phải hoàn thành hd đánh r mới đứng yên
