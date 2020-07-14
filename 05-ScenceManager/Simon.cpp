@@ -3,14 +3,9 @@
 #include <assert.h>
 #include "Utils.h"
 #include "Game.h"
-#include "Portal.h"
-#include "Torch.h"
 #include "Brick.h"
-#include "BotStair.h"
-#include "TopStair.h"
-#include "Bat.h"
-#include "Knight.h"
 #include "MovingPlatform.h"
+#include "BreakableBrick.h"
 
 Simon* Simon::__instance = NULL;
 
@@ -263,14 +258,10 @@ void Simon::SetState(int state)
 	}
 	case SIMON_STATE_DEFLECT:
 	{
+		isHitEnemy = true;
 		vx = vy = dx = dy = 0;
-
 		this->vx = (-this->nx) * SIMON_DEFLECT_SPEED_X;
 		vy = -SIMON_DEFLECT_SPEED_Y;
-
-		animation_set->at(SIMON_ANI_DEFLECT)->Reset();
-		animation_set->at(SIMON_ANI_DEFLECT)->SetAniStartTime(GetTickCount());
-
 		break;
 	}
 	case SIMON_STATE_DIE:
@@ -338,6 +329,23 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (this->health == 0)
 	{
 			SetState(SIMON_STATE_DIE);
+	}
+	if (isHitEnemy)
+	{
+		if (timerDeflect < 700)
+		{
+			timerDeflect += dt;
+		}
+		else
+		{
+			SetState(SIMON_STATE_IDLE);
+			timerDeflect = 0;
+			if(untouchable==0)
+			{
+				StartUntouchable();
+			}
+			isHitEnemy = false;
+		}
 	}
 	if (state == SIMON_STATE_DIE)
 	{
@@ -420,17 +428,31 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CheckCollisionOnStair(dt, coObjects);
 		}
 	}
-
 }
 void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
 
+	if (isLand)
+	{
+		SetState(SIMON_STATE_SIT);
+
+		if (timerLand < 300)
+			timerLand += dt;
+		else
+		{
+			timerLand = 0;
+			isLand = false;
+			isJumping = false;
+			SetState(SIMON_STATE_IDLE);
+		}
+
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
 
-	if (GetTickCount() - untouchable_start > SIMON_DEFLECT_TIME)
+	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -481,10 +503,15 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 					//vy = 0.3f;
 					if (ny == -1)
 					{
+						vy = 0;
 						continue;
 					}
 					else
 						y += dy;
+				}
+				if (e->nx != 0)
+				{
+					x += 0;
 				}
 			}
 			else
@@ -492,17 +519,16 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 				isOnMoving = false;
 			}
 		}
-		if (nx != 0)
+		if (ny == -1)
 		{
-			//vx = SIMON_WALKING_SPEED;
-		};
-	/*	if (ny != 0)
-		{
-			if (ny == -1)
-				vy = 0;
-			else
-				y += dy;
-		}*/
+			//nếu simon rớt xuống độ cao lớn hơn 50 thì ngồi xuống
+			if (this->GetPosition().y - firstY >= 50)
+			{
+				isLand = true;
+			}
+			vy = 0.5f;
+			firstY = this->GetPosition().y;
+		}
 		if (ny == -1 && isJumping == true)
 		{
 			if (isAttack == false /*&& isHitEnemy == false*/) //set đk này để khi chạm đất mà đánh chưa xong thì phải hoàn thành hd đánh r mới đứng yên

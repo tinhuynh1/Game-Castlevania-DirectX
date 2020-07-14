@@ -63,10 +63,10 @@
 # 8 = Black Knight
 
 # SIMON
-0	10	140	0
+0	10	100	0
+#0	10	0	0
 #Breakable brick
 13	224	80	48
-13	128	176	48
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
 1	0	176	1	224	16

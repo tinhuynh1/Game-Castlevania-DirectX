@@ -10,7 +10,7 @@
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
-#define ITEM_GRAVITY	0.002f
+#define ITEM_GRAVITY	0.001f
 #define  UNTOUCHABLE_TIME	300
 #define ENEMY_FREEZE_TIME 3000
 class CGameObject; 
@@ -71,13 +71,15 @@ public:
 	int state;
 	DWORD dt; 
 	DWORD start_untouchable = 0;
-	int currentAniID;
 	LPANIMATION_SET animation_set;
 	bool visible;
 	bool isCollisionWithStair = false;
 	int itemId;
 	bool isOutOfCamera;
 	bool isStop = false;
+
+	bool isCreateBone = false;
+	DWORD timeToItemVisible = 0;
 public: 
 	static CGameObject* GetInstance();
 	void SetPosition(float x, float y) { this->x = x, this->y = y;}

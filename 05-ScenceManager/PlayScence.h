@@ -36,13 +36,14 @@
 #include "Boss.h"
 #include "Ghost.h"
 #include "Fleaman.h"
-//#include "Raven.h"
+#include "Raven.h"
 #include "Skeleton.h"
 #include "Effect.h"
+#include "Bone.h"
 class CPlayScene: public CScene
 {
 public: 
-	Effect* effect;
+	Bone* bone;
 	bool isStateBoss = false;
 	int map_width;
 	int scene_id;
@@ -57,7 +58,6 @@ public:
 	int tileMapLineY = 0;
 	int tileColumns, tileRows;
 	DWORD timeToEnemyStop = 0;
-	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listStair;
 	vector<LPGAMEOBJECT> listBrick;
 	vector<LPGAMEOBJECT> listTorch;
@@ -96,7 +96,6 @@ public:
 	HolyWater* GetHolyWater() { return holywater; }
 	Boomerang* GetBoomerang() { return boomerang; }
 	Axe* GetAxe() { return axe; }
-	vector<LPGAMEOBJECT> GetObjects() { return objects; };
 	vector<LPGAMEOBJECT> GetListStair() { return listStair; };
 	vector<LPGAMEOBJECT> GetListBrick() { return listBrick; };
 	vector<LPGAMEOBJECT> GetListTorch() { return listTorch; };

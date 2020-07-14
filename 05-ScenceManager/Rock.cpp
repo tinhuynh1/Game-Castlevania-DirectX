@@ -39,7 +39,6 @@ void Rocks::DropRock(float x, float y)
 		}
 		if (piece != NULL)
 		{
-			DebugOut(L"abcsa\n");
 			piece->SetPosition(x, y);
 			piece->SetVisible(true);
 			float vx = (float)(-100 + rand() % 200) / 1000;

@@ -12,6 +12,11 @@ void Ghoul::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetVisible(false);
 	CGameObject::Update(dt, coObjects);
 	vy += 0.015f * dt;
+	vx = (nx > 0) ? GHOUL_WALKING_SPEED : -GHOUL_WALKING_SPEED;
+	if (start_untouchable != 0)
+	{
+		Untouchable();
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -51,13 +56,6 @@ void Ghoul::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-
-
-	if (nx>0)
-		vx = 0.052f;
-	else
-		vx = -0.052f;
-
 }
 
 void Ghoul::Render()
@@ -68,7 +66,7 @@ void Ghoul::Render()
 	{
 		animation_set->at(state)->RenderByFrame(animation_set->at(state)->GetCurrentFrame(), nx, x, y);
 	}
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 RECT Ghoul::GetBound()
@@ -78,18 +76,9 @@ RECT Ghoul::GetBound()
 
 void Ghoul::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (nx>0)
-	{
-		left = x - 16;
-		top = y;
-		right = x;
-		bottom = y + 32;
-	}
-	else
-	{
-		left = x + 1;
-		top = y;
-		right = x + 16;
-		bottom = y + 32;
-	}
+
+	left = x;
+	top = y;
+	right = x+GHOUL_BBOX_WIDTH;
+	bottom = y + GHOUL_BBOX_HEIGHT;
 }

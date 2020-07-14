@@ -1,5 +1,22 @@
 [TILESHEET]
 5	resources\tilesheet5.png	5	5	5
+[SPRITES]
+#============ RAVEN ====================
+10014	277	78	293	90	40
+10015	294	75	310	91	40
+10016	312	75	327	90	40
+10017	328	76	343	91	40
+[ANIMATIONS]
+#raven
+#idle
+107	10014	100
+#flying
+108	10015	100	10016	100	10017	100
+109	10015	100	10016	100	10017	100
+110	10015	100	10016	100	10017	100
+[ANIMATIONS_SETS]
+#raven
+107	107	108	109	110
 [OBJECTS]
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
@@ -19,10 +36,15 @@
 1	738	127	1	32	16
 # SIMON
 0	90	160	0
+#0	32	110	0
+#raven
+29	274	32	107	-1	
 #Dagger
 7	570	136	43
 #BigHeart
 4	352	80	41
+#Skeleton
+30	641	122	105	-1
 #Small Candle
 2	156	62	2	4	1
 2	220	126	2	4	1

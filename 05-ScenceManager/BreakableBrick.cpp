@@ -18,6 +18,10 @@ void BreakableBrick::GetBoundingBox(float& left, float& top, float& right, float
 }
 void BreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
+	if (isVisible() == false)
+	{
+		return;
+	}
 	CGameObject::Update(dt, coObject);
 }
 RECT BreakableBrick::GetBound()

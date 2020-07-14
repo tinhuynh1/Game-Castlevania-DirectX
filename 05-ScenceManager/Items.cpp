@@ -16,6 +16,10 @@ void Items::Drop(int itemType,float x, float y)
 	for (auto i = items[itemType].begin(); i != items[itemType].end(); ++i)
 	{
 		if ((*i)->isVisible() == false) {
+			if (itemType == 19)
+			{
+				(*i)->SetState(rand() % 3);
+			}
 			(*i)->SetPosition(x, y);
 			(*i)->SetVisible(true);
 			break;

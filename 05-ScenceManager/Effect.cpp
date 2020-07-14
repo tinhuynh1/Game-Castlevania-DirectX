@@ -15,7 +15,7 @@ void Effect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		return;
 	}
-	if (timer < 400)
+	if (timer < 300)
 		timer += dt;
 	else
 	{
@@ -29,19 +29,29 @@ void Effect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->state = 0;
 		break;
 	}
-	case EFFECT_STATE_1000:
+	case EFFECT_STATE_100:
 	{
 		this->state = 1;
 		break;
 	}
-	case EFFECT_STATE_700:
+	case EFFECT_STATE_400:
 	{
 		this->state = 2;
 		break;
 	}
-	case EFFECT_STATE_2000:
+	case EFFECT_STATE_700:
 	{
 		this->state = 3;
+		break;
+	}
+	case EFFECT_STATE_2000:
+	{
+		this->state = 4;
+		break;
+	}
+	case EFFECT_STATE_DESTROY:
+	{
+		this->state = 5;
 		break;
 	}
 	}

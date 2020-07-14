@@ -1,10 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "Whip.h"
-//#include "Dagger.h"
-#include "HeartItem.h"
-#include "ChainItem.h"
- #include "DaggerItem.h"
 #define SIMON_WALKING_SPEED		0.06f 
 #define SIMON_WALKING_TO_STAIR_SPEED	0.058f 
 #define SIMON_JUMP_SPEED_Y		0.18f
@@ -48,9 +44,9 @@
 #define SIMON_BBOX_WIDTH  16
 #define SIMON_BBOX_HEIGHT 30
 
-#define SIMON_UNTOUCHABLE_TIME 10000
+#define SIMON_UNTOUCHABLE_TIME 5000
 #define SIMON_ATTACK_TIME	300
-#define SIMON_DEFLECT_TIME				1000
+#define SIMON_DEFLECT_TIME				300
 #define SIMON_DEFLECT_SPEED_X			0.06f
 #define SIMON_DEFLECT_SPEED_Y			0.14f
 
@@ -86,7 +82,6 @@ public:
 	bool isUpstair = false;
 
 	bool isHitTop = false; //biến này dùng để ko cho Simon ngồi xuống khi ấn phím xuống cầu thang
-	bool isHitLeft = false;
 
 	float start_x;
 	float start_y;
@@ -94,11 +89,14 @@ public:
 	DWORD timerHitEnemy = 0;
 	DWORD timerDie = 0;
 	DWORD timerChangeColor = 0;
+	DWORD timerDeflect = 0;
 	bool isRevive;
-
+	bool isHitEnemy = false;
 	bool isUseStop = false;
 	bool isOnMoving = false;
-
+	DWORD timeToDeflect = 0;
+	DWORD timerLand = 0;
+	bool isLand;
 public:
 	static Simon* GetInstance();
 	Simon(float x = 0.0f, float y = 0.0f);

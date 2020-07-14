@@ -2,18 +2,18 @@
 void Grid::InsertIntoGrid(CGameObject* object)
 {
 	D3DXVECTOR2 objPosition = object->GetPosition();
-	RECT r = object->GetBound();
+	 RECT r = object->GetBound();
 
-	int objWidth = r.right - r.left;
-	int objHeight = r.bottom - r.top;
+	int objWidth = object->GetWidth();
+	int objHeight = object->GetHeight();
 
 	//o bat dau neu' nhu vat dai va` nam` tren nhieu o
 	int rowInMapBegin = objPosition.y / (CELL_HEIGHT);
-	int colInMapBegin = objPosition.x / (CELL_WIDTH);
+	int colInMapBegin = objPosition.x / (CELL_WIDTH);  
 
 	//o ket thuc neu' nhu vat dai va` nam` tren nhieu o
 	int rowInMapEnd = r.bottom / CELL_HEIGHT;
-	int colInMapEnd = r.right / CELL_WIDTH;
+	int colInMapEnd = r.right / CELL_WIDTH; //
 
 
 	//insert vào lưới

@@ -1,12 +1,10 @@
 ﻿#include "Fleaman.h"
 #include "Brick.h"
-Fleaman::Fleaman()
-{
-
-}
 Fleaman::Fleaman(Simon* simon)
 {
 	mSimon = simon;
+	this->SetState(FLEAMAN_STATE_READY);
+	this->hopping = false;
 }
 Fleaman::~Fleaman()
 {
@@ -16,26 +14,37 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isOutOfCamera == true)
 		return;
 	CGameObject::Update(dt, coObjects);
-	CGameObject::SetState(state);
-	vy += 0.015f * dt;
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	coEvents.clear();
-	CalcPotentialCollisions(coObjects, coEvents);
-	// No collision occured, proceed normally
+	vy += FLEAMAN_GRAVITY * dt;
+	vx = (nx > 0) ? FLEAMAN_JUMP_SPEED_X : -FLEAMAN_JUMP_SPEED_X;
+	if (mSimon->GetInstance()->GetPosition().x - this->x < 72 && GetState()==FLEAMAN_STATE_READY)
+	{
+		SetState(FLEAMAN_STATE_JUMP);
+	}
 	if (isStop)
 	{
 		vx = 0;
 		vy = 0;
 	}
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
+	CalcPotentialCollisions(coObjects, coEvents);
+	// No collision occured, proceed normally
+	if (coEvents.size() == 0)
+	{
+		y += dy;
+		x += dx;
+	}
+	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// block 
-		x += min_tx * dx;
-		y += min_ty * dy;
+		x += min_tx * dx + nx * 0.4f;
+		if (ny <= 0)
+			y += min_ty * dy + ny * 0.4f;
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -43,45 +52,48 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				// The limmied of the knight is the width of the bricks under its feet
-				CBrick* b = dynamic_cast<CBrick*>(e->obj);
+				if (nx != 0)
+				{
+					x += dx;
+					nx = -nx;
+				}
 				if (e->ny != 0)
 				{
-					vy = 0;
-					y += ny * 0.4f;
+					if (e->ny == -1) vy = 0; // hunch back standing on brick
+					else 	y += dy; //hunch back can jump through brick
 				}
-				if (e->nx != 0)
-				{
-					ReDirection();
-					y += ny * 0.4f;
+
+				if (hopping)
+				{					
+					vy = -0.15f;
 				}
 			}
 		}
 	}
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	if (mSimon->GetInstance()->GetPosition().x - x < 30 && state == 0) 
-	{
-		state = STATE_JUMP;
-	}
+	
+}
+void Fleaman::SetState(int state)
+{
+	CGameObject::SetState(state);
 	switch (state)
 	{
-		case STATE_IDLE:
-		{
-			vx = 0;
-			vy = 0;
-		}
-		case STATE_JUMP:
-		{
-			if (nx > 0)
-			{
-				//vx = 0.052f;
-				vy = 0.052f;
-			}
-		}
+	case FLEAMAN_STATE_READY:
+	{
+		vx = 0;
+		vy = 0;
+		break;
 	}
+	case FLEAMAN_STATE_JUMP:
+	{
+		hopping = true;
+		//vx = (nx > 0) ? FLEAMAN_JUMP_SPEED_X : -FLEAMAN_JUMP_SPEED_X;
+		break;
+	}
+	}
+	this->state = state;
 }
-
 void Fleaman::Render()
 {
 	if (!isStop)
@@ -103,8 +115,8 @@ void Fleaman::GetBoundingBox(float& left, float& top, float& right, float& botto
 	{
 		left = x;
 		top = y;
-		right = x + 16;
-		bottom = y + 16;
+		right = x + FLEAMAN_BBOX_WIDTH;
+		bottom = y + FLEAMAN_BBOX_HEIGHT;
 	}
 
 }

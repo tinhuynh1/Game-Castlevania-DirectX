@@ -41,7 +41,7 @@ void ChainItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				// Block brick
 				if (e->ny != 0)
 				{
-					y += 0.4f * e->ny;
+					y += 0.1f * e->ny;
 					vy = 0;
 				}
 			}

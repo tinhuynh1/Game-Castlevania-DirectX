@@ -3,7 +3,7 @@
 
 CrownItem::CrownItem()
 {
-	SetVisible(true);
+	SetVisible(false);
 }
 void CrownItem::Render()
 {
@@ -13,6 +13,10 @@ void CrownItem::Render()
 }
 void CrownItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isVisible() == false)
+	{
+		return;
+	}
 	CGameObject::Update(dt);
 
 	// grow up
@@ -28,11 +32,11 @@ void CrownItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 	if (xS >= DISTANCE_SIMON_GROW_UP_X)
 		{
+			this->SetVisible(true);
 			vy = -CROWN_GROWING_UP_SPEED;
 		}
 
 	}
-
 	//// Update position
 	x += dx;
 	y += dy;

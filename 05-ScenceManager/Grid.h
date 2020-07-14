@@ -6,13 +6,13 @@
 #include "Game.h"
 #include "Utils.h"
 
-#define CELL_WIDTH 68  //272/4
+#define CELL_WIDTH 45  //256/4
 #define CELL_HEIGHT 60  //240/4
 class Grid
 {
 private:
 
-	vector<LPGAMEOBJECT> cells[10][200];
+	vector<LPGAMEOBJECT> cells[5][50];
 	set<CGameObject*> listTemp1;  //set: tồn tại 1 object duy nhất đó và ko trùng
 
 	int rowIndex;

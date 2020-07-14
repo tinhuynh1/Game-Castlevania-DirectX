@@ -32,7 +32,7 @@ void HeartItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (e->ny != 0)
 				{
-					y+= 0.4f * e->ny;
+					y+= 0.1f * e->ny;
 					vy = 0;
 				}
 			}

@@ -1,9 +1,11 @@
 #pragma once
 #include "GameObject.h"
 #define EFFECT_STATE_FLAME	0
-#define EFFECT_STATE_1000	1
-#define EFFECT_STATE_700	2
-#define EFFECT_STATE_2000	3
+#define EFFECT_STATE_100	1
+#define EFFECT_STATE_400	2
+#define EFFECT_STATE_700	3
+#define EFFECT_STATE_2000	4
+#define EFFECT_STATE_DESTROY	5
 class Effect : public CGameObject
 {
 public:

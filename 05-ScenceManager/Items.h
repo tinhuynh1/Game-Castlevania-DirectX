@@ -1,5 +1,6 @@
 #pragma once
 #include"GameObject.h"
+#include"define.h"
 class Items
 {
 	unordered_map<int, vector<LPGAMEOBJECT>> items;

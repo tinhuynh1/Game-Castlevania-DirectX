@@ -129,6 +129,7 @@
     <ClCompile Include="AxeItem.cpp" />
     <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Bone.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="BoomerangItem.cpp" />
     <ClCompile Include="Boss.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="AxeItem.h" />
     <ClInclude Include="Bat.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Bone.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="BoomerangItem.h" />
     <ClInclude Include="Boss.h" />

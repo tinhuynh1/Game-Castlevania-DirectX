@@ -6,11 +6,13 @@ MoneyBagItem::MoneyBagItem()
 void MoneyBagItem::Render()
 {
 	animation_set->at(state)->Render(x, y, 1);
+	RenderBoundingBox();
 }
 void MoneyBagItem::Update(DWORD dt, vector <LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
-	vy += ITEM_GRAVITY * dt;				// simple fall down
+	CGameObject::SetState(state);
+	vy += 0.001f * dt;				// simple fall down
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -41,7 +43,7 @@ void MoneyBagItem::Update(DWORD dt, vector <LPGAMEOBJECT>* coObjects)
 				// Block brick
 				if (e->ny != 0)
 				{
-					y += 0.4f * e->ny;
+					y += 0.1f * e->ny;
 					vy = 0;
 				}
 			}

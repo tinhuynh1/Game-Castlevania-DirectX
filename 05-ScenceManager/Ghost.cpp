@@ -1,66 +1,59 @@
 ﻿#include "Ghost.h"
-Ghost::Ghost()
+Ghost::Ghost(Simon* simon)
 {
+	this->SetVisible(false);
+	mSimon = simon;
+	this->healthPoint = 3;
 }
 Ghost::~Ghost()
 {
 }
 void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (isOutOfCamera == true)
-		return;
 	CGameObject::Update(dt, coObjects);
-	vy += 0.015f * dt;
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	coEvents.clear();
-	CalcPotentialCollisions(coObjects, coEvents);
-	// No collision occured, proceed normally
+	//vy += 0.0018f * dt;
+	vy = 0;
+	vx = (nx > 0) ? 0.052f : -0.052f;
+	if (mSimon->GetInstance()->GetPosition().x < 576 && this->healthPoint>0)
+	{
+		SetVisible(true);
+	}
+	if (abs(mSimon->GetInstance()->GetPosition().x - x) > 32)
+	{
+		if (mSimon->GetInstance()->GetPosition().x < x)
+		{
+			nx = -1;
+		}
+		else
+		{
+			nx = 1;
+		}
+	}
+	if (isVisible() == false)
+	{
+		return;
+	}
+	else
+	{
+		x += dx;
+	}
+	if (start_untouchable != 0)
+	{
+		Untouchable();
+	}
 	if (isStop)
 	{
 		vx = 0;
 		vy = 0;
 	}
-	if (coEvents.size() == 0)
-	{
-
-		x += dx; //dx=vx*dt
-		y += dy;
-	}
-	else
-	{
-		float min_tx, min_ty, nx = 0, ny;
-
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
-		// block 
-		y += min_ty * dy + ny * 0.2f;
-
-		if (!isStop)
-		{
-			// block 
-			if (nx != 1)
-				x += min_tx * dx + nx * 0.2f;;
-
-			if (nx == 1)  //đụng trái	
-				x += dx;
-		}
-
-		if (ny != 0) vy = 0;
-	}
-
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-
-
-	if (nx > 0)
-		vx = 0.052f;
-	else
-		vx = -0.052f;
-
 }
 
 void Ghost::Render()
 {
+	if (isVisible() == false)
+	{
+		return;
+	}
 	if (!isStop)
 		animation_set->at(state)->Render(x, y, nx);
 	else
@@ -77,18 +70,8 @@ RECT Ghost::GetBound()
 
 void Ghost::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (nx > 0)
-	{
-		left = x - 16;
-		top = y;
-		right = x;
-		bottom = y + 32;
-	}
-	else
-	{
-		left = x + 1;
-		top = y;
-		right = x + 16;
-		bottom = y + 32;
-	}
+	left = x;
+	top = y;
+	right = x + GHOST_BBOX_WIDTH;
+	bottom = y + GHOST_BBOX_HEIGHT;
 }
