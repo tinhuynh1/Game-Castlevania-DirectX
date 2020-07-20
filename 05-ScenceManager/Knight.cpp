@@ -60,32 +60,39 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						ReDirection();
 					}
-					else if((count / 2) % 2 == 0 && isNormal == true)
+					if (CGame::GetInstance()->GetSceneId() == 2)
 					{
-						if (this->x <= 40 || this->x >= 80)
+						if ((count / 2) % 2 == 0 && isNormal == true)
 						{
-							ReDirection();
-							count++;
+							if (this->x <= 40 || this->x >= 80)
+							{
+								ReDirection();
+								count++;
+							}
+						}
+						else if ((count / 2) % 2 != 0 && isNormal == true)
+						{
+							if (this->x >= 112 || this->x <= 40)
+							{
+								ReDirection();
+								count++;
+							}
 						}
 					}
-					else if((count / 2) % 2 != 0 && isNormal == true)
+					if (this->x >= b->x + b->GetWidth() - 16)
 					{
-						if (this->x >= 112 || this->x <= 40)
-						{
-							ReDirection();
-							count++;
-						}
-					}		
-					else if (this->x >= b->x + b->GetWidth() - 20)
+						ReDirection();
+					}
+					else if (this->x <= b->x || e->nx != 0)
 					{
 						ReDirection();
 					}
 				}
-				if (e->nx != 0)
+				/*else if (e->nx != 0)
 				{
 					ReDirection();
 					y += ny * 0.4f;
-				}
+				}*/
 			}
 		}
 	}

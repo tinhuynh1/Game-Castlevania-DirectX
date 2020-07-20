@@ -22,7 +22,7 @@ void Bat::Render()
 	{
 		animation_set->at(ani)->RenderByFrame(animation_set->at(ani)->GetCurrentFrame(), nx, x, y);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Bat::SetState(int state)

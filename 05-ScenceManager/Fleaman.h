@@ -13,7 +13,7 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void SetState(int state);
 protected:
-	bool hopping = false;
+	bool isJumping = false;
 	Simon* mSimon;
 };
 

@@ -2,7 +2,7 @@
 void Grid::InsertIntoGrid(CGameObject* object)
 {
 	D3DXVECTOR2 objPosition = object->GetPosition();
-	 RECT r = object->GetBound();
+	RECT r = object->GetBound();
 
 	int objWidth = object->GetWidth();
 	int objHeight = object->GetHeight();
@@ -14,8 +14,6 @@ void Grid::InsertIntoGrid(CGameObject* object)
 	//o ket thuc neu' nhu vat dai va` nam` tren nhieu o
 	int rowInMapEnd = r.bottom / CELL_HEIGHT;
 	int colInMapEnd = r.right / CELL_WIDTH; //
-
-
 	//insert vào lưới
 
 	for (int i = rowInMapBegin; i <= rowInMapEnd; i++)
@@ -52,14 +50,6 @@ void Grid::TakeObjectsFromCell(int rowIndex, int colIndex, vector<CGameObject*>&
 {
 	for (int i = 0; i < cells[rowIndex][colIndex].size(); i++)
 	{
-		if (cells[rowIndex][colIndex].at(i)->isVisible()==false)
-		{
-			if (this->isRevive) //reload lại candle/torch khi Simon revive
-			{
-				cells[rowIndex][colIndex].at(i)->SetVisible(true);
-			}
-		}
-
 		if (cells[rowIndex][colIndex].at(i)->isVisible()!=false)
 		{
 			if (listTemp1.find(cells[rowIndex][colIndex].at(i)) == listTemp1.end())
@@ -71,13 +61,6 @@ void Grid::TakeObjectsFromCell(int rowIndex, int colIndex, vector<CGameObject*>&
 
 	}
 }
-
-
-void Grid::CheckSimonRevive(bool isRevive)
-{
-	this->isRevive = isRevive;
-}
-
 
 Grid::~Grid()
 {

@@ -4,7 +4,7 @@ Fleaman::Fleaman(Simon* simon)
 {
 	mSimon = simon;
 	this->SetState(FLEAMAN_STATE_READY);
-	this->hopping = false;
+	this->isJumping = false;
 }
 Fleaman::~Fleaman()
 {
@@ -59,11 +59,11 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				if (e->ny != 0)
 				{
-					if (e->ny == -1) vy = 0; // hunch back standing on brick
-					else 	y += dy; //hunch back can jump through brick
+					if (e->ny == -1) vy = 0; 
+					else 	y += dy; 
 				}
 
-				if (hopping)
+				if (isJumping)
 				{					
 					vy = -0.15f;
 				}
@@ -87,7 +87,7 @@ void Fleaman::SetState(int state)
 	}
 	case FLEAMAN_STATE_JUMP:
 	{
-		hopping = true;
+		isJumping = true;
 		//vx = (nx > 0) ? FLEAMAN_JUMP_SPEED_X : -FLEAMAN_JUMP_SPEED_X;
 		break;
 	}

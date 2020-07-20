@@ -63,7 +63,6 @@ void Effect::Render()
 	{
 		return;
 	}
-
 	animation_set->at(state)->Render(x, y, -1);
 }
 void Effect::GetBoundingBox(float& left, float& top, float& right, float& bottom)

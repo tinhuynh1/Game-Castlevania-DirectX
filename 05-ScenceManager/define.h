@@ -62,6 +62,6 @@
 #define OBJECT_TYPE_RAVEN	         29
 #define OBJECT_TYPE_SKELETON	     30
 #define OBJECT_TYPE_BONE			 31
-#define OBJECT_TYPE_EFFECT	         100	
+#define OBJECT_TYPE_EFFECT	         200	
 
 #define OBJECT_TYPE_PORTAL	         50

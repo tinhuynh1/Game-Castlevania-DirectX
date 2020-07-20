@@ -5,6 +5,7 @@ Boss::Boss()
 Boss::Boss(Simon* simon)
 {
 	mSimon = simon;
+	healthPoint = 16;
 }
 Boss::~Boss()
 {
@@ -16,7 +17,7 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x += dx;
 	y += dy;
 	CGameObject::SetState(state);
-	if (mSimon->GetInstance()->GetPosition().x > x && state == 0) //khi Simon đi gần dơi đang ngủ, nó thức dậy và tấn công
+	if (mSimon->GetInstance()->GetPosition().x > x && state == 0 && healthPoint > 0) 
 	{
 		state = FLY_AFTER_SLEEP;
 	}
@@ -33,16 +34,15 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	switch (state)
 	{
 	case FLY_AFTER_SLEEP:
-		if (y <= 90) //bay xuống 1 khoảng sau khi ngủ, trc khi attack
+		if (y <= 90) 
 		{
-			vx = 0.02f;
 			vy = 0.03f;
 		}
 		else
 		{
 			vx = 0;
 			vy = 0;
-			state = 2;
+			state = ATTACK;
 		}
 		break;
 	case ATTACK:  //attack
@@ -80,7 +80,7 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				state = FLY_AFTER_ATTACK;
 			}
 		}
-		if (y - mSimon->GetInstance()->GetPosition().y >= 60) //dành cho TH Simon nhảy qua đầu dơi thì dơi ko bay xuống hoài
+		if (y - mSimon->GetInstance()->GetPosition().y >= 60) //boss bay nên nếu simon đứng cao hơn
 		{
 			vy = -0.038f;
 			state = FLY_AFTER_ATTACK;
@@ -110,11 +110,11 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				vy = -0.01f;
 			}
 		}
-		if (x >= 640 - 20 && x < 640 + 10) //khi vào đúng vị trí trong khoảng lý tưởng thì set qua state aim liền 
+		if (x >= 620 && x < 650) //khi vào đúng vị trí trong khoảng lý tưởng thì set qua state aim liền 
 		{
 			vx = 0;
 			vy = 0;
-			state = 5;
+			state = AIM;
 		}
 		break;
 
@@ -154,7 +154,7 @@ void Boss::Render()
 		ani = 1;
 	}
 	animation_set->at(ani)->Render(x, y, nx);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 RECT Boss::GetBound()

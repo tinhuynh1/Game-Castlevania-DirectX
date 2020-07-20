@@ -82,10 +82,12 @@
 14	130	178	49
 #Small candle	extra1: item, extra 2: state
 2	76	116	2	11	1
-2	206	116	2	20	1
-2	140	20	2	21	1
+2	206	116	2	4	1
+2	140	20	2	18	1
 #BigHeart
 4	206	116	41
+#SmallHeart
+18	352	80	46
 #Dagger
 7	570	136	43
 #Boomerang Item
@@ -112,7 +114,7 @@
 #Bat
 16	40	20	6
 #effect
-100	0	0	100
+200	0	0	200
 # STAIR bottom
 # type	l	t	r	b	direction
 9	94	162	1

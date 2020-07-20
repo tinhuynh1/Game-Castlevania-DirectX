@@ -87,7 +87,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time 
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -1060,6 +1060,11 @@ void CPlayScene::CheckCollision_SimonAndEnemy()
 		{
 			if (player->AABB(listEnemy.at(i)->GetBound(), player->GetBound()))
 			{
+				if (player->isOnStair)
+				{
+					player->StartUntouchable();
+					return;
+				}
 				if (dynamic_cast<BreakableBrick*>(listEnemy.at(i)))
 				{
 					break;
@@ -1134,7 +1139,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	}
 	switch (KeyCode)
 	{
-	case DIK_S:
+	case DIK_A:
 	{
 		if ((simon->GetState() == SIMON_STATE_ATTACK) || (simon->GetState() == SIMON_STATE_SIT_AND_ATTACK))
 			return;
@@ -1259,7 +1264,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		break;
 	}
-	case DIK_SPACE:
+	case DIK_S:
 	{
 		if (simon->isAttack) return;
 		if (simon->isOnStair) return;
@@ -1267,12 +1272,20 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		{
 			simon->SetState(SIMON_STATE_JUMP);
 			simon->isJumping = true;
+			if (simon->isOnMoving)
+			{
+				if (CGame::GetInstance()->IsKeyDown(DIK_RIGHT) || CGame::GetInstance()->IsKeyDown(DIK_LEFT))
+				{
+					return;
+				}
+				else
+				{
+					simon->vx = 0;
+				}
+			}
 		}
 		break;
 	}
-	case DIK_A: 
-		simon->Reset();
-		break;
 	}
 }
 
@@ -1283,6 +1296,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	vector<LPGAMEOBJECT> listStair = ((CPlayScene*)scence)->GetListStair();
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 	if (simon->GetState() == SIMON_STATE_DEFLECT) return;
+	if (simon->isLand) return;
 	if (simon->isEatingItem)
 	{
 		simon->SetState(SIMON_STATE_IDLE);
@@ -1339,7 +1353,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 		if (simon->isOnStair)
 		{
-			DebugOut(L"OK------------\n");
 			if (simon->isUpstair)
 				simon->isHitBottomStair = false;
 			if (simon->isUpstair == false)

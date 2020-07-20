@@ -1,7 +1,7 @@
 ﻿#include "Ghoul.h"
 Ghoul::Ghoul()
 {
-
+	healthPoint = 1;
 }
 Ghoul::~Ghoul()
 {
@@ -41,7 +41,18 @@ void Ghoul::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		// block 
 		y += min_ty * dy + ny * 0.2f;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT  e = coEventsResult[i];
 
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				if (e->nx != 0)
+				{
+					ReDirection();
+				}
+			}
+		}
 		if (!isStop)
 		{
 			// block 

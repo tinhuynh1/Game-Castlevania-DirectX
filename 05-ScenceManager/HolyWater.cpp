@@ -2,6 +2,7 @@
 HolyWater::HolyWater()
 {
 	this->visible = false;
+	this->damage = 1;
 }
 
 HolyWater::~HolyWater()
@@ -88,9 +89,9 @@ void HolyWater::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			timer += dt;
 		else
 		{
-			isOnGround = false;
-			timer = 0;
 			SetVisible(false);
+			timer = 0;
+			isOnGround = false;	
 			return;
 		}
 	}

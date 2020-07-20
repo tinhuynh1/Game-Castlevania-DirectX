@@ -6,8 +6,8 @@
 #include "Game.h"
 #include "Utils.h"
 
-#define CELL_WIDTH 45  //256/4
-#define CELL_HEIGHT 60  //240/4
+#define CELL_WIDTH 90
+#define CELL_HEIGHT 90 
 class Grid
 {
 private:
@@ -17,15 +17,12 @@ private:
 
 	int rowIndex;
 	int colIndex;
-	bool isRevive = false;
 public:
 
 	Grid()
 	{
 	}
 	void InsertIntoGrid(CGameObject* object);
-	void CheckSimonRevive(bool isRevive);
-
 	void GetListCollisionFromGrid(vector<CGameObject*>& listColObjects);
 	void TakeObjectsFromCell(int rowIndex, int colIndex, vector<CGameObject*>& listColObjects);
 

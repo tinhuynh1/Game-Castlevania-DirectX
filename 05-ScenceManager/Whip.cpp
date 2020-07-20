@@ -21,49 +21,49 @@ Whip::Whip() :CGameObject()
 }
 void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	top = y + 10;
-	bottom = top + 6;
-	switch (state)
-	{
-	case NORMAL_WHIP:
-	{
-		if (nx > 0) left = x + 70;
-		else
+	
+		top = y + 10;
+		bottom = top + 6;
+		switch (state)
 		{
-			left = x + 25;
-		}
-		right = left + 24;
-		break;
-	}
-	case SHORT_CHAIN:
-	{
-		if (nx > 0) left = x + 70;
-		else
+		case NORMAL_WHIP:
 		{
-			left = x + 25;
+			if (nx > 0) left = x + 70;
+			else
+			{
+				left = x + 25;
+			}
+			right = left + 24;
+			break;
 		}
-		right = left + 24;
-		break;
-	}
-	case LONG_CHAIN:
-	{
-		if (nx > 0) left = x + 70;
-		else
+		case SHORT_CHAIN:
 		{
-			left = x + 15;
+			if (nx > 0) left = x + 70;
+			else
+			{
+				left = x + 25;
+			}
+			right = left + 24;
+			break;
 		}
-		right = left + 38;
-		break;
-	}
-	default:
-		break;
-	}
- 
+		case LONG_CHAIN:
+		{
+			if (nx > 0) left = x + 70;
+			else
+			{
+				left = x + 15;
+			}
+			right = left + 38;
+			break;
+		}
+		default:
+			break;
+		}
 }
 void Whip::Render(int currentFrame)
 {
 	CAnimationSets::GetInstance()->Get(WHIP_ANI_SET)->at(state)->RenderByFrame(currentFrame, nx, x, y);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

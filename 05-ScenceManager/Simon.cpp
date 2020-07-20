@@ -109,12 +109,12 @@ void Simon::Render()
 		}
 		else
 		{
-			if (vx == MOVING_PLATFORM_SPEED || vx == -MOVING_PLATFORM_SPEED)
+			if (CGame::GetInstance()->IsKeyDown(DIK_RIGHT) || CGame::GetInstance()->IsKeyDown(DIK_LEFT) || this->isWalkingToStair == true)
 			{
-				ani = SIMON_ANI_IDLE;
+				ani = SIMON_ANI_WALKING;	
 			}
 			else
-			ani = SIMON_ANI_WALKING;
+				ani = SIMON_ANI_IDLE;
 		}
 
 	}
@@ -482,17 +482,13 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 				MovingPlatform* m = dynamic_cast<MovingPlatform*> (e->obj);	
 				if (ny != 0)
 				{			
+					y += ny * 0.8f;
 					if (ny == -1)
 					{
 						isOnMoving = true;
 						this->vx = m->vx;
 						vy = 0;
-					}
-					else
-					{
-						isOnMoving = false;
-						y += dy;
-					}
+					}	
 				}
 			}
 			else if  (dynamic_cast<CBrick*>(e->obj))
@@ -512,12 +508,13 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 				if (e->nx != 0)
 				{
 					x += 0;
+	
 				}
 			}
-			else
+			/*else
 			{
 				isOnMoving = false;
-			}
+			}*/
 		}
 		if (ny == -1)
 		{
