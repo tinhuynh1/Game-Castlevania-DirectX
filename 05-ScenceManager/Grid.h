@@ -6,26 +6,22 @@
 #include "Game.h"
 #include "Utils.h"
 
-#define CELL_WIDTH 90
-#define CELL_HEIGHT 90 
+#define CELL_WIDTH 270
+#define CELL_HEIGHT 270 
 class Grid
 {
-private:
-
-	vector<LPGAMEOBJECT> cells[5][50];
+public:
+	vector<LPGAMEOBJECT> cells[2][5];
 	set<CGameObject*> listTemp1;  //set: tồn tại 1 object duy nhất đó và ko trùng
 
 	int rowIndex;
 	int colIndex;
 public:
-
 	Grid()
 	{
 	}
-	void InsertIntoGrid(CGameObject* object);
 	void GetListCollisionFromGrid(vector<CGameObject*>& listColObjects);
 	void TakeObjectsFromCell(int rowIndex, int colIndex, vector<CGameObject*>& listColObjects);
-
 	~Grid();
 };
 

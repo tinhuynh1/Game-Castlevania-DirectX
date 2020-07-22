@@ -8,11 +8,6 @@
 #include "Portal.h"
 
 using namespace std;
-//CPlayScene::CPlayScene() : CScene(this->id, this->sceneFilePath)
-//{
-//	
-//	key_handler = new CPlayScenceKeyHandler(this);
-//}
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
@@ -122,7 +117,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
-
+	//grid = new Grid();
 	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
@@ -146,6 +141,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->SetWidth(width);
 		obj->SetHeight(height);
 		listBrick.push_back(obj);
+		for (int i = 6; i < tokens.size(); i+=2)
+		{
+			int rowIndex = atoi(tokens[i].c_str());
+			int colIndex = atoi(tokens[i+1].c_str());
+			(grid->cells[rowIndex][colIndex]).push_back(obj);
+		}
 		break;
 	}
 	case OBJECT_TYPE_SIMON:
@@ -260,18 +261,32 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		listEfect.push_back(obj);
 		break;
 	case OBJECT_TYPE_MOVING_PFLATFORM: 
+	{
 		obj = new MovingPlatform();
+		for (int i = 4; i < tokens.size(); i += 2)
+		{
+			int rowIndex = atoi(tokens[i].c_str());
+			int colIndex = atoi(tokens[i + 1].c_str());
+			(grid->cells[rowIndex][colIndex]).push_back(obj);
+		}
 		listBrick.push_back(obj);
 		break;
+	}
 	case OBJECT_TYPE_BOTSTAIR:
 	{
 		obj = new BotStair(); 
 		int direction = atoi(tokens[3].c_str());
-		DebugOut(L"Bot stair direction is: %d  \n", direction);
 		if(direction == 1)
 		obj->StairTag = CGameObject::StairTypes::ToRight;
 		else
 		obj->StairTag = CGameObject::StairTypes::ToLeft;
+		for (int i = 4; i < tokens.size(); i += 2)
+		{
+			int rowIndex = atoi(tokens[i].c_str());
+			int colIndex = atoi(tokens[i + 1].c_str());
+			(grid->cells[rowIndex][colIndex]).push_back(obj);
+		}
+		listTorch.push_back(obj);
 		listStair.push_back(obj);
 		break;
 	}
@@ -279,11 +294,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new TopStair();
 		int direction = atoi(tokens[3].c_str());
-		DebugOut(L"Top stair direction is: %d  \n", direction);
 		if (direction == 1)
 		obj->StairTag = CGameObject::StairTypes::ToRight;
 		else		
 		obj->StairTag = CGameObject::StairTypes::ToLeft;
+		for (int i = 4; i < tokens.size(); i += 2)
+		{
+			int rowIndex = atoi(tokens[i].c_str());
+			int colIndex = atoi(tokens[i + 1].c_str());
+			(grid->cells[rowIndex][colIndex]).push_back(obj);
+		}
+		listTorch.push_back(obj);
 		listStair.push_back(obj);
 		break;
 	}
@@ -294,12 +315,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Torch();
 		obj->SetState(state);
 		obj->SetItemId(i);
+		for (int i = 6; i < tokens.size(); i += 2)
+		{
+			int rowIndex = atoi(tokens[i].c_str());
+			int colIndex = atoi(tokens[i + 1].c_str());
+			(grid->cells[rowIndex][colIndex]).push_back(obj);
+		}
 		listTorch.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_BREAKABLE_BRICK:
 	{
 		obj = new BreakableBrick();
+		for (int i = 4; i < tokens.size(); i += 2)
+		{
+			int rowIndex = atoi(tokens[i].c_str());
+			int colIndex = atoi(tokens[i + 1].c_str());
+			(grid->cells[rowIndex][colIndex]).push_back(obj);
+		}
 		listEnemy.push_back(obj);
 		listBrick.push_back(obj);
 		break;
@@ -432,75 +465,6 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 	HUD = Board::GetInstance();
 	grid = new Grid();
-	
-
-	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
-	if (CScene::GetSceneId() == 1)
-	{
-		ifstream f;
-		f.open(sceneFilePath);
-
-		// current resource section flag
-		int section = SCENE_SECTION_UNKNOWN;
-
-		char str[MAX_SCENE_LINE];
-		while (f.getline(str, MAX_SCENE_LINE))
-		{
-			string line(str);
-
-			if (line[0] == '#') continue;	// skip comment lines	
-			if (line == "[TILESHEET]") {
-				section = SCENE_SECTION_TILE_SHEET; continue;
-			}
-			if (line == "[SPRITES]") {
-				section = SCENE_SECTION_SPRITES; continue;
-			}
-			if (line == "[ANIMATIONS]") {
-				section = SCENE_SECTION_ANIMATIONS; continue;
-			}
-			if (line == "[ANIMATIONS_SETS]") {
-				section = SCENE_SECTION_ANIMATION_SETS; continue;
-			}
-			if (line == "[OBJECTS]") {
-				section = SCENE_SECTION_OBJECTS; continue;
-			}
-			if (line == "[MAP_INFO]") {
-				section = SCENE_SECTION_MAP_INFO; continue;
-			}
-			if (line == "[MAP]") {
-				section = SCENE_SECTION_MAPS; continue;
-			}
-			if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
-
-			//
-			// data section
-			//
-
-			switch (section)
-			{
-			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
-			case SCENE_SECTION_MAP_INFO: _ParseSection_MAP_INFO(line); break;
-			case SCENE_SECTION_MAPS:	_ParseSection_MAP(line); break;
-			case SCENE_SECTION_TILE_SHEET: _ParseSection_TILE_SHEET(line); break;
-			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
-			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
-			}
-		}
-
-		f.close();
-
-		CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
-		for (UINT i = 0; i < listTorch.size(); i++)
-		{
-			grid->InsertIntoGrid(listTorch.at(i));
-		}
-		for (UINT i = 0; i < listBrick.size(); i++)
-		{
-			grid->InsertIntoGrid(listBrick.at(i));
-		}
-	}
-	else
 	{
 		listBrick.clear();
 		listTorch.clear();
@@ -562,19 +526,6 @@ void CPlayScene::Load()
 		f.close();
 
 		CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 0, 255));
-	
-		for (UINT i = 0; i < listBrick.size(); i++)
-		{
-			grid->InsertIntoGrid(listBrick.at(i));
-		}
-		for (UINT i = 0; i < listTorch.size(); i++)
-		{
-			grid->InsertIntoGrid(listTorch.at(i));
-		}
-		for (UINT i = 0; i < listStair.size(); i++)
-		{
-			grid->InsertIntoGrid(listStair.at(i));
-		}
 	}
 }
 
@@ -584,7 +535,8 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	grid->GetListCollisionFromGrid(listColObjects);
-	//DebugOut(L"Size of listCoObjects is %d \n", listColObjects.size());
+	DebugOut(L"Size object is %d \n", listColObjects.size());
+	DebugOut(L"Cam position is %f ; %f \n", CGame::GetInstance()->GetCamPosition().x, CGame::GetInstance()->GetCamPosition().y);
 	listStair.clear();
 	listTorch.clear();
 	listBrick.clear();
@@ -941,6 +893,7 @@ void CPlayScene::CheckCollision_WhipAndTorch()
 			|| player->animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->GetCurrentFrame() == 2 
 			|| player->animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->GetCurrentFrame()==2)
 		{
+			DebugOut(L"Last Frame\n");
 			for (UINT i = 0; i < listTorch.size(); i++)
 			{
 				if (player->whip->AABB(player->whip->GetBound(), listTorch.at(i)->GetBound()))
@@ -1425,7 +1378,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 
 			if (simon->StairDirection == 1)  //stair từ trái qua phải
 			{
-				simon->isUpstair = true;
+				simon->isUpstair = false;
 			}
 			else if (simon->StairDirection == -1)  //stair từ phải qua trái
 			{
@@ -1662,6 +1615,5 @@ void  CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		simon->vy = 0;
 		break;
 	}
-
 	}
 }

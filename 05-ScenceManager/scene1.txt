@@ -30,11 +30,11 @@
 
 # CANDLE
 #extra_settings = Item Object ID
-2	100	112	2	4	0
-2	210	112	2	5	0
-2	330	112	2	5	0
-2	450	112	2	4	0
-2	570	112	2	6	0
+2	100	112	2	4	0	0	0
+2	210	112	2	5	0	0	0
+2	330	112	2	5	0	0	1
+2	450	112	2	4	0	0	1
+2	570	112	2	6	0	0	2
 
 # ITEMS
 #BigHeart
@@ -46,7 +46,7 @@
 6	570	136	43
 # BRICK 
 # --- platform (hint: I created the list using Excel!) ----
-1	0	144	1	768	16
+1	0	144	1	768	16	0	0	0	1
 #WEAPON
 # WHIP
 3	0	0	3

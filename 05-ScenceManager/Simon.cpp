@@ -208,14 +208,20 @@ void Simon::SetState(int state)
 	case SIMON_STATE_ATTACK_UPSTAIR:
 	{
 		isStanding = true;
+		animation_set->at(SIMON_ANI_ATTACK)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->Reset();
 		animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->Reset();
+		animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->Reset();
 		animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->SetAniStartTime(GetTickCount());
 		break;
 	}
 	case SIMON_STATE_ATTACK_DOWNSTAIR:
 	{
 		isStanding = true;
+		animation_set->at(SIMON_ANI_ATTACK)->Reset();
 		animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->Reset();
+		animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->Reset();
 		animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->SetAniStartTime(GetTickCount());
 		break;
 	}
@@ -237,12 +243,18 @@ void Simon::SetState(int state)
 	case SIMON_STATE_ATTACK:
 	{
 		animation_set->at(SIMON_ANI_ATTACK)->Reset();
+		animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->Reset();
 		animation_set->at(SIMON_ANI_ATTACK)->SetAniStartTime(GetTickCount());
 		break;
 	}
 	case SIMON_STATE_SIT_AND_ATTACK:
 	{
 		isStanding = false;
+		animation_set->at(SIMON_ANI_ATTACK)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK_DOWNSTAIR)->Reset();
+		animation_set->at(SIMON_ANI_ATTACK_UPSTAIR)->Reset();
 		animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->Reset();
 		animation_set->at(SIMON_ANI_SIT_AND_ATTACK)->SetAniStartTime(GetTickCount());
 		break;

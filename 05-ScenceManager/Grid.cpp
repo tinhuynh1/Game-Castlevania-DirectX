@@ -1,30 +1,4 @@
 ﻿#include "Grid.h"
-void Grid::InsertIntoGrid(CGameObject* object)
-{
-	D3DXVECTOR2 objPosition = object->GetPosition();
-	RECT r = object->GetBound();
-
-	int objWidth = object->GetWidth();
-	int objHeight = object->GetHeight();
-
-	//o bat dau neu' nhu vat dai va` nam` tren nhieu o
-	int rowInMapBegin = objPosition.y / (CELL_HEIGHT);
-	int colInMapBegin = objPosition.x / (CELL_WIDTH);  
-
-	//o ket thuc neu' nhu vat dai va` nam` tren nhieu o
-	int rowInMapEnd = r.bottom / CELL_HEIGHT;
-	int colInMapEnd = r.right / CELL_WIDTH; //
-	//insert vào lưới
-
-	for (int i = rowInMapBegin; i <= rowInMapEnd; i++)
-	{
-		for (int j = colInMapBegin; j <= colInMapEnd; j++)
-		{
-			cells[i][j].push_back(object);
-		}
-	}
-
-}
 void Grid::GetListCollisionFromGrid(vector<CGameObject*>& listColObjects)
 {
 	
@@ -35,12 +9,11 @@ void Grid::GetListCollisionFromGrid(vector<CGameObject*>& listColObjects)
 
 
 
-	for (int j = 0; j <= SCREEN_HEIGHT / CELL_HEIGHT; j++)
+	for (int j = 0; j <=SCREEN_HEIGHT / CELL_HEIGHT; j++) //1
 	{
-		for (int i = 0; i <= SCREEN_WIDTH / CELL_WIDTH; i++)
+		for (int i = 0; i <= SCREEN_WIDTH / CELL_WIDTH; i++) //1
 		{
 			TakeObjectsFromCell(j + rowCam, i + colCam, listColObjects);
-
 		}
 	}
 
@@ -50,6 +23,7 @@ void Grid::TakeObjectsFromCell(int rowIndex, int colIndex, vector<CGameObject*>&
 {
 	for (int i = 0; i < cells[rowIndex][colIndex].size(); i++)
 	{
+		//DebugOut(L"Cells[0][0] size is: %d \n", cells[rowIndex][colIndex].size());
 		if (cells[rowIndex][colIndex].at(i)->isVisible()!=false)
 		{
 			if (listTemp1.find(cells[rowIndex][colIndex].at(i)) == listTemp1.end())
@@ -58,10 +32,8 @@ void Grid::TakeObjectsFromCell(int rowIndex, int colIndex, vector<CGameObject*>&
 				listColObjects.push_back(cells[rowIndex][colIndex].at(i));
 			}
 		}
-
 	}
 }
-
 Grid::~Grid()
 {
 }
