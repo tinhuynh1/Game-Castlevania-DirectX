@@ -9,9 +9,9 @@ void Grid::GetListCollisionFromGrid(vector<CGameObject*>& listColObjects)
 
 
 
-	for (int j = 0; j <=SCREEN_HEIGHT / CELL_HEIGHT; j++) //1
+	for (int j = 0; j <=SCREEN_HEIGHT / CELL_HEIGHT; j++)
 	{
-		for (int i = 0; i <= SCREEN_WIDTH / CELL_WIDTH; i++) //1
+		for (int i = 0; i <= SCREEN_WIDTH / CELL_WIDTH; i++) 
 		{
 			TakeObjectsFromCell(j + rowCam, i + colCam, listColObjects);
 		}
@@ -23,7 +23,6 @@ void Grid::TakeObjectsFromCell(int rowIndex, int colIndex, vector<CGameObject*>&
 {
 	for (int i = 0; i < cells[rowIndex][colIndex].size(); i++)
 	{
-		//DebugOut(L"Cells[0][0] size is: %d \n", cells[rowIndex][colIndex].size());
 		if (cells[rowIndex][colIndex].at(i)->isVisible()!=false)
 		{
 			if (listTemp1.find(cells[rowIndex][colIndex].at(i)) == listTemp1.end())

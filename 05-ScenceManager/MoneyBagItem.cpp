@@ -6,7 +6,7 @@ MoneyBagItem::MoneyBagItem()
 void MoneyBagItem::Render()
 {
 	animation_set->at(state)->Render(x, y, 1);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void MoneyBagItem::Update(DWORD dt, vector <LPGAMEOBJECT>* coObjects)
 {

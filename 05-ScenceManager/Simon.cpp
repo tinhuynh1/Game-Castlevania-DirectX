@@ -540,7 +540,7 @@ void Simon::CheckCollisionWithGround(DWORD dt, vector<LPGAMEOBJECT>* colliable_o
 		}
 		if (ny == -1 && isJumping == true)
 		{
-			if (isAttack == false /*&& isHitEnemy == false*/) //set đk này để khi chạm đất mà đánh chưa xong thì phải hoàn thành hd đánh r mới đứng yên
+			if (isAttack == false) //set đk này để khi chạm đất mà đánh chưa xong thì phải hoàn thành hd đánh r mới đứng yên
 				SetState(SIMON_STATE_IDLE);
 
 			isJumping = false;

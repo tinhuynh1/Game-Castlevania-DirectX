@@ -117,8 +117,6 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
-	//grid = new Grid();
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
@@ -535,8 +533,6 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	grid->GetListCollisionFromGrid(listColObjects);
-	DebugOut(L"Size object is %d \n", listColObjects.size());
-	DebugOut(L"Cam position is %f ; %f \n", CGame::GetInstance()->GetCamPosition().x, CGame::GetInstance()->GetCamPosition().y);
 	listStair.clear();
 	listTorch.clear();
 	listBrick.clear();
@@ -1039,8 +1035,12 @@ void CPlayScene::CheckCollision_SimonAndEnemy()
 }
 void CPlayScene::CheckCollision_WeaponAndEnemy()
 {
+	if (player->GetState() == SIMON_STATE_DEFLECT)
+		return;
 	for (UINT i = 0; i < listWeapon.size(); i++)
 	{
+		if(listWeapon.at(i)->isVisible() == true)
+		{ 
 		for (UINT j = 0; j < listEnemy.size(); j++)
 		{
 			if (listEnemy.at(j)->isVisible() == true)
@@ -1071,6 +1071,7 @@ void CPlayScene::CheckCollision_WeaponAndEnemy()
 					listEffet1.at(0)->SetVisible(true);
 				}
 			}
+		}
 		}
 	}
 }
@@ -1113,6 +1114,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		{
 			if (simon->GetState() == SIMON_STATE_IDLE || simon->GetState() == SIMON_STATE_JUMP)
 			{
+				simon->isAttack = true;
 				simon->SetState(SIMON_STATE_ATTACK);
 			}
 

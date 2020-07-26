@@ -88,45 +88,48 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							vy = 0;
 							y += ny * 0.1f;
 							{
-								if (abs(mSimon->GetInstance()->GetPosition().x - x) < 64)
+								if (abs(mSimon->GetInstance()->GetPosition().y - this->y) < 16 || abs(mSimon->GetInstance()->GetPosition().y - this->y) > 40)
 								{
-									vx = (mSimon->GetInstance()->GetPosition().x < x) ? 0.05 : -0.05;
-								}
-								if (abs(mSimon->GetInstance()->GetPosition().x - x) > 82)
-								{
-									vx = (mSimon->GetInstance()->GetPosition().x > x) ? 0.05 : -0.05;
+									if (abs(mSimon->GetInstance()->GetPosition().x - x) < 64)
+									{
+										vx = (mSimon->GetInstance()->GetPosition().x < x) ? 0.05 : -0.05;
+									}
+									if (abs(mSimon->GetInstance()->GetPosition().x - x) > 82)
+									{
+										vx = (mSimon->GetInstance()->GetPosition().x > x) ? 0.05 : -0.05;
+									}
 								}
 							}
 						}
 					}
-					//else if (GetState() == SKELETON_STATE_JUMP)
-					//{
-					//	y += ny * 0.1f;
-					//	/*if (this->y < 96)
-					//	{
-					//		vy = -0.3f ;
-					//		vx = -0.15f;
-					//	}
-					//	else
-					//	{
-					//		vy = -0.35;
-					//		vx = 0.15;
-					//	}*/
-					//}
 					if (e->ny == -1)
 					{
-						if (this->x > (b->x + b->GetWidth() - 8))
+						if (abs(mSimon->GetInstance()->GetPosition().y-this->y) > 8  && abs(mSimon->GetInstance()->GetPosition().y - this->y) < 40)
 						{
-							//cuối gạch thì nhảy chéo lên phải
-							vy = -0.37f;
-							vx = 0.14f;
+							if (this->x > (b->x + b->GetWidth() - 8))
+							{ 
+								vx = -0.05f;
+							}
+							if (this->x < b->x)
+							{
+								vx = 0.05f;
+							}
 						}
-						/*else*/ if (this->x < b->x && this->x > mSimon->GetInstance()->GetPosition().x || abs(this->y - mSimon->GetInstance()->GetPosition().y) > 64)
+						else
 						{
-							//đầu gạch thì nhảy chéo qua trái
-							vy = -0.35f;
-							vx = -0.15f;
-						}	
+							if (this->x > (b->x + b->GetWidth() - 8))
+							{
+								//cuối gạch thì nhảy chéo lên phải
+								vy = -0.35f;
+								vx = 0.14f;
+							}
+							/*else*/ if (this->x < b->x && this->x > mSimon->GetInstance()->GetPosition().x || abs(this->y - mSimon->GetInstance()->GetPosition().y) > 64)
+							{
+								//đầu gạch thì nhảy chéo qua trái
+								vy = -0.35f;
+								vx = -0.15f;
+							}
+						}
 					}
 				}
 			}

@@ -12,13 +12,43 @@ Fleaman::~Fleaman()
 void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isOutOfCamera == true)
+	{
+		//SetVisible(false);
 		return;
+	}
 	CGameObject::Update(dt, coObjects);
-	vy += FLEAMAN_GRAVITY * dt;
-	vx = (nx > 0) ? FLEAMAN_JUMP_SPEED_X : -FLEAMAN_JUMP_SPEED_X;
-	if (mSimon->GetInstance()->GetPosition().x - this->x < 72 && GetState()==FLEAMAN_STATE_READY)
+	if (this->GetState() != FLEAMAN_STATE_READY && IsOutofCamera()==true)
+	{
+		SetVisible(false);
+	}
+	if (this->GetState() == FLEAMAN_STATE_JUMP)
+	{
+		vy += FLEAMAN_GRAVITY * dt;
+		vx = (nx > 0) ? FLEAMAN_JUMP_SPEED_X : -FLEAMAN_JUMP_SPEED_X;
+	}
+	if (timerToReady > 1000 && GetState()==FLEAMAN_STATE_READY)
 	{
 		SetState(FLEAMAN_STATE_JUMP);
+		timerToReady = 0;
+	}
+	else
+	{
+		timerToReady += dt;
+	}
+	
+	if (abs(mSimon->GetInstance()->GetPosition().x - this->x) > 64)
+	{
+		if (IsOnGround() == true && mSimon->untouchable==0)
+		{
+			if (mSimon->GetInstance()->GetPosition().x < this->x)
+			{
+				nx = -1;
+			}
+			else
+			{
+				nx = 1;
+			}
+		}
 	}
 	if (isStop)
 	{
@@ -34,6 +64,7 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		y += dy;
 		x += dx;
+		SetOnGround(false);
 	}
 	else
 	{
@@ -59,13 +90,28 @@ void Fleaman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				if (e->ny != 0)
 				{
-					if (e->ny == -1) vy = 0; 
-					else 	y += dy; 
+					isCanReturn = true;
+					if (e->ny == -1)
+					{
+						SetOnGround(true);
+						vy = 0;
+					}
+					else
+					{
+						SetOnGround(false);
+						y += dy;
+					}
 				}
-
+				else
+				{
+					isCanReturn = false;
+				}
 				if (isJumping)
-				{					
-					vy = -0.15f;
+				{	
+					if (abs(mSimon->GetInstance()->GetPosition().x - this->x) < 48)
+						vy = -0.2f;
+					else
+						vy = -0.05f;
 				}
 			}
 		}
@@ -97,7 +143,22 @@ void Fleaman::SetState(int state)
 void Fleaman::Render()
 {
 	if (!isStop)
+	{
+		if(this->GetState()==FLEAMAN_STATE_READY)
 		animation_set->at(0)->Render(x, y, nx);
+		else
+		{
+			//không đụng gạch thì frame duỗi chân
+			if (IsOnGround() == true)
+			{
+				animation_set->at(0)->RenderByFrame(0, nx, x, y);
+			}
+			else
+			{
+				animation_set->at(0)->RenderByFrame(1, nx, x, y);
+			}
+		}
+	}
 	else
 	{
 		animation_set->at(0)->RenderByFrame(animation_set->at(0)->GetCurrentFrame(), nx, x, y);

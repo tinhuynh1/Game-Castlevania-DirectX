@@ -63,7 +63,7 @@ void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Whip::Render(int currentFrame)
 {
 	CAnimationSets::GetInstance()->Get(WHIP_ANI_SET)->at(state)->RenderByFrame(currentFrame, nx, x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

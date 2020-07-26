@@ -8,7 +8,7 @@ MovingPlatform::MovingPlatform() : CGameObject()
 void MovingPlatform::Render()
 {
 	animation_set->at(0)->Render(x, y, 1);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void MovingPlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

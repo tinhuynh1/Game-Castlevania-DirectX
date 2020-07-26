@@ -10,6 +10,11 @@ Raven::~Raven()
 }
 void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isOutOfCamera == true)
+	{
+		//SetVisible(false);
+		return;
+	}
 	CGameObject::Update(dt, coObjects);
 	CGameObject::SetState(state);
 	if (abs(Simon::GetInstance()->GetPosition().y - this->y) <= 4)
@@ -23,6 +28,17 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (Simon::GetInstance()->GetPosition().x > 170 && state == 0)
 	{
 		SetState(RAVEN_STATE_FLY_CROSS);
+	}
+	if ((abs(Simon::GetInstance()->GetPosition().x - this->x) > 32) && this->GetState()== RAVEN_STATE_FLY_HORIZENTAL)
+	{
+		if (Simon::GetInstance()->GetPosition().x < this->x)
+		{
+			nx = -1;
+		}
+		else
+		{
+			nx = 1;
+		}
 	}
 	//vy += 0.0018f * dt;
 	//vy = 0;
@@ -56,7 +72,7 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		vx = (nx > 0) ? 0.052f : -0.052f;
 		vy = (this->y < Simon::GetInstance()->GetPosition().y) ? 0.052f : -0.052f;
-		if (timerToCros < 400)
+		if (timerToCros < 600)
 		{
 			timerToCros += dt;
 		}
